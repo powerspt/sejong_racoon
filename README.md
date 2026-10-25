@@ -5,8 +5,7 @@
 
 ## 웹 교재
 
-**https://powerspt.github.io/sejong_racoon/** — 학생용 · 교사용 중 하나를 고르고, 목차에서 주제를 눌러 들어간다.
-교사용은 학생용과 같은 내용에 슬라이드마다 발표자 노트가 붙어 있다.
+**https://powerspt.github.io/sejong_racoon/stu/index.html** — 목차에서 주제를 눌러 들어간다.
 
 ## 받기
 
@@ -23,7 +22,7 @@
 
 | 폴더 | 무엇 |
 | --- | --- |
-| `가이드/` | 웹 교재 — `학생용/` · `교사용/` (브라우저로 `index.html` 을 열어도 된다) |
+| `stu/` | 웹 교재 (브라우저로 `stu/index.html` 을 열어도 된다) |
 | `코드/학생용/` | 학생에게 나눠 주는 코드 — `lessons` · `extras` · `vision` · `docs` |
 | `코드/교사용/` | 학생용 전부 + `lessons/*_완성.py` + `examples/` — 이 폴더 하나로 다 돌아간다 |
 | `활동지/` | 삼각비 활동지 · 프로젝트 활동지 (HTML · PDF), 활동지 제작 가이드 |
