@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>주제 6 프로젝트 활동지</title>
+<style>
+@page { size: A4 portrait; margin: 0; }
+* { margin:0; padding:0; box-sizing:border-box; }
+body { width:210mm; font-family:'Malgun Gothic','맑은 고딕',Arial,sans-serif; color:#16212e; }
+.page { width:210mm; height:297mm; padding:12mm 13mm 9mm; position:relative; page-break-after:always; }
+.page:last-child { page-break-after:auto; }
+@media screen {
+  body { background:#8b949e; }
+  .page { background:#fff; margin:10px auto; box-shadow:0 0 10px rgba(0,0,0,.45); }
+}
+
+/* 머리 */
+.head { display:flex; justify-content:space-between; align-items:flex-end;
+        border-bottom:0.8mm solid #16212e; padding-bottom:2mm; margin-bottom:3mm; }
+.head .t { font-size:13pt; font-weight:700; letter-spacing:-0.3pt; }
+.head .t span { font-size:9pt; font-weight:700; color:#2e9e8f; letter-spacing:1pt; margin-right:3mm; }
+.head .n { font-size:8.5pt; color:#5a6675; }
+.lead { font-size:8.5pt; line-height:1.5; color:#4a5568; margin-bottom:3.5mm; }
+
+/* 칸 제목 */
+h2 { font-size:10.5pt; font-weight:700; margin:0 0 1.5mm;
+     display:flex; align-items:baseline; gap:2mm; }
+h2 .no { display:inline-block; min-width:6mm; height:6mm; line-height:6mm; text-align:center;
+         background:#16212e; color:#fff; border-radius:3mm; font-size:8.5pt; }
+h2 .when { margin-left:auto; font-size:7.5pt; font-weight:400; color:#7e8c9b; }
+h2 .hint { font-size:8pt; font-weight:400; color:#5a6675; }
+.sec { margin-bottom:4mm; }
+
+/* 적는 자리 */
+.w { border-bottom:0.25mm dotted #9aa5b0; height:7mm; }
+.w.sm { height:6mm; }
+.box { border:0.25mm solid #b7bfc8; border-radius:1.2mm; padding:2mm 2.5mm; }
+.row { display:flex; gap:3mm; }
+.row > * { flex:1; }
+.lbl { font-size:8pt; color:#5a6675; margin-bottom:0.8mm; }
+
+/* 표 */
+table { width:100%; border-collapse:collapse; font-size:8.5pt; }
+th, td { border:0.25mm solid #b7bfc8; padding:1.4mm 2mm; vertical-align:top; text-align:left; }
+th { background:#eef1f4; font-weight:700; font-size:8pt; }
+td.c, th.c { text-align:center; }
+td.fill { height:9mm; }
+.spec td.fill { height:11mm; }        /* 성공 기준 */
+.four td.fill { height:26mm; }        /* 안전 네 항목 */
+.four td.c { text-align:left; font-size:7.5pt; line-height:1.6; }
+.cmd td.fill { height:12mm; }         /* 명령표 */
+
+/* 체크 */
+.chk { display:inline-block; width:3.2mm; height:3.2mm; border:0.3mm solid #16212e;
+       border-radius:0.6mm; margin-right:1.2mm; vertical-align:-0.3mm; }
+.opts { display:grid; grid-template-columns:1fr 1fr; gap:1mm 4mm; font-size:8.5pt; }
+.opts div { line-height:1.5; }
+.opts b { font-weight:700; }
+.opts small { color:#5a6675; }
+
+/* 도장칸 */
+.stamp { display:flex; align-items:center; gap:3mm; border:0.4mm solid #c6402f; border-radius:1.5mm;
+         padding:2mm 3mm; font-size:8.5pt; }
+.stamp .ttl { font-weight:700; color:#c6402f; }
+.stamp .sign { margin-left:auto; width:34mm; border-bottom:0.25mm solid #9aa5b0; height:6mm; }
+.note { font-size:7.5pt; color:#7e8c9b; line-height:1.5; margin-top:1mm; }
+.warn { background:#fdf0ec; border-left:1mm solid #c6402f; padding:2mm 3mm; font-size:8pt;
+        line-height:1.5; border-radius:0 1.2mm 1.2mm 0; }
+.tip { background:#eef7f5; border-left:1mm solid #2e9e8f; padding:2mm 3mm; font-size:8pt;
+       line-height:1.5; border-radius:0 1.2mm 1.2mm 0; }
+
+/* 꼬리 */
+.foot { position:absolute; left:13mm; right:13mm; bottom:5mm; display:flex;
+        justify-content:space-between; font-size:7.5pt; color:#9aa5b0;
+        border-top:0.25mm solid #d6dbe0; padding-top:1.5mm; }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════ 1쪽 ══════════════════════ -->
+<div class="page">
+  <div class="head">
+    <div class="t"><span>주제 6</span>프로젝트 활동지 — 명세와 설계</div>
+    <div class="n">팀 ____________ &nbsp; 이름 ____________ &nbsp; 날짜 ____ / ____</div>
+  </div>
+  <p class="lead">이 활동지는 두 시간 동안 <b>열 칸</b>을 차례로 채운다. 설계 시간에 ①~⑥, 검증과 발표 시간에 ⑦~⑩ 을 채운다.
+    칸을 건너뛰지 않는다 — ③ 명세서와 ④ 검증표는 교사 검토를 받아야 다음으로 간다.</p>
+
+  <div class="sec">
+    <h2><span class="no">1</span>우리 팀 <span class="hint">— 사람마다 맡은 일을 적는다</span><span class="when">설계 · 시작</span></h2>
+    <table>
+      <tr><th style="width:26mm">맡은 일</th><th style="width:34mm">이름</th><th>그 사람이 하는 일</th></tr>
+      <tr><td>로봇 조작</td><td class="fill"></td><td>로봇을 연결하고 움직인다. 정지 키에 손을 올려 둔다.</td></tr>
+      <tr><td>기록</td><td class="fill"></td><td>⑦ 정량 검증표를 한 번 돌릴 때마다 한 줄씩 적는다.</td></tr>
+      <tr><td>발표·촬영</td><td class="fill"></td><td>90초 발표를 맡고 시연 장면을 영상으로 남긴다.</td></tr>
+    </table>
+    <p class="note">세 명이 안 되면 한 사람이 두 가지를 맡되, 로봇 조작과 기록은 나눈다 — 조작하면서 적을 수 없다.</p>
+  </div>
+
+  <div class="sec">
+    <h2><span class="no">2</span>주제 고르기 <span class="hint">— 하나에 표시한다</span><span class="when">설계 · 12분 안에</span></h2>
+    <div class="opts">
+      <div><span class="chk"></span><b>① 재활용 분류</b> <small>— 카메라로 분류해 종류별 칸으로</small></div>
+      <div><span class="chk"></span><b>② 물류 피킹</b> <small>— 주문서 순서대로 집어 출고 칸으로</small></div>
+      <div><span class="chk"></span><b>③ 약국 조제</b> <small>— 처방을 받아 약 칸에서 집어 담기</small></div>
+      <div><span class="chk"></span><b>④ 팔레타이징</b> <small>— 정해진 패턴으로 쌓아 올리기</small></div>
+      <div><span class="chk"></span><b>⑤ 틱택토</b> <small>— 사람이 두면 로봇이 제 수를 놓기</small></div>
+      <div><span class="chk"></span><b>⑥ 접근성 보조</b> <small>— 제스처나 음성만으로 가져오기</small></div>
+      <div><span class="chk"></span><b>⑦ 음성 카페</b> <small>— 음성 주문을 받아 재료를 차례로</small></div>
+      <div><span class="chk"></span><b>⑧ 품질 검사</b> <small>— 불량을 골라 불량 칸으로</small></div>
+    </div>
+    <div style="margin-top:2mm"><span class="chk"></span><b style="font-size:8.5pt">자유 주제</b>
+      <span style="font-size:8pt; color:#5a6675">— 아래 세 가지를 다 지키면 직접 정해도 된다</span></div>
+    <div class="w sm"></div>
+    <div style="font-size:8pt; color:#4a5568; margin-top:1mm">
+      <span class="chk"></span>작업 지도의 칸 번호로 좌표를 잡는다 &nbsp;
+      <span class="chk"></span>성공 기준이 숫자다 &nbsp;
+      <span class="chk"></span>④ 안전 설계 네 항목을 통과한다
+    </div>
+  </div>
+
+  <div class="sec">
+    <h2><span class="no">3</span>명세서 <span class="hint">— 성공 기준만은 반드시 숫자로</span><span class="when">설계 · 검토 받음</span></h2>
+    <div class="lbl">무엇을 만드나 (한두 문장)</div>
+    <div class="w"></div><div class="w"></div>
+    <div class="lbl" style="margin-top:1.5mm">누가 쓰나 (이 시스템을 쓰는 사람)</div>
+    <div class="w"></div>
+    <div class="lbl" style="margin-top:1.5mm">성공 기준 — 세 줄 다 숫자로 적는다</div>
+    <table class="spec">
+      <tr><th class="c" style="width:8mm">#</th><th>무엇을 몇 번 중 몇 번, 몇 초 이내에 하는가</th><th class="c" style="width:26mm">잰 방법</th></tr>
+      <tr><td class="c">1</td><td class="fill"></td><td></td></tr>
+      <tr><td class="c">2</td><td class="fill"></td><td></td></tr>
+      <tr><td class="c">3</td><td class="fill"></td><td></td></tr>
+    </table>
+    <div class="warn" style="margin-top:2mm"><b>잘 · 빠르게 · 안전하게 · 대부분 · 거의 · 가끔</b> 은 숫자가 아니다.
+      끝난 뒤에 됐는지 안 됐는지 말할 수 없으면 기준이 아니다.
+      보기 — “세 종류를 섞어 열 번 집어 <b>여덟 번 이상</b> 제 칸에 넣는다”, “한 개를 <b>20초 이내</b>에 처리한다”.</div>
+    <div class="lbl" style="margin-top:2mm">기준에 못 미치면 어떻게 하나 (고칠 수 있는 것 한 가지)</div>
+    <div class="w"></div>
+  </div>
+
+  <div class="stamp">
+    <span class="ttl">교사 검토</span>
+    <span><span class="chk"></span>통과 &nbsp; <span class="chk"></span>숫자가 없다 — 고쳐 올 것</span>
+    <span class="sign"></span>
+  </div>
+  <p class="note">검토를 통과한 팀만 구현에 들어간다. 주제를 바꾸려면 설계 때 바꾼다 — 검증 때는 측정과 발표만 한다.</p>
+
+  <div class="foot"><span>라쿤봇 4축 로봇팔 · 주제 6 프로젝트 (9차시)</span><span>1 / 4</span></div>
+</div>
+
+<!-- ══════════════════════ 2쪽 ══════════════════════ -->
+<div class="page">
+  <div class="head">
+    <div class="t"><span>④ 안전</span>설계 검증표 — 통과해야 로봇을 연결한다</div>
+    <div class="n">팀 ____________</div>
+  </div>
+  <p class="lead">안전은 기능이 아니라 <b>통과 조건</b>이다. 네 항목을 적고, 적은 대로 실제로 되는지 확인한 뒤 교사 검토를 받는다.
+    통과하기 전에는 로봇을 연결하지 않는다.</p>
+
+  <div class="sec">
+    <h2><span class="no">4</span>네 항목 <span class="hint">— 적는 데서 끝내지 않고 확인까지 한다</span><span class="when">설계 · 15분</span></h2>
+    <table class="four">
+      <tr>
+        <th style="width:30mm">항목</th>
+        <th>우리 팀은 이렇게 한다</th>
+        <th class="c" style="width:44mm">확인</th>
+      </tr>
+      <tr>
+        <td><b>① 비상정지</b><br><span style="font-size:7.5pt;color:#5a6675">무엇을 누르면 멈추나</span></td>
+        <td class="fill"></td>
+        <td class="c">세 번 눌러 세 번 다 멈췄다<br>
+          <span class="chk"></span>1회 <span class="chk"></span>2회 <span class="chk"></span>3회</td>
+      </tr>
+      <tr>
+        <td><b>② 인식이 틀리면</b><br><span style="font-size:7.5pt;color:#5a6675">기본값은 정지</span></td>
+        <td class="fill"></td>
+        <td class="c">신뢰도를 0.2 로 바꿔 돌렸더니<br>팔이 움직이지 않았다 <span class="chk"></span></td>
+      </tr>
+      <tr>
+        <td><b>③ 좌표 범위</b><br><span style="font-size:7.5pt;color:#5a6675">보내기 전에 확인</span></td>
+        <td class="fill"></td>
+        <td class="c">범위 밖 좌표를 넣었더니<br>보내지 않았다 <span class="chk"></span></td>
+      </tr>
+      <tr>
+        <td><b>④ 명령표</b><br><span style="font-size:7.5pt;color:#5a6675">아래 표에 적는다</span></td>
+        <td class="fill"></td>
+        <td class="c">인식률이 낮은 입력을 위험한<br>동작에 쓰지 않았다 <span class="chk"></span></td>
+      </tr>
+    </table>
+    <div class="tip" style="margin-top:2mm">코드로 옮기면 <b>세 번의 return</b> 이 전부다 —
+      ① <code>if STOP: return</code> &nbsp; ② <code>if score &lt; 0.55: return</code> &nbsp;
+      ③ <code>if not can_move_to(x, y, z): return</code>. 움직이는 줄은 그 뒤에 딱 하나다.</div>
+  </div>
+
+  <div class="sec">
+    <h2><span class="no">4</span>-② 명령표 <span class="hint">— 어떤 입력이 어떤 동작을 부르는가</span></h2>
+    <table class="cmd">
+      <tr><th style="width:42mm">입력 (제스처·음성·색·버튼)</th><th style="width:48mm">동작</th><th>왜 이렇게 배정했나</th></tr>
+      <tr><td class="fill"></td><td></td><td></td></tr>
+      <tr><td class="fill"></td><td></td><td></td></tr>
+      <tr><td class="fill"></td><td></td><td></td></tr>
+      <tr><td class="fill"></td><td></td><td></td></tr>
+      <tr><td class="fill"></td><td></td><td></td></tr>
+    </table>
+    <p class="note">못 알아들었을 때 무엇을 하는지도 한 줄로 적는다 — 멈춘 다음에 사람에게 알리는가, 다시 보는가, 보류 칸으로 보내는가.</p>
+    <div class="w sm"></div>
+  </div>
+
+  <div class="stamp">
+    <span class="ttl">교사 통과</span>
+    <span><span class="chk"></span>네 항목 통과 — 로봇 연결 허가 &nbsp; <span class="chk"></span>다시</span>
+    <span class="sign"></span>
+  </div>
+
+  <div class="foot"><span>안전 복창 — 로봇이 움직일 때 작업 공간 안에 손을 넣지 않는다</span><span>2 / 4</span></div>
+</div>
+
+<!-- ══════════════════════ 3쪽 ══════════════════════ -->
+<div class="page">
+  <div class="head">
+    <div class="t"><span>⑤~⑦</span>가상 모드 · 개발 일지 · 정량 검증</div>
+    <div class="n">팀 ____________</div>
+  </div>
+
+  <div class="sec">
+    <h2><span class="no">5</span>가상 모드 확인 <span class="hint">— 로봇 없이 순서부터 맞춘다</span><span class="when">설계 · 12분</span></h2>
+    <div class="lbl">파일 맨 위를 <code>실기기 = False</code> 로 두고 F5 — 로봇 없이 화면에 찍힌 순서를 적는다</div>
+    <div class="box" style="height:24mm; font-size:8pt; color:#5a6675">
+      [가상] &nbsp; → &nbsp; [가상] &nbsp; → &nbsp; [가상] &nbsp; → &nbsp; [가상]
+    </div>
+    <div style="font-size:8pt; margin-top:1.5mm">
+      <span class="chk"></span>처음부터 끝까지 한 번 돌았다 &nbsp;&nbsp;
+      <span class="chk"></span><b>정지</b>가 한 번 이상 찍혔다 &nbsp;&nbsp;
+      <span class="chk"></span><b>거절</b>(범위 밖)이 한 번 이상 찍혔다
+    </div>
+    <p class="note">정지와 거절이 한 번도 안 찍혔다면 안전 코드가 실제로는 연결되지 않은 것이다. 일부러 틀린 입력을 넣어 확인한다.
+      세 칸이 다 채워진 팀부터 로봇을 연결한다.</p>
+  </div>
+
+  <div class="sec">
+    <h2><span class="no">6</span>개발 일지 <span class="hint">— 기대 / 실제 / 조치</span><span class="when">설계 · 마무리</span></h2>
+    <div class="row">
+      <div><div class="lbl">기대 — 무엇이 될 줄 알았나</div><div class="box" style="height:17mm"></div></div>
+      <div><div class="lbl">실제 — 무엇이 일어났나</div><div class="box" style="height:17mm"></div></div>
+      <div><div class="lbl">조치 — 그래서 무엇을 바꿨나</div><div class="box" style="height:17mm"></div></div>
+    </div>
+    <p class="note">바꾼 것이 없다면 왜 바꿀 것이 없었는지를 적는다. 다음 시간 순서(누가 조작·기록·발표)와 배터리 충전도 여기서 확인한다.</p>
+  </div>
+
+  <div class="sec">
+    <h2><span class="no">7</span>정량 검증 <span class="hint">— 열 번 돌리고 한 번에 한 줄씩 적는다</span><span class="when">검증 · 15분</span></h2>
+    <table>
+      <tr><th class="c" style="width:13mm">회차</th><th class="c" style="width:23mm">결과</th>
+          <th style="width:62mm">실패한 까닭 (어떤 조건에서)</th><th>무엇을 했나</th></tr>
+      <tr><td class="c">1</td><td class="c" style="font-size:8pt; white-space:nowrap">성공 / 실패</td><td class="fill"></td><td></td></tr>
+      <tr><td class="c">2</td><td class="c" style="font-size:8pt; white-space:nowrap">성공 / 실패</td><td class="fill"></td><td></td></tr>
+      <tr><td class="c">3</td><td class="c" style="font-size:8pt; white-space:nowrap">성공 / 실패</td><td class="fill"></td><td></td></tr>
+      <tr><td class="c">4</td><td class="c" style="font-size:8pt; white-space:nowrap">성공 / 실패</td><td class="fill"></td><td></td></tr>
+      <tr><td class="c">5</td><td class="c" style="font-size:8pt; white-space:nowrap">성공 / 실패</td><td class="fill"></td><td></td></tr>
+      <tr><td class="c">6</td><td class="c" style="font-size:8pt; white-space:nowrap">성공 / 실패</td><td class="fill"></td><td></td></tr>
+      <tr><td class="c">7</td><td class="c" style="font-size:8pt; white-space:nowrap">성공 / 실패</td><td class="fill"></td><td></td></tr>
+      <tr><td class="c">8</td><td class="c" style="font-size:8pt; white-space:nowrap">성공 / 실패</td><td class="fill"></td><td></td></tr>
+      <tr><td class="c">9</td><td class="c" style="font-size:8pt; white-space:nowrap">성공 / 실패</td><td class="fill"></td><td></td></tr>
+      <tr><td class="c">10</td><td class="c" style="font-size:8pt; white-space:nowrap">성공 / 실패</td><td class="fill"></td><td></td></tr>
+      <tr style="background:#eef1f4">
+        <td class="c" style="white-space:nowrap"><b>합계</b></td><td class="c"><b>____ / 10</b></td>
+        <td><b>실패를 종류별로</b> — 인식 ___ &middot; 집기 ___ &middot; 그 밖 ___</td>
+        <td><b>명세 기준</b> ____ 이상 → <span class="chk"></span>달성 <span class="chk"></span>미달</td></tr>
+    </table>
+    <p class="note">못 미친 항목도 그대로 적는다. 적지 않은 실패는 보고가 아니다. 한 번도 실패하지 않았다면 기준이 느슨한 것이니
+      블록 위치나 조명을 바꿔 다시 잰다.</p>
+  </div>
+
+  <div class="foot"><span>측정 중에도 정지 키에 손을 올려 둔다</span><span>3 / 4</span></div>
+</div>
+
+<!-- ══════════════════════ 4쪽 ══════════════════════ -->
+<div class="page">
+  <div class="head">
+    <div class="t"><span>⑧~⑩</span>발표 · 상호 평가 · 돌아보기</div>
+    <div class="n">팀 ____________</div>
+  </div>
+
+  <div class="sec">
+    <h2><span class="no">8</span>90초 발표 메모 <span class="hint">— 세 가지만 말한다</span><span class="when">발표 · 20분</span></h2>
+    <table>
+      <tr><th style="width:44mm">말할 것</th><th>우리 팀이 말할 문장</th></tr>
+      <tr><td><b>① 무엇을 만들었나</b><br><span style="font-size:7.5pt;color:#5a6675">누구를 위한 시스템인가 · 동작은 보여 준다</span></td><td class="fill" style="height:12mm"></td></tr>
+      <tr><td><b>② 목표와 달성 여부</b><br><span style="font-size:7.5pt;color:#5a6675">명세한 숫자와 실제로 잰 숫자를 나란히</span></td><td class="fill" style="height:12mm"></td></tr>
+      <tr><td><b>③ 무엇이 안 됐고 어떻게 고쳤나</b><br><span style="font-size:7.5pt;color:#c6402f">여기가 발표의 핵심이다</span></td><td class="fill" style="height:16mm"></td></tr>
+    </table>
+    <div class="tip" style="margin-top:2mm">좋은 발표는 이렇게 들린다 — “8/10 을 목표했고 7/10 이 나왔습니다.
+      실패 3번 중 2번은 파랑을 빨강으로 본 것이었고, 형광등 바로 아래에서만 생겼습니다.
+      HSV 범위를 좁히고 다시 쟀더니 9/10 이 됐습니다.” <b>재현 조건까지 있어야</b> 다른 팀이 따라 할 수 있다.</div>
+  </div>
+
+  <div class="sec">
+    <h2><span class="no">9</span>상호 평가 <span class="hint">— 완성도가 아니라 과정으로 본다</span><span class="when">평가 · 7분</span></h2>
+    <table>
+      <tr><th class="c" style="width:14mm">수준</th><th>무엇이 보이는가</th></tr>
+      <tr><td class="c"><b>A</b></td><td>실패를 재현 조건과 함께 적고, 까닭을 세워 확인한 뒤 고쳤다</td></tr>
+      <tr><td class="c"><b>B</b></td><td>실패를 적고 고쳤으나, 까닭이 추측에 머물렀다</td></tr>
+      <tr><td class="c"><b>C</b></td><td>실패를 적었으나 고쳐 보지 않았다</td></tr>
+      <tr><td class="c"><b>D</b></td><td>결과만 말했다</td></tr>
+    </table>
+    <table style="margin-top:2mm">
+      <tr><th style="width:34mm">팀 이름</th><th class="c" style="width:16mm">수준</th><th>무엇을 보고 그렇게 생각했나 (근거 한 줄)</th></tr>
+      <tr><td class="fill"></td><td class="c">A B C D</td><td></td></tr>
+      <tr><td class="fill"></td><td class="c">A B C D</td><td></td></tr>
+      <tr><td class="fill"></td><td class="c">A B C D</td><td></td></tr>
+      <tr><td class="fill"></td><td class="c">A B C D</td><td></td></tr>
+    </table>
+    <div style="font-size:8.5pt; margin-top:2mm"><b>실패를 가장 잘 넘어선 팀</b> 하나를 고른다 —
+      <span style="display:inline-block; width:40mm; border-bottom:0.25mm solid #9aa5b0"></span>
+      <span style="font-size:8pt; color:#5a6675">(잘 만든 팀이 아니다)</span></div>
+  </div>
+
+  <div class="sec">
+    <h2><span class="no">10</span>돌아보기 <span class="hint">— 처음과 달라진 점, 다음에 해 볼 것</span><span class="when">마지막</span></h2>
+    <table>
+      <tr><th style="width:30mm">언제</th><th>무엇을 적나</th></tr>
+      <tr><td><b>처음</b> — 1차시<br><span style="font-size:7.5pt;color:#5a6675">로봇이 무엇을 할 수 있다고 생각했나</span></td><td class="fill" style="height:10mm"></td></tr>
+      <tr><td><b>지금</b> — 프로젝트<br><span style="font-size:7.5pt;color:#5a6675">목표한 숫자와 잰 숫자가 어떻게 달랐나</span></td><td class="fill" style="height:10mm"></td></tr>
+      <tr><td><b>다음</b><br><span style="font-size:7.5pt;color:#5a6675">더 해 보고 싶은 것 (자율 탐구 등)</span></td><td class="fill" style="height:10mm"></td></tr>
+    </table>
+    <div class="lbl" style="margin-top:2mm">아홉 차시에서 나에게 남는 한 줄</div>
+    <div class="w"></div>
+    <div class="lbl" style="margin-top:1.5mm">더 가고 싶은 것 (카메라 보정 · 피드백 제어 · YOLO 직접 학습 · 포즈 인식 · 그 밖)</div>
+    <div class="w sm"></div>
+  </div>
+
+  <div class="foot"><span>1회차에 쓴 포트폴리오를 펴서 오늘 쓴 것과 나란히 본다</span><span>4 / 4</span></div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,30 @@
+# 라쿤봇 교육 프로그램 의존성
+#
+# 아래 버전 조합은 Python 3.13.12 (Windows 11) 에서 vision/selftest.py 27항목
+# 전부 통과를 확인한 것이다 (2026-10-06).
+# 학교 PC 여러 대를 같게 맞추려면 이 파일 그대로 설치하는 것이 안전하다.
+#
+#   python -m pip install -r requirements.txt
+#
+# ⚠️ 파이썬이 여러 개 깔려 있으면 IDE 가 쓰는 것과 터미널의 것이 다를 수 있다.
+#    설치 전에 `python -c "import sys; print(sys.executable)"` 로 확인하고,
+#    VS Code 는 Ctrl+Shift+P -> Python: Select Interpreter 로 맞춘다.
+
+# ── 필수 (주제 1~7, 10) ──
+roboid>=1.7.11          # 확인 1.7.11. 라쿤봇 제어 + pyserial 을 함께 끌고 온다
+opencv-python>=4.8      # 확인 5.0.0. 프로젝트가 쓰는 cv2 이름 51개 전부 5.0 에서 유효
+numpy>=1.24             # 확인 2.5.3
+matplotlib>=3.7         # 확인 3.11.2. 작업 지도(work_map) PDF 생성에 쓴다
+pillow>=10.0            # 확인 12.3.0. 버튼 패널의 한글 글자 그리기
+
+# ── 주제 8: 손동작 인식 ──
+# MediaPipe 1.0 부터 mp.solutions 가 없어졌다. Tasks API 만 쓴다 (인터넷 예제 대부분 안 됨).
+# .task 모델 파일은 따로 내려받아야 한다.
+mediapipe>=1.0          # 확인 1.0.1
+
+# ── 주제 9: 음성 인식 (오프라인) ──
+vosk>=0.3.45            # 확인 0.3.45. 한국어 모델 vosk-model-small-ko-0.22 는 따로 내려받는다
+sounddevice>=0.5        # 확인 0.5.6
+
+# ── 선택: YOLO 검출기를 쓸 때만 (심화) ──
+# ultralytics>=8.2

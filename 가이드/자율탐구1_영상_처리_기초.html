@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>자율 탐구 ① 영상 처리 기초</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Gothic+A1:wght@400;700&display=swap">
+<style>
+:root{--ink:#16212e;--sub:#4a5866;--mut:#7e8c9b;--line:#dfe3e8;--bg:#ffffff;--paper:#f7f6f1;
+--teal:#1f8a7c;--orange:#d9622f;--red:#c6402f;--code:#13202d;--codefg:#e7eef6;--card:#fbfaf6}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--ink:#e6edf3;--sub:#b9c5d0;--mut:#8796a5;
+--line:#26323f;--bg:#0f151c;--paper:#141c25;--card:#151e28;--code:#0a1017}}
+:root[data-theme="dark"]{--ink:#e6edf3;--sub:#b9c5d0;--mut:#8796a5;--line:#26323f;--bg:#0f151c;--paper:#141c25;--card:#151e28;--code:#0a1017}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth;scroll-padding-top:16px}
+body{background:var(--bg);color:var(--ink);font:400 16px/1.75 'Gothic A1','Malgun Gothic',sans-serif}
+a{color:var(--teal)}
+#toc{position:fixed;top:0;left:0;bottom:0;width:280px;overflow-y:auto;background:var(--paper);border-right:1px solid var(--line);padding:22px 0 60px}
+#toc .home{display:block;padding:0 20px 6px;font-size:13px;color:var(--mut);text-decoration:none}
+#toc .tt{font:400 22px/1.3 'Black Han Sans','Malgun Gothic',sans-serif;padding:0 20px}
+#toc .ts{font-size:12.5px;color:var(--mut);padding:2px 20px 14px;border-bottom:1px solid var(--line);margin-bottom:8px}
+#toc a.it{display:block;padding:5px 20px;font-size:13.5px;line-height:1.45;color:var(--sub);text-decoration:none}
+#toc a.it:hover{background:var(--card);color:var(--ink)}
+#toc a.it.now{color:var(--orange);font-weight:700}
+#tocbtn{position:fixed;left:12px;top:12px;z-index:40;display:none;font:700 13px/1 inherit;background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:9px 12px;cursor:pointer}
+#doc{margin-left:280px;padding:36px 48px 120px;max-width:1240px}
+header.top{border-bottom:2px solid var(--ink);padding-bottom:18px;margin-bottom:8px}
+header.top .lab{color:var(--orange);font-weight:700;letter-spacing:2px;font-size:14px}
+header.top h1{font:400 42px/1.2 'Black Han Sans','Malgun Gothic',sans-serif;margin:4px 0 6px}
+header.top p{color:var(--sub)}
+.nav{display:flex;justify-content:space-between;gap:12px;margin-top:40px;padding-top:16px;border-top:1px solid var(--line);font-size:14px}
+.slide{padding:30px 0 6px;border-bottom:1px dashed var(--line)}
+.slide h2{font:700 23px/1.4 'Gothic A1','Malgun Gothic',sans-serif;margin-bottom:12px;display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px}
+.tag{font-size:13px;font-weight:700;color:var(--teal);background:var(--card);border:1px solid var(--line);border-radius:20px;padding:2px 10px}
+.slide p{margin:0 0 8px;color:var(--ink)}
+.txt,.card,.chip,figure,pre,.tbl{margin:0 0 14px}
+.lbl{font-size:13px;font-weight:700;color:var(--teal)!important;margin-bottom:2px!important}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.card .txt:last-child,.card p:last-child{margin-bottom:0}
+.chip{display:inline-block;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 14px;margin-right:8px}
+.chip p{margin:0}
+.hl{color:var(--orange)}
+.cols{display:grid;gap:20px;align-items:start}
+figure img{max-width:100%;height:auto;border-radius:8px;border:1px solid var(--line);background:#fff;display:block}
+pre{font:400 14px/1.6 'D2Coding','JetBrains Mono',Consolas,monospace;background:var(--code);color:var(--codefg);border-radius:10px;padding:14px 16px;overflow-x:auto;white-space:pre}
+.tbl{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14.5px}
+th,td{border:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--paper);font-weight:700}
+.note{font-size:13.5px;color:var(--mut)!important}
+.sn{display:inline-block;width:28px;height:28px;border-radius:50%;background:var(--teal);color:#fff;text-align:center;font:700 15px/28px inherit;margin-right:4px}
+.box{border-left:4px solid var(--teal);background:var(--card);border-radius:0 10px 10px 0;padding:10px 14px;margin:10px 0}
+.box.no{border-color:var(--orange)}
+.box .bt,.tri .bt{font-size:13px;font-weight:700;color:var(--teal);margin-bottom:2px}
+.box.no .bt{color:var(--orange)}
+.tri{border-left:3px solid var(--line);padding:2px 0 2px 14px;margin:8px 0}
+.pills{display:flex;flex-wrap:wrap;gap:6px}
+.pill{font-size:13px;border:1px solid var(--line);border-radius:20px;padding:3px 10px;background:var(--card)}
+.pill.on{background:var(--teal);color:#fff;border-color:var(--teal)}
+ul{padding-left:22px;margin:0 0 10px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin:14px 0 26px}
+.grid a{display:block;text-decoration:none;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.grid a:hover{border-color:var(--teal)}
+.grid .k{font-size:12.5px;font-weight:700;color:var(--orange)}
+.grid .n{font-weight:700;font-size:18px;line-height:1.35}
+.grid .d{font-size:13.5px;color:var(--sub)}
+h3.part{font-size:18px;margin-top:26px}
+@media (max-width:900px){#toc{transform:translateX(-100%);transition:transform .18s;z-index:30}
+body.open #toc{transform:none}#doc{margin-left:0;padding:56px 16px 100px}#tocbtn{display:block}
+.cols{grid-template-columns:1fr!important}figure img{width:auto!important}}
+@media print{#toc,#tocbtn,.nav{display:none}#doc{margin:0;padding:0;max-width:none}.slide{page-break-inside:avoid}}
+</style>
+</head>
+<body>
+<nav id="toc"><a class="home" href="index.html">← 가이드 차례</a><p class="tt">영상 처리 기초</p><p class="ts">자율 탐구 ① · 프로젝트에 붙이기</p><a class="it" href="#s136">자율 탐구 — 영상 처리 기초</a><a class="it" href="#t6-why">왜 하나</a><a class="it" href="#t6-1">1. 그대로 실행해 본다</a><a class="it" href="#t6-2">2. 숫자 여섯 개를 만져 본다</a><a class="it" href="#t6-3">3. 한 줄씩 지우며 해부한다</a><a class="it" href="#t6-4">4. 찾은 것의 자리를 숫자로 받는다</a><a class="it" href="#t6-measure">숫자로 재기</a><a class="it" href="#t6-project">프로젝트에 붙이기</a><a class="it" href="#t6-more">더 가고 싶으면</a></nav>
+<button id="tocbtn" type="button">목차</button>
+<main id="doc">
+<header class="top"><p class="lab">자율 탐구 ① · 프로젝트에 붙이기</p><h1>영상 처리 기초</h1><p>화면은 숫자 배열이다</p></header>
+<section class="slide" id="s136"><h2>자율 탐구 — 영상 처리 기초 <span class="tag">자율 탐구 ① · detectors.py</span></h2><div class="cols" style="grid-template-columns:17fr 17fr"><div><div class="card"><div class="txt"><p><b>무엇을 하나</b></p></div><div class="txt"><p>웹캠 영상을 숫자로 본다. 색을 고르는 숫자 여섯 개(HSV 범위)를 정해 물체를 찾고, 한 줄씩 지우며 코드를 해부한다.</p></div></div></div><div><div class="card"><div class="txt"><p><b>프로젝트에 어떻게</b></p></div><div class="txt"><p>블록 <b>종류</b>를 카메라로 가린다. 위치는 그대로 작업 지도의 칸으로 잡는다 — 카메라로 위치를 재는 것은 그다음 이야기다.</p></div></div></div></div><div class="cols" style="grid-template-columns:17fr 17fr"><div><div class="card"><div class="txt"><p><span class="hl"><b>무엇이 필요한가</b></span></p></div><div class="txt"><p>노트북 웹캠과 OpenCV. 코드는 <b>vision/detectors.py</b> 의 ColorDetector, 색 범위는 vision/config.py 의 COLOR_PRESETS 에 있다.</p></div></div></div><div><div class="card"><div class="txt"><p><span class="hl"><b>어디서 막히나</b></span></p></div><div class="txt"><p>조명이 바뀌면 무너진다. 형광등 아래와 창가에서 같은 숫자가 안 통한다 — 객체 인식(자율 탐구 ②)은 이 문제를 다른 방법으로 푼다.</p></div></div></div></div><p class="note"></p></section><section class="slide" id="t6-why"><h2>왜 하나</h2><p class="pills"><span class="pill on">100분 × 2</span><span class="pill">노트북 웹캠</span><span class="pill">pip install opencv-python</span><span class="pill">색블록 3종</span><span class="pill">흰 종이</span></p><p>주제 1~5 에서 로봇은 <b>어디로</b> 갈지는 알게 됐다. 작업 지도의 칸 번호로 좌표를 잡았다. 그런데 그 칸에 놓인 것이 <b>무엇인지</b>는 아직 모른다.</p><p>카메라가 그 "무엇"을 맡는다. 오늘은 가장 단순한 방법부터 — 색으로 가린다.</p></section><section class="slide step" id="t6-1"><h2><span class="sn">1</span>그대로 실행해 본다</h2><p>먼저 돌려 보고, 그다음에 왜 그런지 따진다. 아래를 그대로 적어 실행한다.</p><pre>import cv2
+cap = cv2.VideoCapture(0)      # 화면이 안 나오면 0 -&gt; 1
+while True:
+    ok, frame = cap.read()
+    if not ok: break
+    hsv  = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+    mask = cv2.inRange(hsv, (40, 80, 60), (85, 255, 255))
+    cv2.imshow("frame", frame)
+    cv2.imshow("mask", mask)
+    if cv2.waitKey(1) == 27:   # ESC
+        break
+cap.release()
+cv2.destroyAllWindows()</pre><div class="box ok"><p class="bt">이렇게 되면 맞다</p><p>창이 두 개 뜬다. 왼쪽은 보이는 그대로, 오른쪽은 검은 화면에 초록 물체만 하얗게 뜬다.</p><p>초록 블록을 움직이면 흰 덩어리도 따라 움직인다.</p></div><div class="box no"><p class="bt">막히면</p><p>검은 창만 뜬다 — VideoCapture(0) 의 0 을 1 로 바꾼다 (노트북 내장/외장 카메라).</p><p>ModuleNotFoundError: cv2 — python -m pip install opencv-python 한 번이면 된다.</p><p>창이 안 닫힌다 — 창을 클릭해 고른 뒤 ESC. 그래도 안 되면 터미널에서 Ctrl+C.</p></div></section><section class="slide step" id="t6-2"><h2><span class="sn">2</span>숫자 여섯 개를 만져 본다</h2><p><b>inRange 의 숫자 여섯 개</b>가 무엇을 잡을지 정한다. 앞 세 개가 아래값, 뒤 세 개가 위값이고 순서는 H(색) · S(진하기) · V(밝기) 다.</p><p>H 를 40~85 로 두면 초록이다. 100~130 이면 파랑, 0~10 과 170~180 이면 빨강이다.</p><p>한 번에 하나씩만 바꾼다. 바꾸기 전에 <b>어떻게 될지 먼저 적고</b> 실행한다.</p><pre>mask = cv2.inRange(hsv, (100, 80, 60), (130, 255, 255))   # 파랑
+mask = cv2.inRange(hsv, ( 40, 30, 30), ( 85, 255, 255))   # S·V 를 낮추면?</pre><div class="box ok"><p class="bt">이렇게 되면 맞다</p><p>S 의 아래값을 낮추면 연한 색까지 잡혀 흰 덩어리가 커진다.</p><p>V 의 아래값을 낮추면 그늘진 부분까지 잡힌다 — 그림자도 같이 잡힌다.</p></div><div class="box no"><p class="bt">막히면</p><p>아무것도 안 잡힌다 — 물체가 화면에 있는지, H 범위가 그 색인지 차례로 본다.</p></div></section><section class="slide step" id="t6-3"><h2><span class="sn">3</span>한 줄씩 지우며 해부한다</h2><p>코드를 외우지 말고 한 줄씩 지워 본다. 무엇이 사라지는지가 그 줄의 일이다.</p><pre># cvtColor 를 지우고 frame 을 그대로 inRange 에 넣으면?
+# imshow("mask", ...) 만 남기고 imshow("frame", ...) 을 지우면?
+# waitKey(1) 을 지우면?</pre><div class="box ok"><p class="bt">이렇게 되면 맞다</p><p>cvtColor 를 지우면 전혀 엉뚱한 것이 잡힌다 — 같은 숫자라도 BGR 과 HSV 는 다른 뜻이다.</p><p>waitKey 를 지우면 창이 아예 안 그려진다 — 그리는 일은 waitKey 가 한다.</p></div></section><section class="slide step" id="t6-4"><h2><span class="sn">4</span>찾은 것의 자리를 숫자로 받는다</h2><p>흰 덩어리 중 가장 큰 것의 중심을 구하면 <b>화면 좌표</b>가 나온다. 이 네 단계가 vision/detectors.py 의 ColorDetector 가 하는 일 그대로다.</p><pre>cnts, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+if cnts:
+    c = max(cnts, key=cv2.contourArea)
+    x, y, w, h = cv2.boundingRect(c)
+    print(x + w // 2, y + h // 2)   # 중심 (픽셀)</pre><div class="box ok"><p class="bt">이렇게 되면 맞다</p><p>물체를 오른쪽으로 옮기면 첫 번째 숫자가 커지고, 아래로 내리면 두 번째가 커진다.</p></div><div class="box no"><p class="bt">막히면</p><p>숫자가 미친 듯이 튄다 — 작은 점까지 잡혀서다. cv2.contourArea(c) 가 일정 값보다 작으면 무시하게 한다.</p></div></section><section class="slide" id="t6-measure"><h2>숫자로 재기</h2><p>인상은 믿을 것이 못 된다. 조건을 두 가지로 바꿔 가며 <b>열 번씩</b> 재고 적는다.</p><p>같은 블록을 같은 자리에 놓고, 조명만 바꾼다.</p><div class="tbl"><table><tr><th>조건</th><th>잡힌 횟수 / 10</th><th>놓친 까닭</th></tr><tr><td>형광등 아래</td><td></td><td></td></tr><tr><td>창가 (햇빛)</td><td></td><td></td></tr><tr><td>조명 끄고 어둡게</td><td></td><td></td></tr></table></div><p class="note">열 번 중 몇 번인지로 적는다. "대체로 잘 된다" 는 기록이 아니다.</p></section><section class="slide" id="t6-project"><h2>프로젝트에 붙이기</h2><p>프로젝트에서는 <b>종류만</b> 카메라로 가린다. 위치는 그대로 작업 지도의 칸으로 잡는다 — 픽셀을 cm 로 바꾸는 보정은 그다음 이야기다.</p><p>쓰는 색은 vision/config.py 의 COLOR_PRESETS 에 이름으로 들어 있다. COLOR_NAME 을 바꾸면 검출기가 찾는 색이 바뀐다.</p><p>성공 기준은 이렇게 적는다 — "세 종류를 섞어 열 번 집어 여덟 번 이상 제 칸에 넣는다".</p></section><section class="slide" id="t6-more"><h2>더 가고 싶으면</h2><ul><li>조명이 바뀌면 무너지는 것을 직접 본 뒤 자율 탐구 ②(객체 인식)로 넘어가면 대비가 선명하다.</li><li>vision/calibrate_distance.py — 픽셀을 cm 로 바꾸는 보정 (심화)</li></ul></section>
+<div class="nav"><span><a href="주제6_프로젝트.html">← 주제 6 실생활 문제 해결 프로젝트</a></span><a href="index.html">차례</a><span><a href="자율탐구2_객체_인식과_모델_평가.html">자율 탐구 ② 객체 인식과 모델 평가 →</a></span></div>
+</main>
+<script>
+var S=[].slice.call(document.querySelectorAll('.slide')),L=document.querySelectorAll('#toc a.it');
+function mark(){var y=window.scrollY+120,id='';for(var i=0;i<S.length;i++)if(S[i].offsetTop<=y)id=S[i].id;
+for(var j=0;j<L.length;j++)L[j].classList.toggle('now',L[j].getAttribute('href')==='#'+id);}
+var tk=false;window.addEventListener('scroll',function(){if(tk)return;tk=true;requestAnimationFrame(function(){tk=false;mark();});});
+document.getElementById('tocbtn').onclick=function(){document.body.classList.toggle('open');};
+[].forEach.call(L,function(a){a.addEventListener('click',function(){document.body.classList.remove('open');});});
+mark();
+</script>
+</body>
+</html>
