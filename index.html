@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>라쿤봇 로봇팔과 AI — 웹 교재</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Gothic+A1:wght@400;700&display=swap">
+<style>
+:root{--ink:#16212e;--sub:#4a5866;--mut:#7e8c9b;--line:#dfe3e8;--bg:#ffffff;--paper:#f7f6f1;
+--teal:#1f8a7c;--orange:#d9622f;--red:#c6402f;--code:#13202d;--codefg:#e7eef6;--card:#fbfaf6}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--ink:#e6edf3;--sub:#b9c5d0;--mut:#8796a5;
+--line:#26323f;--bg:#0f151c;--paper:#141c25;--card:#151e28;--code:#0a1017}}
+:root[data-theme="dark"]{--ink:#e6edf3;--sub:#b9c5d0;--mut:#8796a5;--line:#26323f;--bg:#0f151c;--paper:#141c25;--card:#151e28;--code:#0a1017}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth;scroll-padding-top:16px}
+body{background:var(--bg);color:var(--ink);font:400 16px/1.75 'Gothic A1','Malgun Gothic',sans-serif}
+a{color:var(--teal)}
+#toc{position:fixed;top:0;left:0;bottom:0;width:280px;overflow-y:auto;background:var(--paper);border-right:1px solid var(--line);padding:22px 0 60px}
+#toc .home{display:block;padding:0 20px 6px;font-size:13px;color:var(--mut);text-decoration:none}
+#toc .tt{font:400 22px/1.3 'Black Han Sans','Malgun Gothic',sans-serif;padding:0 20px}
+#toc .ts{font-size:12.5px;color:var(--mut);padding:2px 20px 14px;border-bottom:1px solid var(--line);margin-bottom:8px}
+#toc a.it{display:block;padding:5px 20px;font-size:13.5px;line-height:1.45;color:var(--sub);text-decoration:none}
+#toc a.it:hover{background:var(--card);color:var(--ink)}
+#toc a.it.now{color:var(--orange);font-weight:700}
+#tocbtn{position:fixed;left:12px;top:12px;z-index:40;display:none;font:700 13px/1 inherit;background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:9px 12px;cursor:pointer}
+#doc{margin-left:280px;padding:36px 48px 120px;max-width:1240px}
+header.top{border-bottom:2px solid var(--ink);padding-bottom:18px;margin-bottom:8px}
+header.top .lab{color:var(--orange);font-weight:700;letter-spacing:2px;font-size:14px}
+header.top h1{font:400 42px/1.2 'Black Han Sans','Malgun Gothic',sans-serif;margin:4px 0 6px}
+header.top p{color:var(--sub)}
+.nav{display:flex;justify-content:space-between;gap:12px;margin-top:40px;padding-top:16px;border-top:1px solid var(--line);font-size:14px}
+.slide{padding:30px 0 6px;border-bottom:1px dashed var(--line)}
+.slide h2{font:700 23px/1.4 'Gothic A1','Malgun Gothic',sans-serif;margin-bottom:12px;display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px}
+.tag{font-size:13px;font-weight:700;color:var(--teal);background:var(--card);border:1px solid var(--line);border-radius:20px;padding:2px 10px}
+.slide p{margin:0 0 8px;color:var(--ink)}
+.txt,.card,.chip,figure,pre,.tbl{margin:0 0 14px}
+.lbl{font-size:13px;font-weight:700;color:var(--teal)!important;margin-bottom:2px!important}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.card .txt:last-child,.card p:last-child{margin-bottom:0}
+.chip{display:inline-block;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 14px;margin-right:8px}
+.chip p{margin:0}
+.hl{color:var(--orange)}
+.cols{display:grid;gap:20px;align-items:start}
+figure img{max-width:100%;height:auto;border-radius:8px;border:1px solid var(--line);background:#fff;display:block}
+pre{font:400 14px/1.6 'D2Coding','JetBrains Mono',Consolas,monospace;background:var(--code);color:var(--codefg);border-radius:10px;padding:14px 16px;overflow-x:auto;white-space:pre}
+.tbl{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14.5px}
+th,td{border:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--paper);font-weight:700}
+.note{font-size:13.5px;color:var(--mut)!important}
+.sn{display:inline-block;width:28px;height:28px;border-radius:50%;background:var(--teal);color:#fff;text-align:center;font:700 15px/28px inherit;margin-right:4px}
+.box{border-left:4px solid var(--teal);background:var(--card);border-radius:0 10px 10px 0;padding:10px 14px;margin:10px 0}
+.box.no{border-color:var(--orange)}
+.box .bt,.tri .bt{font-size:13px;font-weight:700;color:var(--teal);margin-bottom:2px}
+.box.no .bt{color:var(--orange)}
+.tri{border-left:3px solid var(--line);padding:2px 0 2px 14px;margin:8px 0}
+.pills{display:flex;flex-wrap:wrap;gap:6px}
+.pill{font-size:13px;border:1px solid var(--line);border-radius:20px;padding:3px 10px;background:var(--card)}
+.pill.on{background:var(--teal);color:#fff;border-color:var(--teal)}
+ul{padding-left:22px;margin:0 0 10px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin:14px 0 26px}
+.grid a{display:block;text-decoration:none;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.grid a:hover{border-color:var(--teal)}
+.grid .k{font-size:12.5px;font-weight:700;color:var(--orange)}
+.grid .n{font-weight:700;font-size:18px;line-height:1.35}
+.grid .d{font-size:13.5px;color:var(--sub)}
+h3.part{font-size:18px;margin-top:26px}
+.tnote{margin:12px 0 4px;background:#fff8e6;border:1px solid #ecd9a6;border-left:4px solid #d9a21f;border-radius:0 10px 10px 0;padding:10px 14px;color:#3d3420}
+.tnote p{color:#3d3420!important;font-size:14.5px}
+.tnote .bt{font-size:13px;font-weight:700;color:#a8780c!important;margin-bottom:2px}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .tnote{background:#2a2414;border-color:#5a4a1e}
+:root:not([data-theme="light"]) .tnote p{color:#efe3c2!important}}
+#doc.wide{margin:0 auto;max-width:1100px}
+.grid a .n{display:block}
+.grid.big{grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
+.grid.big a{padding:26px 24px}
+.grid.big .n{font:400 30px/1.3 'Black Han Sans','Malgun Gothic',sans-serif;margin:4px 0}
+@media (max-width:900px){#toc{transform:translateX(-100%);transition:transform .18s;z-index:30}
+body.open #toc{transform:none}#doc{margin-left:0;padding:56px 16px 100px}#tocbtn{display:block}
+.cols{grid-template-columns:1fr!important}figure img{width:auto!important}}
+@media print{#toc,#tocbtn,.nav{display:none}#doc{margin:0;padding:0;max-width:none}.slide{page-break-inside:avoid}}
+</style>
+</head>
+<body>
+<main id="doc" class="wide">
+<header class="top"><p class="lab">세종SW교육체험센터 · 피지컬 AI</p>
+<h1>라쿤봇 로봇팔과 AI</h1>
+<p>라쿤봇 4축 로봇팔로 좌표계 → 순기구학 → 작업 공간 → 집기 → 작업 지도 → 프로젝트를 다루는 9차시 수업의 웹 교재다.</p></header>
+<div class="grid big">
+<a href="가이드/학생용/index.html"><span class="k">학생용</span><span class="n">학생용 교재</span>
+<span class="d">주제별로 읽고 따라 한다 · 코드와 활동지는 여기서 받는다</span></a>
+<a href="가이드/교사용/index.html"><span class="k">교사용</span><span class="n">교사용 교재</span>
+<span class="d">학생용과 같은 내용 + 슬라이드마다 발표자 노트 · 완성 코드</span></a>
+</div>
+<h3 class="part">내려받기</h3>
+<ul>
+<li><a href="https://github.com/powerspt/sejong_racoon/archive/refs/heads/main.zip">전체 자료 ZIP</a> — 코드 · 활동지 · 작업 지도 · 설치 도우미</li>
+<li><a href="https://github.com/powerspt/sejong_racoon">GitHub 저장소</a></li>
+</ul></main></body></html>

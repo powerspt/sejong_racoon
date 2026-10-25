@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>주제 2 각도에서 좌표로 — 학생용</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Gothic+A1:wght@400;700&display=swap">
+<style>
+:root{--ink:#16212e;--sub:#4a5866;--mut:#7e8c9b;--line:#dfe3e8;--bg:#ffffff;--paper:#f7f6f1;
+--teal:#1f8a7c;--orange:#d9622f;--red:#c6402f;--code:#13202d;--codefg:#e7eef6;--card:#fbfaf6}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--ink:#e6edf3;--sub:#b9c5d0;--mut:#8796a5;
+--line:#26323f;--bg:#0f151c;--paper:#141c25;--card:#151e28;--code:#0a1017}}
+:root[data-theme="dark"]{--ink:#e6edf3;--sub:#b9c5d0;--mut:#8796a5;--line:#26323f;--bg:#0f151c;--paper:#141c25;--card:#151e28;--code:#0a1017}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth;scroll-padding-top:16px}
+body{background:var(--bg);color:var(--ink);font:400 16px/1.75 'Gothic A1','Malgun Gothic',sans-serif}
+a{color:var(--teal)}
+#toc{position:fixed;top:0;left:0;bottom:0;width:280px;overflow-y:auto;background:var(--paper);border-right:1px solid var(--line);padding:22px 0 60px}
+#toc .home{display:block;padding:0 20px 6px;font-size:13px;color:var(--mut);text-decoration:none}
+#toc .tt{font:400 22px/1.3 'Black Han Sans','Malgun Gothic',sans-serif;padding:0 20px}
+#toc .ts{font-size:12.5px;color:var(--mut);padding:2px 20px 14px;border-bottom:1px solid var(--line);margin-bottom:8px}
+#toc a.it{display:block;padding:5px 20px;font-size:13.5px;line-height:1.45;color:var(--sub);text-decoration:none}
+#toc a.it:hover{background:var(--card);color:var(--ink)}
+#toc a.it.now{color:var(--orange);font-weight:700}
+#tocbtn{position:fixed;left:12px;top:12px;z-index:40;display:none;font:700 13px/1 inherit;background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:9px 12px;cursor:pointer}
+#doc{margin-left:280px;padding:36px 48px 120px;max-width:1240px}
+header.top{border-bottom:2px solid var(--ink);padding-bottom:18px;margin-bottom:8px}
+header.top .lab{color:var(--orange);font-weight:700;letter-spacing:2px;font-size:14px}
+header.top h1{font:400 42px/1.2 'Black Han Sans','Malgun Gothic',sans-serif;margin:4px 0 6px}
+header.top p{color:var(--sub)}
+.nav{display:flex;justify-content:space-between;gap:12px;margin-top:40px;padding-top:16px;border-top:1px solid var(--line);font-size:14px}
+.slide{padding:30px 0 6px;border-bottom:1px dashed var(--line)}
+.slide h2{font:700 23px/1.4 'Gothic A1','Malgun Gothic',sans-serif;margin-bottom:12px;display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px}
+.tag{font-size:13px;font-weight:700;color:var(--teal);background:var(--card);border:1px solid var(--line);border-radius:20px;padding:2px 10px}
+.slide p{margin:0 0 8px;color:var(--ink)}
+.txt,.card,.chip,figure,pre,.tbl{margin:0 0 14px}
+.lbl{font-size:13px;font-weight:700;color:var(--teal)!important;margin-bottom:2px!important}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.card .txt:last-child,.card p:last-child{margin-bottom:0}
+.chip{display:inline-block;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 14px;margin-right:8px}
+.chip p{margin:0}
+.hl{color:var(--orange)}
+.cols{display:grid;gap:20px;align-items:start}
+figure img{max-width:100%;height:auto;border-radius:8px;border:1px solid var(--line);background:#fff;display:block}
+pre{font:400 14px/1.6 'D2Coding','JetBrains Mono',Consolas,monospace;background:var(--code);color:var(--codefg);border-radius:10px;padding:14px 16px;overflow-x:auto;white-space:pre}
+.tbl{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14.5px}
+th,td{border:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--paper);font-weight:700}
+.note{font-size:13.5px;color:var(--mut)!important}
+.sn{display:inline-block;width:28px;height:28px;border-radius:50%;background:var(--teal);color:#fff;text-align:center;font:700 15px/28px inherit;margin-right:4px}
+.box{border-left:4px solid var(--teal);background:var(--card);border-radius:0 10px 10px 0;padding:10px 14px;margin:10px 0}
+.box.no{border-color:var(--orange)}
+.box .bt,.tri .bt{font-size:13px;font-weight:700;color:var(--teal);margin-bottom:2px}
+.box.no .bt{color:var(--orange)}
+.tri{border-left:3px solid var(--line);padding:2px 0 2px 14px;margin:8px 0}
+.pills{display:flex;flex-wrap:wrap;gap:6px}
+.pill{font-size:13px;border:1px solid var(--line);border-radius:20px;padding:3px 10px;background:var(--card)}
+.pill.on{background:var(--teal);color:#fff;border-color:var(--teal)}
+ul{padding-left:22px;margin:0 0 10px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin:14px 0 26px}
+.grid a{display:block;text-decoration:none;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.grid a:hover{border-color:var(--teal)}
+.grid .k{font-size:12.5px;font-weight:700;color:var(--orange)}
+.grid .n{font-weight:700;font-size:18px;line-height:1.35}
+.grid .d{font-size:13.5px;color:var(--sub)}
+h3.part{font-size:18px;margin-top:26px}
+.tnote{margin:12px 0 4px;background:#fff8e6;border:1px solid #ecd9a6;border-left:4px solid #d9a21f;border-radius:0 10px 10px 0;padding:10px 14px;color:#3d3420}
+.tnote p{color:#3d3420!important;font-size:14.5px}
+.tnote .bt{font-size:13px;font-weight:700;color:#a8780c!important;margin-bottom:2px}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .tnote{background:#2a2414;border-color:#5a4a1e}
+:root:not([data-theme="light"]) .tnote p{color:#efe3c2!important}}
+#doc.wide{margin:0 auto;max-width:1100px}
+.grid a .n{display:block}
+.grid.big{grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
+.grid.big a{padding:26px 24px}
+.grid.big .n{font:400 30px/1.3 'Black Han Sans','Malgun Gothic',sans-serif;margin:4px 0}
+@media (max-width:900px){#toc{transform:translateX(-100%);transition:transform .18s;z-index:30}
+body.open #toc{transform:none}#doc{margin-left:0;padding:56px 16px 100px}#tocbtn{display:block}
+.cols{grid-template-columns:1fr!important}figure img{width:auto!important}}
+@media print{#toc,#tocbtn,.nav{display:none}#doc{margin:0;padding:0;max-width:none}.slide{page-break-inside:avoid}}
+</style>
+</head>
+<body>
+<nav id="toc"><a class="home" href="index.html">← 학생용 차례</a><p class="tt">각도에서 좌표로</p><p class="ts">주제 2 · 2차시</p><a class="it" href="#s22">오늘의 각도 제어 명령어</a><a class="it" href="#s23">실행해보기</a><a class="it" href="#s24">숫자를 바꿔 세 자세 만들기</a><a class="it" href="#s25">집게 끝 가장 멀리 보내기</a><a class="it" href="#s26">집게 끝 가장 높이 올리기</a><a class="it" href="#s27">책상에 닿을 듯 말 듯 멈추기</a><a class="it" href="#s28">자세를 상상하고 실행해보기</a><a class="it" href="#s29">내 예상과 로봇의 답, 왜 다를까?</a><a class="it" href="#s30">각도 네 개로 좌표를 알 수 있을까?</a><a class="it" href="#s31">로봇의 치수</a><a class="it" href="#s32">측정의 기준 정해보기</a><a class="it" href="#s33">활동지로 직접 재보기</a><a class="it" href="#s34">로봇 팔과 막대 세 개</a><a class="it" href="#s35">빈칸 채우고 Home 넣어보기</a><a class="it" href="#s36">각도의 + 는 어느 쪽일까?</a><a class="it" href="#s37">코드로 옮겨보기</a><a class="it" href="#s38">눈대중과 계산, 누가 맞힐까?</a><a class="it" href="#s39">6mm, 우연일까?</a><a class="it" href="#s40">숨어 있던 0.6cm 더해보기</a><a class="it" href="#s41">정리</a></nav>
+<button id="tocbtn" type="button">목차</button>
+<main id="doc">
+<header class="top"><p class="lab">주제 2 · 2차시</p><h1>각도에서 좌표로</h1><p>로봇은 제 손끝이 어디인지 어떻게 아는가 — 순기구학</p></header>
+<section class="slide" id="s22"><h2>오늘의 각도 제어 명령어 <span class="tag">명령어</span></h2><pre># ── 지금까지 배운 명령 ──
+encoder(-1)               # 관절 각도 4개 읽기 (주제 1에서 썼다)
+xyz()                     # 집게 끝 좌표 읽기 (주제 1에서 썼다)
+ 
+# ── 오늘 새로 배우는 명령 ──
+degree_to(j1, j2, j3, j4, 속도)    # 네 관절을 한 번에 그 각도로
+degree_to(관절번호, 각도)          # 한 관절만 콕 집어서
+wait(ms)                  # 다음 명령까지 잠깐 기다리기
+beep()                    # “삑” — 동작이 끝났다는 신호음</pre><div class="txt"><p>주제 1에서는 로봇의 상태를 <b>읽기만</b> 했다 — encoder 로 각도를, xyz 로 좌표를.</p><p>오늘부터는 로봇에세 특정한 동작을 <b>시킬</b><b> 수 </b><b>있다</b><b>.</b></p><p>degree_to 에 각도를 넣으면 팔이 그 자세를 만든다.</p></div></section><section class="slide" id="s23"><h2>실행해보기 <span class="tag">실습 1 · 그대로 실행</span></h2><div class="txt"><p>degree_to 는 관절 네 개의 각도를 <br>한 번에 정하는 명령이다.</p></div><pre>from roboid import *
+ 
+raccoon = Raccoon()
+ 
+raccoon.degree_to(0, 0, 0, 0, 30) # 위로 쭉 (Zero)
+raccoon.beep()
+wait(1000)
+raccoon.degree_to(0, -20, -70, 0, 30) # 앞으로 숙인 자세
+raccoon.beep()
+wait(1000)
+raccoon.degree_to(1, 45) # 관절 1만 +45도
+raccoon.beep()
+wait(1000)
+raccoon.degree_to(0, -10, -140, 60)  # Home 복귀
+raccoon.dispose()</pre><div class="txt"><p class="lbl">[관찰해보기]</p><p>코드를 실행하면  팔이 어떤 순서로 움직이는지?</p><p>숫자 네 개 중 <b>몇째</b><b> </b><b>숫자가</b><b> </b><b>어느</b><b> </b><b>관절</b>을 움직이는지?</p><p>(마지막 숫자 30 은 속도이다.)</p></div><div class="txt"><p><b>안전</b> — 실행 전 팔 주변 30cm 를 비우고, 속도 30 은 그대로 둔다.</p></div><div class="txt"><p>degree_to(관절번호, 각도) 처럼 두 개만 쓰면 그 관절 하나만 움직인다</p></div></section><section class="slide" id="s24"><h2>숫자를 바꿔 세 자세 만들기 <span class="tag">[미션] 각도만 바꿔서</span></h2><pre>from roboid import * 
+raccoon = Raccoon()
+raccoon.lock_horz()
+raccoon.degree_to(0, -10, -140, 90)  # ← 이 네 각도를 바꾼다
+wait(1000)
+print(raccoon.xyz())                    # 집게 끝 좌표 (x, y, z)</pre><div class="cols" style="grid-template-columns:25fr 16fr"><div><div class="tbl"><table><tr><th><b>규칙</b></th><th><b>왜</b></th></tr><tr><td><b>한 번에 한 </b><b>관절씩</b> 바꾸고 실행</td><td>어느 숫자가 무엇을 바꿨는지 알 수 있다</td></tr><tr><td>3번 미션은 10도씩 줄여 가며 천천히</td><td>책상에 박기 전에 멈출 수 있다</td></tr><tr><td>다시 실행한 횟수를 센다</td><td>“로봇은 몇 번 만에 가는가”와 비교하게 된다</td></tr><tr><td>오프셋</td><td>전방 8 / 아래 0.6</td></tr></table></div></div><div><div class="txt"><p>집게 끝을 <b>가장</b><b> </b><b>멀리</b> 앞으로 — y 를 최대로</p><p>집게 끝을 <b>가장 높이</b> — z 를 최대로</p><p>책상에 <b>닿을 듯 말 듯</b> — z 가 1 ~ 2 사이</p></div></div></div></section><section class="slide" id="s25"><h2>집게 끝 가장 멀리 보내기 <span class="tag">[미션 1]</span></h2><div class="txt"><p><b>[</b><b>목표</b><b>]</b> <b>y 를 </b><b>최대로</b><b>.</b> <br>그림처럼 팔이 한 직선이 되면 가장 멀리 간다.</p><p>어느 관절을 몇 도로 눕혀야 이 모양이 될까?</p><p><b>실습</b><b> 1 </b><b>코드의</b><b> </b><b>degree_to</b><b> </b><b>숫자를</b><b> 한 </b><b>관절씩</b><b> </b><b>바꿔</b><b> </b><b>가며</b><b> </b><b>찾아본다</b><b>.</b></p></div><figure><img src="../img/g02/s025-1.jpg" alt="집게 끝 가장 멀리 보내기 — 그림" style="width:580px" loading="lazy"></figure><div class="txt"><p>그림은 예상 모양이다 — 답은 여러 개일 수 있고, 판정은 xyz() 숫자로 한다</p></div><div class="cols" style="grid-template-columns:25fr 16fr"><div><pre>from roboid import * 
+raccoon = Raccoon()
+raccoon.degree_to(0, -10, -70, 90)
+wait(1000)
+raccoon.degree_to(0, -10, -140, 0)# ← 이 각도를 바꿔보세요
+wait(1000)
+print(raccoon.xyz())               #집게 끝 좌표 (x, y, z)</pre></div><div><div class="tbl"><table><tr><th><b>기록</b></th><th><b>값</b></th></tr><tr><td>내가 찾은 각도 (j1, j2, j3, j4)</td><td></td></tr><tr><td>print(raccoon.xyz()) 실측</td><td></td></tr><tr><td>다시 실행한 횟수</td><td></td></tr></table></div></div></div></section><section class="slide" id="s26"><h2>집게 끝 가장 높이 올리기 <span class="tag">[미션 2]</span></h2><div class="cols" style="grid-template-columns:19fr 20fr"><div><figure><img src="../img/g02/s026-1.jpg" alt="집게 끝 가장 높이 올리기 — 그림" style="width:540px" loading="lazy"></figure></div><div><div class="txt"><p class="lbl"><b>[</b><b>목표</b><b>]</b> <b>z 를 </b><b>최대로</b><b>.</b></p><p>그림처럼 팔을 똑바로 세우면 된다.</p><p>좌우 공간을 충분히 비우고 실행한다.</p></div><div class="tbl"><table><tr><th><b>기록</b></th><th><b>값</b></th></tr><tr><td>내가 찾은 각도 (j1, j2, j3, j4)</td><td></td></tr><tr><td>print(raccoon.xyz()) 실측</td><td></td></tr><tr><td>다시 실행한 횟수</td><td></td></tr></table></div></div></div><p class="note">그림은 예상 모양이다 — 답은 여러 개일 수 있고, 판정은 xyz() 숫자로 한다</p></section><section class="slide" id="s27"><h2>책상에 닿을 듯 말 듯 멈추기 <span class="tag">[미션 3]</span></h2><div class="cols" style="grid-template-columns:20fr 20fr"><div><figure><img src="../img/g02/s027-1.jpg" alt="책상에 닿을 듯 말 듯 멈추기 — 그림" style="width:578px" loading="lazy"></figure></div><div><div class="txt"><p><b>[</b><b>목표</b><b>]</b><b> </b><b>z 가 1 ~ 2 </b><b>사이</b><b>.</b> <br>그림처럼 팔꿈치를 깊게 접어 내려가는 모양이 된다. <br>이 미션만의 규칙 : 실습 1 코드의 degree_to 숫자를 <br><b>10도씩</b>, 속도 30 이하로, 조금씩 내려간다.</p></div><div class="tbl"><table><tr><th><b>기록</b></th><th><b>값</b></th></tr><tr><td>내가 찾은 각도 (j1, j2, j3, j4)</td><td></td></tr><tr><td>print(raccoon.xyz()) 실측</td><td></td></tr><tr><td>다시 실행한 횟수</td><td></td></tr></table></div></div></div><div class="txt"><p><span class="hl"><b>※ </b></span><span class="hl"><b>만약 팔이 책상에 닿으면 바로 손을 떼고 </b></span><span class="hl"><b>Home </b></span><span class="hl"><b>자세로 복귀하세요</b></span></p></div></section><section class="slide" id="s28"><h2>자세를 상상하고 실행해보기 <span class="tag">실습 3 · 실행 전에 멈춘다</span></h2><pre>raccoon.degree_to(0, -30, -60, 0, 30)</pre><div class="txt"><p>머릿속으로 팔 모양을 그린다 — 어깨 −30°, 팔꿈치 −60°, 손목 0°</p><p>집게 끝의 예상 위치를 숫자로 적는다 — 앞으로 y = ___ cm, 높이 z = ___ 츠</p><p>옆 사람과 예상을 비교한다 — 아마 서로 다를 것이다</p><p>이제 실행하고 print(raccoon.xyz()) 의 실측을 옆에 적는다</p><p>|내 예상 − 실측| 을 계산한다</p><p>내가 생각한 거리와 실제 이동한 거리는 <b>얼마나</b><b>, </b><b>어느 쪽으로 빗나갔나</b><b>?</b></p></div></section><section class="slide" id="s29"><h2>내 예상과 로봇의 답, 왜 다를까? <span class="tag">생각해보기</span></h2><div class="txt"><p>방금 교실의 예상은 사람마다 달랐다. 실측은 하나였고, 다시 실행해도 같은 자리였다. <br>미션에서도 그랬다 — 우리는 몇 번씩 고쳐 실행했지만, 로봇은 각도 네 개만 받으면 망설이지 않았다.</p><p>로봇이 집게 끝의 위치를 <b>미리 계산하고 있다</b>는 뜻이다.</p></div><div class="txt"><p>지난 시간에 같은 팔의 같은 상태를 두 가지 방식으로 표현해보았다.</p><p><b>encoder(-1)  - </b><b>관절</b><b> </b><b>각도</b><b> 4개를 </b><b>읽기</b><b>     </b><b>xyz</b><b>() - </b><b>집게</b><b> 끝 </b><b>좌표</b><b> 3개를 </b><b>읽기</b></p><p>각도로 시키고(degree_to), 좌표로 읽는(xyz()) 방식을 '순기구학'이라고 부른다.</p></div></section><section class="slide" id="s30"><h2>각도 네 개로 좌표를 알 수 있을까?</h2><div class="txt"><p>로봇은 관절 이동 가능 공간에서만 움직일 수 있기 때문에 4개의 관절 각도를 필요로 한다.</p><p>사람은 관절의 끝이 어디에 위치해있는가?를 기준으로 생각하고 해석한다.</p><p>서로 다른 표현을 잇는 것을 <b>"</b><b>기구학"</b>이라고 부른다.</p><p><b>순기구학</b><b>?</b> 관절 네 개의 각도로 3차원 좌표 지점(x, y, z)을 산출하는 방식을 의미한다.</p></div></section><section class="slide" id="s31"><h2>로봇의 치수 <span class="tag">출처: 라쿤봇 매뉴얼 1장 · 순기구학 검산으로 확인</span></h2><div class="tbl"><table><tr><th><b>구간</b></th><th><b>기호</b></th><th><b>길이</b></th></tr><tr><td>바닥 ~ 어깨</td><td>L1</td><td>8.25cm</td></tr><tr><td>어깨 ~ 팔꿈치</td><td>L2</td><td>10cm</td></tr><tr><td>팔꿈치 ~ 손목</td><td>L3</td><td>10cm</td></tr><tr><td>손목 ~ 집게 끝(앞)</td><td>GRIP</td><td>8.0cm</td></tr><tr><td>손목 ~ 집게 끝(아래)</td><td>-</td><td>0.6cm</td></tr></table></div><figure><img src="../img/g02/s031-1.jpg" alt="로봇의 치수 — 그림" style="width:479px" loading="lazy"></figure><div class="txt"><p>로봇팔의 끝 지점을 알기 위해서는 아래 3개 요소를 고려해야 한다.</p><p><b>1. </b><b>집게</b><b> </b><b>끝의</b><b> </b><b>위치</b></p><p><b>2. </b><b>닫힌</b><b> 두 </b><b>날이</b><b> </b><b>만나는</b><b> 점(</b><b>좌표가</b><b> </b><b>가리키는</b><b> </b><b>지점</b><b>)</b></p><p><b>3. </b>집게의 끝은 손목 축에서 <b>앞으로</b><b> 8cm</b> 떨어져 있다.</p></div></section><section class="slide" id="s32"><h2>측정의 기준 정해보기</h2><div class="cols" style="grid-template-columns:22fr 18fr"><div><div class="tbl"><table><tr><th><b>항목</b></th><th><b>우리 정의</b></th></tr><tr><td>원점</td><td>베이스 회전축이 책상면과 만나는 점 <br>(그림은 부록 《오차와 한계의 과학》)</td></tr><tr><td>+x</td><td>오른쪽</td></tr><tr><td>+y</td><td>로봇 정면 앞쪽</td></tr><tr><td>+z</td><td>책상면에서 위로</td></tr><tr><td>기준점</td><td>닫힌 두 날이 만나는 점</td></tr><tr><td>단위</td><td>코드 cm,측정 mm</td></tr></table></div><div class="card"><div class="txt"><p>검산 — Home <span class="hl">(0, −10, −140, 60)</span> 는 <span class="hl">(0, 14.7, 8.8)</span>.</p><p>집게 끝이 로봇 앞 14.7cm, 책상 위 8.8cm 에 있다는 뜻이다.</p></div></div></div><div><div class="card"><div class="txt"><p>집게를 닫으면 날 끝이 한 점에서 만난다</p></div><figure><img src="../img/g02/s032-1.jpg" alt="측정의 기준 정해보기 — 그림" style="width:503px" loading="lazy"></figure><figure><img src="../img/g02/s032-2.png" alt="측정의 기준 정해보기 — 그림" style="width:68px" loading="lazy"></figure><div class="txt"><p>좌표가 가리키는 점은 손목이 아니라 <b>집게의 끝</b>이다</p></div></div></div></div></section><section class="slide" id="s33"><h2>활동지로 직접 재보기 <span class="tag">활동 · 「삼각비 활동지」와 자</span></h2><div class="cols" style="grid-template-columns:25fr 16fr"><div><div class="txt"><p><b>「</b><b>삼각비</b><b> </b><b>활동지」</b>에 <b>30° / 45° / 60°</b> 로 눕힌 선이 미리 그려져 있다.</p><p>각 선 위에 <b>원점에서</b><b> 10cm</b> 되는 곳을 자로 표시하고,</p><p>그 점의 <b>앞으로</b><b> 간 </b><b>거리</b>와 <b>올라간</b><b> </b><b>높이</b>를 모눈으로 읽는다.</p></div></div><div><figure><img src="../img/g02/s033-1.png" alt="활동지로 직접 재보기 — 그림" style="width:451px" loading="lazy"></figure></div></div><div class="tbl"><table><tr><th><b>각도</b></th><th><b>앞으로 간 거리</b></th><th><b>10 x sin</b></th><th><b>올라간 높이</b></th><th><b>10 x cos</b></th></tr><tr><td>30°</td><td></td><td>5.00</td><td></td><td>8.66</td></tr><tr><td>45°</td><td></td><td>7.07</td><td></td><td>7.07</td></tr><tr><td>60°</td><td></td><td>8.66</td><td></td><td>5.00</td></tr></table></div><div class="card"><div class="txt"><p><span class="hl"><b>sin 은 </b></span><span class="hl"><b>앞으로</b></span><span class="hl"><b>, cos 은 </b></span><span class="hl"><b>위로</b></span> 얼마 가는지 내주는 도구다. (각도는 수직에서 눕힌 만큼)</p></div></div></section><section class="slide" id="s34"><h2>로봇 팔과 막대 세 개</h2><figure><img src="../img/g02/s034-1.png" alt="로봇 팔과 막대 세 개 — 그림" style="width:1077px" loading="lazy"></figure><div class="txt"><p><b>로봇팔</b><b> </b><b>좌표</b><b> </b><b>계산</b><b> </b><b>공식</b><b> : </b><b>수평</b><b> </b><b>거리</b><b> = </b><b>길이</b><b> × sin</b><b> | </b><b>수직</b><b> </b><b>거리</b><b> = </b><b>길이</b><b> × cos</b>.</p><p>(각도는 수평이 아니라 <b>수직을</b><b> </b><b>기준으로</b><b> </b><b>측정한다</b><b>. </b><b>막대가</b><b> 네 </b><b>개로</b><b> </b><b>늘어나도</b><b> </b><b>각각</b><b> </b><b>재서</b><b> </b><b>더하면</b><b> </b><b>끝이다</b><b>.)</b></p></div><div class="txt"><p>각도는 <b>누적된다</b><b>.</b> 그림처럼 어깨(J2)의 막대 기울기는 J2 그대로지만, 팔꿈치 막대는 어깨에서 이미 기울어진 상태에서 <b>더</b> 기울인 것이라 J2 + J3 가 된다. <br>집게는 J2 + J3 + J4 다. 팔꿈치 각도가 “절대 각도” 가 아니라 “직전 마디에 대한 <br>상대 각도” 라는 점이 핵심이다.</p></div></section><section class="slide" id="s35"><h2>빈칸 채우고 Home 넣어보기 <span class="tag">[미션] 식을 코드로 · 작성&amp;실행 02_순기구학_실습.py</span></h2><div class="txt"><p>집게의 누적 각도 <span class="hl">0</span> 부분을 수정해보자.</p><p>(바로 윗줄(팔꿈치)를 참고)</p><p>매뉴얼의 Home 좌표는 <b>(0, 14.7, 8.8)</b> 이다. 내가 실행한 결과에서 나온 값은?</p></div><pre># lessons/02_순기구학_실습.py 의 핵심 부분
+a2 = radians(j2)     # 어깨 막대
+a3 = radians(j2 + j3) # 본보기 — 팔꿈치는 어깨에서 ‘더’
+a4 = radians( 0 )   # TODO — 집게는? (윗줄이 본보기)
+r = L2*sin(a2) + L3*sin(a3) + GRIP*sin(a4)  
+# 높이
+z = L1 + L2*cos(a2) + L3*cos(a3) + GRIP*cos(a4)  
+ 
+print(순기구학(0, -10, -140, 60))  # Home</pre><p class="note">틀린 답도 데이터다 — 어떻게 틀렸는지가 다음 장이다</p></section><section class="slide" id="s36"><h2>각도의 + 는 어느 쪽일까? <span class="tag">함정 — 부호 규약</span></h2><div class="cols" style="grid-template-columns:18fr 18fr"><div><div class="card"><div class="txt"><p><span class="hl">방금</span><span class="hl"> 내 식</span></p></div><pre>r = L2·sin a2 + L3·sin a3 + GRIP·sin a4</pre><pre>→  y = −14.74</pre><div class="txt"><p>집게가 로봇 <b>뒤쪽</b>에 있다는 답</p></div></div></div><div><div class="card"><div class="txt"><p>r 앞에 − 하나를 붙이면</p></div><pre>r = −(L2·sin a2 + L3·sin a3 + GRIP·sin a4)</pre><pre>→  y = +14.74</pre><div class="txt"><p>매뉴얼 값 <b>14.7</b> 과 일치</p></div></div></div></div><div class="txt"><p>방금 TODO 를 채워 완성한 식은, Home 을 넣자 집게가 로봇 <b>뒤쪽</b>(y = −14.74)에 있다는 답을 내놓았다. 로봇은 분명 앞으로 팔을 뻗고 있는데도 그렇다. 틀린 것은 삼각함수가 아니라 <b>각도의</b><b> + </b><b>방향을</b><b> </b><b>어느</b><b> </b><b>쪽으로</b><b> </b><b>보느냐</b> 다. 우리는 앞으로 숙이는 쪽을 +로 생각하고 식을 세웠지만, roboid 는 반대로 잡는다.</p></div><div class="txt"><p>단서는 이미 사양서에 있었다. <b>J2 의 </b><b>범위가</b><b> −90 ~ +30</b> 이라는 것 — 아래로 많이 내려가고 위로는 조금만 올라간다는 뜻이니, <b>앞으로</b><b> </b><b>숙이는</b><b> </b><b>쪽이</b><b> </b><b>음수</b>다. 라이브러리의 규약을 먼저 확인하지 않으면 식이 맞아도 답이 틀린다.</p></div></section><section class="slide" id="s37"><h2>코드로 옮겨보기</h2><div class="txt"><p>방금 채운 TODO 의 완성본이다. 코드는 <b>세 단계</b>다 — 왼쪽의 색 띠가 단계다.</p></div><div class="cols" style="grid-template-columns:25fr 14fr"><div><pre>def 순기구학(j1, j2, j3, j4):
+① a2 = radians(j2)               # 어깨 막대의 기울기
+   a3 = radians(j2 + j3)          # 팔꿈치 = 어깨에서 ‘더’
+   a4 = radians(j2 + j3 + j4)     
+ 
+# 집게까지 누적
+② r = −(L2*sin(a2) + L3*sin(a3) + GRIP*sin(a4))  
+   z = L1 + L2*cos(a2) + L3*cos(a3) + GRIP*cos(a4)# 높이
+ 
+③ a1 = radians(j1)               # 위에서 본 회전
+   return −r*sin(a1), r*cos(a1), z  # r 을 x, y 로 나눈다</pre></div><div><div class="card"><div class="txt"><p class="lbl"><b>① </b><b>누적</b><b> </b><b>각도</b><b> 세 개</b></p><p>a2, a3, a4 — chain 의 규칙 그대로, 아래 관절일수록 각도가 쌓인다</p></div></div><div class="card"><div class="txt"><p class="lbl"><span class="hl"><b>② </b></span><span class="hl"><b>막대마다</b></span><span class="hl"><b> </b></span><span class="hl"><b>sin·cos</b></span></p><p>sin 은 <b>r</b>(앞으로), cos 은 <b>z</b>(높이)로.</p><p>r 앞의 <span class="hl"><b>−</b></span> 는 y 가 −14.74 로 나오던 <br><b>“+는 </b><b>뒤로</b><b>” </b><b>함정</b>의 흔적이다</p></div></div></div></div><div class="card"><div class="txt"><p class="lbl"><b>③ 위에서 본 회전</b></p><p>J1 만큼 돌려 r 을 <b>x 와 y</b> 로 나눈다</p></div></div></section><section class="slide" id="s38"><h2>눈대중과 계산, 누가 맞힐까?</h2><div class="txt"><p>전반부에서 눈대중으로 예상했던 자세 (0, -30, -60, 0) 을 이제 식에 넣는다. <br>손계산이든 순기구학() 이든 같은 값이 나온다.</p></div><figure><img src="../img/g02/s038-1.png" alt="눈대중과 계산, 누가 맞힐까? — 그림" style="width:517px" loading="lazy"></figure><div class="card"><div class="txt"><p>내 식의 예측</p></div><pre>(0,  23.0,  16.9)</pre></div><div class="card"><div class="txt"><p>실측 xyz()</p></div><pre>(0,  23.0,  16.3)</pre></div><div class="txt"><p class="lbl">x 와 y 는 정확히 맞았다.</p><p>눈대중은 사람마다 다를 수 있다 — 같은 자세를 보고도 적어 낸 숫자가 제각각이었다.</p><p>식은 다르다. <b>누가</b><b> </b><b>계산해도</b><b> </b><b>같은</b><b> </b><b>값</b>이 나오고, 그 값이 실측과 들어맞는다 — 이것이 로봇 안에 들어 있던 계산이다.</p><p>그런데 하나가 남는다. z 가 0.6cm, 꼭 그만큼 크다. 우연일까?</p></div></section><section class="slide" id="s39"><h2>6mm, 우연일까?</h2><div class="tbl"><table><tr><th><b>자세</b></th><th><b>내 계산</b><b> z</b></th><th><b>Roboid z </b></th><th><b>차이</b></th></tr><tr><td>예측 자세</td><td>16.91</td><td>16.31</td><td>6.0mm</td></tr><tr><td>Home</td><td>9.44</td><td>8.84</td><td>6.0mm</td></tr><tr><td>팔 펴기</td><td>8.25</td><td>7.65</td><td>6.0mm</td></tr><tr><td>왼쪽 가까이</td><td>8.61</td><td>8.01</td><td>6.0mm</td></tr><tr><td>오른쪽 멀리</td><td>7.68</td><td>7.08</td><td>6.0mm</td></tr><tr><td>5자세 전부</td><td>-</td><td>-</td><td>6.0mm</td></tr></table></div><div class="txt"><p>자세를 바꿔 가며 손목은 수평으로 두고 다시 재 본다. 팔을 펴도, 접어도, 옆으로 돌려도 x 와 y 는 맞는데 z 만 크고, 그 차이가 전부 6.0mm 다. 여기서 “6mm 틀렸다” 로 멈추면 고칠 수가 없다. 중요한 것은 <b>차이가</b><b> </b><b>어느</b><b> </b><b>자세에서나</b><b> </b><b>똑같다</b>는 사실이다.</p></div><div class="txt"><p>자세를 바꿨는데 오차가 변하지 않았다는 것은, <b>그 오차가 자세와 무관하다</b>는 뜻이다. 각도를 잘못 다뤘다면 자세마다 달라졌을 것이다. 그러니 범인은 각도가 아니다.</p></div></section><section class="slide" id="s40"><h2>숨어 있던 0.6cm 더해보기</h2><div class="txt"><p>치수표로 돌아가면 아직 쓰지 않은 숫자가 하나 남아 있다 — 집게 끝은 손목에서 앞으로 8cm 에 더해 <b>아래로</b><b> 0.6cm</b> 내려가 있다. 우리 식은 앞 8cm 만 넣었다. 빠진 0.6cm 가 z 에 그대로 남아 6.0mm 가 된 것이다.</p><p>이제 각자 순기구학() 함수에 아래 두 항을 직접 추가해서 오차를 지워 보자.</p></div><pre>r += −GRIP_FWD*sin(a4) + GRIP_DOWN*cos(a4)
+z +=  GRIP_FWD*cos(a4) + GRIP_DOWN*sin(a4)</pre><div class="txt"><p>단순히 z 에서 0.6 을 빼면 되는 것이 아니다. 손목이 기울면 그 0.6cm 도 <b>함께</b><b> </b><b>돌아가므로</b>, 앞으로 가는 몫과 위로 가는 몫으로 나뉘어 r 과 z 양쪽에 들어간다. 두 항의 부호는 둘 다 + 다 — 반대로 넣으면 오차가 지워지기는커녕 <b>12mm 로 두 </b><b>배</b>가 된다.</p></div><div class="cols" style="grid-template-columns:17fr 17fr"><div><div class="card"><div class="txt"><p>고치기 전 — 내 식</p></div><pre>6.00 mm</pre></div></div><div><div class="card"><div class="txt"><p>고친 후</p></div><pre>0.00 mm</pre></div></div></div></section><section class="slide" id="s41"><h2>정리</h2><div class="txt"><p>오늘은 감으로 먼저 움직였고, 예상이 흩어지는 것을 보았다. 그 다음 <b>기준을</b><b> </b><b>정하고</b><b>, </b><b>막대를</b><b> </b><b>재서</b><b> </b><b>더해</b><b> </b><b>로봇</b><b> </b><b>안의</b><b> </b><b>계산을</b><b> </b><b>직접</b><b> </b><b>만들었고</b>, 그 식으로 아침의 자세를 맞혔다.</p><p>원점과 축과 부호와 기준점을 먼저 정하지 않으면 숫자가 뜻을 갖지 못한다. 그 다음은 오늘 모눈종이에서 한 것과 같았다 — sin 은 앞으로, cos 은 위로. 다만 각도가 누적된다는 것만 더했다.</p></div><div class="txt"><p>가장 오래 남길 것은 마지막 단계다. 두 번 틀렸고 두 번 다 <b>오차의</b><b> </b><b>모양이</b><b> </b><b>범인을</b><b> </b><b>알려</b><b> </b><b>줬다</b><b>.</b> <br>답이 로봇 뒤쪽에 나온 것은 부호 규약을 확인하지 않아서였고, 어느 자세에서나 똑같이 6mm 였던 것은 상수를 빠뜨려서였다. 자세마다 달랐다면 다른 곳을 봐야 했을 것이다.</p></div><div class="card"><div class="txt"><p><b>다음</b><b> </b><b>주제</b><b> —</b><b>좌표를</b><b> </b><b>주면</b><b> 그 </b><b>자리로</b><b> 갈 수 </b><b>있을까</b><b>? 못 </b><b>가는</b><b> </b><b>곳도</b><b> </b><b>있을까</b><b>? 그 </b><b>경계는</b><b> </b><b>어디인가</b><b>?</b></p></div></div></section>
+<div class="nav"><span><a href="주제1_로봇팔과_좌표계.html">← 주제 1 로봇팔과 좌표계</a></span><a href="index.html">차례</a><span><a href="주제3_작업_공간.html">주제 3 작업 공간 →</a></span></div>
+</main>
+<script>
+var S=[].slice.call(document.querySelectorAll('.slide')),L=document.querySelectorAll('#toc a.it');
+function mark(){var y=window.scrollY+120,id='';for(var i=0;i<S.length;i++)if(S[i].offsetTop<=y)id=S[i].id;
+for(var j=0;j<L.length;j++)L[j].classList.toggle('now',L[j].getAttribute('href')==='#'+id);}
+var tk=false;window.addEventListener('scroll',function(){if(tk)return;tk=true;requestAnimationFrame(function(){tk=false;mark();});});
+document.getElementById('tocbtn').onclick=function(){document.body.classList.toggle('open');};
+[].forEach.call(L,function(a){a.addEventListener('click',function(){document.body.classList.remove('open');});});
+mark();
+</script>
+</body>
+</html>

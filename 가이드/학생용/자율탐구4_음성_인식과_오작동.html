@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>자율 탐구 ④ 음성 인식과 오작동 — 학생용</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Gothic+A1:wght@400;700&display=swap">
+<style>
+:root{--ink:#16212e;--sub:#4a5866;--mut:#7e8c9b;--line:#dfe3e8;--bg:#ffffff;--paper:#f7f6f1;
+--teal:#1f8a7c;--orange:#d9622f;--red:#c6402f;--code:#13202d;--codefg:#e7eef6;--card:#fbfaf6}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--ink:#e6edf3;--sub:#b9c5d0;--mut:#8796a5;
+--line:#26323f;--bg:#0f151c;--paper:#141c25;--card:#151e28;--code:#0a1017}}
+:root[data-theme="dark"]{--ink:#e6edf3;--sub:#b9c5d0;--mut:#8796a5;--line:#26323f;--bg:#0f151c;--paper:#141c25;--card:#151e28;--code:#0a1017}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth;scroll-padding-top:16px}
+body{background:var(--bg);color:var(--ink);font:400 16px/1.75 'Gothic A1','Malgun Gothic',sans-serif}
+a{color:var(--teal)}
+#toc{position:fixed;top:0;left:0;bottom:0;width:280px;overflow-y:auto;background:var(--paper);border-right:1px solid var(--line);padding:22px 0 60px}
+#toc .home{display:block;padding:0 20px 6px;font-size:13px;color:var(--mut);text-decoration:none}
+#toc .tt{font:400 22px/1.3 'Black Han Sans','Malgun Gothic',sans-serif;padding:0 20px}
+#toc .ts{font-size:12.5px;color:var(--mut);padding:2px 20px 14px;border-bottom:1px solid var(--line);margin-bottom:8px}
+#toc a.it{display:block;padding:5px 20px;font-size:13.5px;line-height:1.45;color:var(--sub);text-decoration:none}
+#toc a.it:hover{background:var(--card);color:var(--ink)}
+#toc a.it.now{color:var(--orange);font-weight:700}
+#tocbtn{position:fixed;left:12px;top:12px;z-index:40;display:none;font:700 13px/1 inherit;background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:9px 12px;cursor:pointer}
+#doc{margin-left:280px;padding:36px 48px 120px;max-width:1240px}
+header.top{border-bottom:2px solid var(--ink);padding-bottom:18px;margin-bottom:8px}
+header.top .lab{color:var(--orange);font-weight:700;letter-spacing:2px;font-size:14px}
+header.top h1{font:400 42px/1.2 'Black Han Sans','Malgun Gothic',sans-serif;margin:4px 0 6px}
+header.top p{color:var(--sub)}
+.nav{display:flex;justify-content:space-between;gap:12px;margin-top:40px;padding-top:16px;border-top:1px solid var(--line);font-size:14px}
+.slide{padding:30px 0 6px;border-bottom:1px dashed var(--line)}
+.slide h2{font:700 23px/1.4 'Gothic A1','Malgun Gothic',sans-serif;margin-bottom:12px;display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px}
+.tag{font-size:13px;font-weight:700;color:var(--teal);background:var(--card);border:1px solid var(--line);border-radius:20px;padding:2px 10px}
+.slide p{margin:0 0 8px;color:var(--ink)}
+.txt,.card,.chip,figure,pre,.tbl{margin:0 0 14px}
+.lbl{font-size:13px;font-weight:700;color:var(--teal)!important;margin-bottom:2px!important}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.card .txt:last-child,.card p:last-child{margin-bottom:0}
+.chip{display:inline-block;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 14px;margin-right:8px}
+.chip p{margin:0}
+.hl{color:var(--orange)}
+.cols{display:grid;gap:20px;align-items:start}
+figure img{max-width:100%;height:auto;border-radius:8px;border:1px solid var(--line);background:#fff;display:block}
+pre{font:400 14px/1.6 'D2Coding','JetBrains Mono',Consolas,monospace;background:var(--code);color:var(--codefg);border-radius:10px;padding:14px 16px;overflow-x:auto;white-space:pre}
+.tbl{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14.5px}
+th,td{border:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--paper);font-weight:700}
+.note{font-size:13.5px;color:var(--mut)!important}
+.sn{display:inline-block;width:28px;height:28px;border-radius:50%;background:var(--teal);color:#fff;text-align:center;font:700 15px/28px inherit;margin-right:4px}
+.box{border-left:4px solid var(--teal);background:var(--card);border-radius:0 10px 10px 0;padding:10px 14px;margin:10px 0}
+.box.no{border-color:var(--orange)}
+.box .bt,.tri .bt{font-size:13px;font-weight:700;color:var(--teal);margin-bottom:2px}
+.box.no .bt{color:var(--orange)}
+.tri{border-left:3px solid var(--line);padding:2px 0 2px 14px;margin:8px 0}
+.pills{display:flex;flex-wrap:wrap;gap:6px}
+.pill{font-size:13px;border:1px solid var(--line);border-radius:20px;padding:3px 10px;background:var(--card)}
+.pill.on{background:var(--teal);color:#fff;border-color:var(--teal)}
+ul{padding-left:22px;margin:0 0 10px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin:14px 0 26px}
+.grid a{display:block;text-decoration:none;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.grid a:hover{border-color:var(--teal)}
+.grid .k{font-size:12.5px;font-weight:700;color:var(--orange)}
+.grid .n{font-weight:700;font-size:18px;line-height:1.35}
+.grid .d{font-size:13.5px;color:var(--sub)}
+h3.part{font-size:18px;margin-top:26px}
+.tnote{margin:12px 0 4px;background:#fff8e6;border:1px solid #ecd9a6;border-left:4px solid #d9a21f;border-radius:0 10px 10px 0;padding:10px 14px;color:#3d3420}
+.tnote p{color:#3d3420!important;font-size:14.5px}
+.tnote .bt{font-size:13px;font-weight:700;color:#a8780c!important;margin-bottom:2px}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .tnote{background:#2a2414;border-color:#5a4a1e}
+:root:not([data-theme="light"]) .tnote p{color:#efe3c2!important}}
+#doc.wide{margin:0 auto;max-width:1100px}
+.grid a .n{display:block}
+.grid.big{grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
+.grid.big a{padding:26px 24px}
+.grid.big .n{font:400 30px/1.3 'Black Han Sans','Malgun Gothic',sans-serif;margin:4px 0}
+@media (max-width:900px){#toc{transform:translateX(-100%);transition:transform .18s;z-index:30}
+body.open #toc{transform:none}#doc{margin-left:0;padding:56px 16px 100px}#tocbtn{display:block}
+.cols{grid-template-columns:1fr!important}figure img{width:auto!important}}
+@media print{#toc,#tocbtn,.nav{display:none}#doc{margin:0;padding:0;max-width:none}.slide{page-break-inside:avoid}}
+</style>
+</head>
+<body>
+<nav id="toc"><a class="home" href="index.html">← 학생용 차례</a><p class="tt">음성 인식과 오작동</p><p class="ts">자율 탐구 ④ · 프로젝트에 붙이기</p><a class="it" href="#s139">자율 탐구 — 음성 인식과 오작동</a><a class="it" href="#t9-why">왜 하나</a><a class="it" href="#t9-1">1. 자유 발화로 먼저 실패해 본다</a><a class="it" href="#t9-2">2. 쓸 수 있는 말을 여덟 개로 줄인다</a><a class="it" href="#t9-3">3. 명령이 아닌 말을 스무 개 넣어 본다</a><a class="it" href="#t9-4">4. 인식기 밖에 거절을 만든다</a><a class="it" href="#t9-measure">숫자로 재기</a><a class="it" href="#t9-project">프로젝트에 붙이기</a><a class="it" href="#t9-more">더 가고 싶으면</a></nav>
+<button id="tocbtn" type="button">목차</button>
+<main id="doc">
+<header class="top"><p class="lab">자율 탐구 ④ · 프로젝트에 붙이기</p><h1>음성 인식과 오작동</h1><p>아무 말에도 움직인다</p></header>
+<section class="slide" id="s139"><h2>자율 탐구 — 음성 인식과 오작동 <span class="tag">자율 탐구 ④</span></h2><div class="cols" style="grid-template-columns:17fr 17fr"><div><div class="card"><div class="txt"><p><b>무엇을 하나</b></p></div><div class="txt"><p>오프라인 한국어 모델로 말을 받아 본다. 자유 발화는 먼저 실패하고, <b>제한 어휘</b>로 바꾸면 올라간다. 그 까닭을 따진다.</p></div></div></div><div><div class="card"><div class="txt"><p><b>프로젝트에 어떻게</b></p></div><div class="txt"><p>음성 카페 주제에 쓴다. 성공 기준이 "비명령 스무 개에 오작동 0" 처럼 <b>막는 쪽</b> 숫자로 적힌다.</p></div></div></div></div><div class="cols" style="grid-template-columns:17fr 17fr"><div><div class="card"><div class="txt"><p><span class="hl"><b>무엇이 필요한가</b></span></p></div><div class="txt"><p>마이크와 Vosk. 모델은 vosk-model-small-ko-0.22 (풀면 253MB), models/vosk-ko/ 에 둔다. 인식기 코드는 아직 안 만들었다.</p></div></div></div><div><div class="card"><div class="txt"><p><span class="hl"><b>어디서 막히나</b></span></p></div><div class="txt"><p>후보가 여덟 개뿐이면 무슨 소리든 여덟 개 중 하나가 된다. 호출어 · 푸시투토크 · 복창 확인으로 <b>인식기 밖에서</b> 막는다.</p></div></div></div></div><p class="note">docs/voice_control_feasibility.md</p></section><section class="slide" id="t9-why"><h2>왜 하나</h2><p class="pills"><span class="pill on">100분 × 2</span><span class="pill">마이크</span><span class="pill">pip install vosk sounddevice</span><span class="pill">모델 253MB</span><span class="pill">조용한 자리</span></p><p>음성은 완전히 오프라인으로 돌린다. 말소리가 이 노트북 밖으로 나가지 않는다.</p><p>인식기는 "모르겠다" 고 말하지 않는다. 후보가 여덟 개뿐이면 무슨 소리든 여덟 개 중 하나가 된다.</p><p>그래서 거절하는 일은 인식기가 아니라 <b>우리가 밖에</b> 만들어 둬야 한다.</p></section><section class="slide step" id="t9-1"><h2><span class="sn">1</span>자유 발화로 먼저 실패해 본다</h2><p>모델 폴더(vosk-model-small-ko-0.22)를 코드 옆에 두고 실행한다. 내려받기 87MB, 풀면 253MB 다.</p><p>실행하기 전에 <b>몇 개나 맞출지 먼저 적는다.</b></p><pre>import queue, json, sounddevice as sd
+from vosk import Model, KaldiRecognizer
+
+model = Model("vosk-model-small-ko-0.22")
+rec = KaldiRecognizer(model, 16000)   # 음성 → 글자
+q = queue.Queue()
+def cb(data, frames, t, status): q.put(bytes(data))
+
+with sd.RawInputStream(samplerate=16000, blocksize=8000,
+        dtype="int16", channels=1, callback=cb):
+    print("말해 보세요 (Ctrl+C 종료)")
+    while True:
+        if rec.AcceptWaveform(q.get()):
+            print(json.loads(rec.Result())["text"])</pre><div class="box ok"><p class="bt">이렇게 되면 맞다</p><p>짧은 단어는 곧잘 맞고, 문장은 엉뚱하게 받아 적힌다.</p><p>교실에서 재 보면 아홉 번 중 두 번쯤 맞는다 (2/9).</p></div><div class="box no"><p class="bt">막히면</p><p>마이크를 못 찾는다 — python -c "import sounddevice; print(sounddevice.query_devices())" 로 장치 번호를 확인한다.</p><p>모델을 못 찾는다 — 폴더 이름이 vosk-model-small-ko-0.22 인지, 코드와 같은 자리인지 본다.</p></div></section><section class="slide step" id="t9-2"><h2><span class="sn">2</span>쓸 수 있는 말을 여덟 개로 줄인다</h2><p>고치는 것은 <b>세 번째 인자 하나</b>다. 쓸 수 있는 말을 적어 주는 것뿐이다.</p><pre>GRAMMAR = json.dumps(["집어","놓아","멈춰","집으로",
+                      "왼쪽","오른쪽","앞으로","뒤로"],
+                     ensure_ascii=False)
+
+rec = KaldiRecognizer(model, 16000, GRAMMAR)
+                                    ↑ 세 번째 인자</pre><div class="box ok"><p class="bt">이렇게 되면 맞다</p><p>같은 사람, 같은 마이크인데 <b>2/9 → 8/9</b> 로 올라간다.</p><p>틀리는 하나는 대개 어휘에 없는 활용형 문장이다.</p></div><div class="box no"><p class="bt">막히면</p><p>여전히 낮다면 마이크를 입에 더 가까이, 주변 소음을 줄이고 다시 잰다.</p></div></section><section class="slide step" id="t9-3"><h2><span class="sn">3</span>명령이 아닌 말을 스무 개 넣어 본다</h2><p>"점심 뭐 먹지", "아 졸려" 같은 말을 스무 개 준비해 그대로 말해 본다.</p><p>제한 어휘를 쓰면 정확도는 올라가지만, 무슨 소리든 여덟 개 중 하나로 <b>사영된다.</b></p><div class="box ok"><p class="bt">이렇게 되면 맞다</p><p>명령할 생각이 없던 말에 로봇이 움직인다. 이것이 오늘 보려던 장면이다.</p></div><div class="box no"><p class="bt">막히면</p><p>한 번도 안 움직인다면 소리가 작은 것이다. 평소 말하듯 또렷하게 한다.</p></div></section><section class="slide step" id="t9-4"><h2><span class="sn">4</span>인식기 밖에 거절을 만든다</h2><p>세 가지를 넣고 다시 스무 개를 말해 본다. 무엇이 몇 개를 막았는지 적는다.</p><pre># ① 호출어 — "라쿤아" 를 들은 뒤 3초 안의 말만 명령으로 친다
+# ② 푸시투토크 — 스페이스를 누르고 있는 동안만 듣는다
+# ③ 복창 확인 — "집어 맞습니까?" 에 "응" 이 와야 실행한다</pre><div class="box ok"><p class="bt">이렇게 되면 맞다</p><p>오작동이 눈에 띄게 줄어든다. 대신 쓰기가 번거로워진다 — 그 맞바꿈이 설계다.</p></div><div class="box no"><p class="bt">막히면</p><p>셋 다 넣으면 너무 느리다 — 위험한 명령(집기)에만 복창을 붙이는 식으로 나눈다.</p></div></section><section class="slide" id="t9-measure"><h2>숫자로 재기</h2><p>두 가지를 따로 센다. <b>맞히는 힘</b>과 <b>막는 힘</b>은 다른 숫자다.</p><div class="tbl"><table><tr><th>무엇을</th><th>횟수</th><th>결과</th><th>비고</th></tr><tr><td>명령 여덟 개를 차례로</td><td>10</td><td>정확 ___ / 10</td><td></td></tr><tr><td>명령이 아닌 말</td><td>20</td><td>오작동 ___ / 20</td><td>방어 넣기 전</td></tr><tr><td>명령이 아닌 말</td><td>20</td><td>오작동 ___ / 20</td><td>방어 넣은 뒤</td></tr></table></div><p class="note">프로젝트 성공 기준은 보통 아래 두 줄에서 나온다.</p></section><section class="slide" id="t9-project"><h2>프로젝트에 붙이기</h2><p>음성 카페 주제에 쓴다. 성공 기준이 <b>막는 쪽</b>으로 적힌다 — "10회 중 9회 정확 · 비명령 20개에 오작동 0".</p><p>활동지 ④칸 ②줄(인식이 틀리면)에 "기본값은 정지" 를 적고, 복창 확인을 명령표에 넣는다.</p><p>인식기 코드(vision/voice_listener.py)는 아직 만들어 두지 않았다 — 위 실습 코드를 팀 파일로 옮겨 쓴다.</p></section><section class="slide" id="t9-more"><h2>더 가고 싶으면</h2><ul><li>docs/voice_control_feasibility.md — 엔진 선택과 모델 비교</li><li>호출어 전용 모델(웨이크워드)로 바꿔 보기</li><li>명령을 소리 대신 화면 버튼으로 받는 웹 리모컨 (extras/07_웹_리모컨_가상.py)</li></ul></section>
+<div class="nav"><span><a href="자율탐구3_손동작_인식.html">← 자율 탐구 ③ 손동작 인식</a></span><a href="index.html">차례</a><span><a href="부록_오차와_한계의_과학.html">부록 오차와 한계의 과학 →</a></span></div>
+</main>
+<script>
+var S=[].slice.call(document.querySelectorAll('.slide')),L=document.querySelectorAll('#toc a.it');
+function mark(){var y=window.scrollY+120,id='';for(var i=0;i<S.length;i++)if(S[i].offsetTop<=y)id=S[i].id;
+for(var j=0;j<L.length;j++)L[j].classList.toggle('now',L[j].getAttribute('href')==='#'+id);}
+var tk=false;window.addEventListener('scroll',function(){if(tk)return;tk=true;requestAnimationFrame(function(){tk=false;mark();});});
+document.getElementById('tocbtn').onclick=function(){document.body.classList.toggle('open');};
+[].forEach.call(L,function(a){a.addEventListener('click',function(){document.body.classList.remove('open');});});
+mark();
+</script>
+</body>
+</html>

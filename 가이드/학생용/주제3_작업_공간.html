@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>주제 3 작업 공간 — 학생용</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Gothic+A1:wght@400;700&display=swap">
+<style>
+:root{--ink:#16212e;--sub:#4a5866;--mut:#7e8c9b;--line:#dfe3e8;--bg:#ffffff;--paper:#f7f6f1;
+--teal:#1f8a7c;--orange:#d9622f;--red:#c6402f;--code:#13202d;--codefg:#e7eef6;--card:#fbfaf6}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--ink:#e6edf3;--sub:#b9c5d0;--mut:#8796a5;
+--line:#26323f;--bg:#0f151c;--paper:#141c25;--card:#151e28;--code:#0a1017}}
+:root[data-theme="dark"]{--ink:#e6edf3;--sub:#b9c5d0;--mut:#8796a5;--line:#26323f;--bg:#0f151c;--paper:#141c25;--card:#151e28;--code:#0a1017}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth;scroll-padding-top:16px}
+body{background:var(--bg);color:var(--ink);font:400 16px/1.75 'Gothic A1','Malgun Gothic',sans-serif}
+a{color:var(--teal)}
+#toc{position:fixed;top:0;left:0;bottom:0;width:280px;overflow-y:auto;background:var(--paper);border-right:1px solid var(--line);padding:22px 0 60px}
+#toc .home{display:block;padding:0 20px 6px;font-size:13px;color:var(--mut);text-decoration:none}
+#toc .tt{font:400 22px/1.3 'Black Han Sans','Malgun Gothic',sans-serif;padding:0 20px}
+#toc .ts{font-size:12.5px;color:var(--mut);padding:2px 20px 14px;border-bottom:1px solid var(--line);margin-bottom:8px}
+#toc a.it{display:block;padding:5px 20px;font-size:13.5px;line-height:1.45;color:var(--sub);text-decoration:none}
+#toc a.it:hover{background:var(--card);color:var(--ink)}
+#toc a.it.now{color:var(--orange);font-weight:700}
+#tocbtn{position:fixed;left:12px;top:12px;z-index:40;display:none;font:700 13px/1 inherit;background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:9px 12px;cursor:pointer}
+#doc{margin-left:280px;padding:36px 48px 120px;max-width:1240px}
+header.top{border-bottom:2px solid var(--ink);padding-bottom:18px;margin-bottom:8px}
+header.top .lab{color:var(--orange);font-weight:700;letter-spacing:2px;font-size:14px}
+header.top h1{font:400 42px/1.2 'Black Han Sans','Malgun Gothic',sans-serif;margin:4px 0 6px}
+header.top p{color:var(--sub)}
+.nav{display:flex;justify-content:space-between;gap:12px;margin-top:40px;padding-top:16px;border-top:1px solid var(--line);font-size:14px}
+.slide{padding:30px 0 6px;border-bottom:1px dashed var(--line)}
+.slide h2{font:700 23px/1.4 'Gothic A1','Malgun Gothic',sans-serif;margin-bottom:12px;display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px}
+.tag{font-size:13px;font-weight:700;color:var(--teal);background:var(--card);border:1px solid var(--line);border-radius:20px;padding:2px 10px}
+.slide p{margin:0 0 8px;color:var(--ink)}
+.txt,.card,.chip,figure,pre,.tbl{margin:0 0 14px}
+.lbl{font-size:13px;font-weight:700;color:var(--teal)!important;margin-bottom:2px!important}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.card .txt:last-child,.card p:last-child{margin-bottom:0}
+.chip{display:inline-block;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 14px;margin-right:8px}
+.chip p{margin:0}
+.hl{color:var(--orange)}
+.cols{display:grid;gap:20px;align-items:start}
+figure img{max-width:100%;height:auto;border-radius:8px;border:1px solid var(--line);background:#fff;display:block}
+pre{font:400 14px/1.6 'D2Coding','JetBrains Mono',Consolas,monospace;background:var(--code);color:var(--codefg);border-radius:10px;padding:14px 16px;overflow-x:auto;white-space:pre}
+.tbl{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14.5px}
+th,td{border:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--paper);font-weight:700}
+.note{font-size:13.5px;color:var(--mut)!important}
+.sn{display:inline-block;width:28px;height:28px;border-radius:50%;background:var(--teal);color:#fff;text-align:center;font:700 15px/28px inherit;margin-right:4px}
+.box{border-left:4px solid var(--teal);background:var(--card);border-radius:0 10px 10px 0;padding:10px 14px;margin:10px 0}
+.box.no{border-color:var(--orange)}
+.box .bt,.tri .bt{font-size:13px;font-weight:700;color:var(--teal);margin-bottom:2px}
+.box.no .bt{color:var(--orange)}
+.tri{border-left:3px solid var(--line);padding:2px 0 2px 14px;margin:8px 0}
+.pills{display:flex;flex-wrap:wrap;gap:6px}
+.pill{font-size:13px;border:1px solid var(--line);border-radius:20px;padding:3px 10px;background:var(--card)}
+.pill.on{background:var(--teal);color:#fff;border-color:var(--teal)}
+ul{padding-left:22px;margin:0 0 10px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin:14px 0 26px}
+.grid a{display:block;text-decoration:none;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.grid a:hover{border-color:var(--teal)}
+.grid .k{font-size:12.5px;font-weight:700;color:var(--orange)}
+.grid .n{font-weight:700;font-size:18px;line-height:1.35}
+.grid .d{font-size:13.5px;color:var(--sub)}
+h3.part{font-size:18px;margin-top:26px}
+.tnote{margin:12px 0 4px;background:#fff8e6;border:1px solid #ecd9a6;border-left:4px solid #d9a21f;border-radius:0 10px 10px 0;padding:10px 14px;color:#3d3420}
+.tnote p{color:#3d3420!important;font-size:14.5px}
+.tnote .bt{font-size:13px;font-weight:700;color:#a8780c!important;margin-bottom:2px}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .tnote{background:#2a2414;border-color:#5a4a1e}
+:root:not([data-theme="light"]) .tnote p{color:#efe3c2!important}}
+#doc.wide{margin:0 auto;max-width:1100px}
+.grid a .n{display:block}
+.grid.big{grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
+.grid.big a{padding:26px 24px}
+.grid.big .n{font:400 30px/1.3 'Black Han Sans','Malgun Gothic',sans-serif;margin:4px 0}
+@media (max-width:900px){#toc{transform:translateX(-100%);transition:transform .18s;z-index:30}
+body.open #toc{transform:none}#doc{margin-left:0;padding:56px 16px 100px}#tocbtn{display:block}
+.cols{grid-template-columns:1fr!important}figure img{width:auto!important}}
+@media print{#toc,#tocbtn,.nav{display:none}#doc{margin:0;padding:0;max-width:none}.slide{page-break-inside:avoid}}
+</style>
+</head>
+<body>
+<nav id="toc"><a class="home" href="index.html">← 학생용 차례</a><p class="tt">작업 공간</p><p class="ts">주제 3 · 3~4차시</p><a class="it" href="#s43">오늘의 좌표 제어 명령어</a><a class="it" href="#s44">좌표로 움직여보기</a><a class="it" href="#s45">좌표를 바꿔 네 곳 보내기</a><a class="it" href="#s46">갈 수 있을지 O/X 예상하기</a><a class="it" href="#s47">가까운데 왜 안 될까?</a><a class="it" href="#s48">좌표에서 각도로, 반대로 가볼까?</a><a class="it" href="#s49">관절은 어디까지 움직일까?</a><a class="it" href="#s50">칸 이름으로 보내보기</a><a class="it" href="#s51">손으로 가르쳐보기</a><a class="it" href="#s52">가기 전에 물어볼까?</a><a class="it" href="#s53">같은 좌표, 왜 다른 답일까?</a><a class="it" href="#s54">로봇에게 펜을 쥐여 준다면?</a><a class="it" href="#s55">로봇이 만든 눈금자 — 자로 재서 검증한다</a><a class="it" href="#s56">로봇이 만든 눈금자 — 어느 칸에 놓나</a><a class="it" href="#s57">오차를 인공지능은 어떻게 다루나</a><a class="it" href="#s58">경계 찾아보기</a><a class="it" href="#s59">단면도 그려보기</a><a class="it" href="#s60">높이를 바꾸면 어떻게 될까?</a><a class="it" href="#s61">왜 로봇 바로 앞은 못 갈까?</a><a class="it" href="#s62">라쿤봇 작업 공간 단면도</a><a class="it" href="#s63">안쪽 경계와 바깥쪽 경계</a><a class="it" href="#s64">반경과 기울기</a><a class="it" href="#s65">인쇄된 작업지도</a><a class="it" href="#s66">정리</a></nav>
+<button id="tocbtn" type="button">목차</button>
+<main id="doc">
+<header class="top"><p class="lab">주제 3 · 3~4차시</p><h1>작업 공간</h1><p>갈 수 있는 곳과 없는 곳, 그 경계는 어디인가</p></header>
+<section class="slide" id="s43"><h2>오늘의 좌표 제어 명령어 <span class="tag">명령어</span></h2><pre># ── 지금까지 배운 명령 ──
+degree_to(j1, j2, j3, j4)   # 각도 네 개로 자세 만들기 (주제 2)
+encoder(-1) / xyz()         # 각도 읽기 / 집게 끝 좌표 읽기 (주제 1~2)
+ 
+# ── 오늘 새로 배우는 명령 ──
+move_to(x, y, z, 속도)     # 집게 끝을 그 좌표로 — 각도는 로봇이 알아서
+can_move_to(x, y, z)        # 가기 전에 “갈 수 있어?” 하고 묻기 (안 움직임)</pre><div class="txt"><p>지금까지는 각도 네 개를 우리가 하나하나 정해 줬다.</p><p>오늘부터는 <b>가고</b><b> </b><b>싶은</b><b> </b><b>곳만</b> 말하면 된다 — 각도 계산은 로봇의 몫이다.</p><p>새로 외울 것은 <b>보내기</b><b>(</b><b>move_to</b><b>)</b>와 <b>묻기</b><b>(</b><b>can_move_to</b><b>)</b>, 딱 두 개다.</p></div></section><section class="slide" id="s44"><h2>좌표로 움직여보기 <span class="tag">실습 1 · 그대로 실행</span></h2><div class="cols" style="grid-template-columns:19fr 20fr"><div><pre>from roboid import *
+raccoon = Raccoon()
+raccoon.move_to(0, 14, 10)   # 앞 14cm, 높이 10cm
+raccoon.beep()               # “삑” — 동작 하나 끝
+wait(1000)
+raccoon.move_to(8, 14, 10)   # 오른쪽으로 8cm
+raccoon.beep()
+wait(1000)
+raccoon.move_to(-8, 14, 10)  # 왼쪽으로
+raccoon.beep()
+wait(1000)
+raccoon.degree_to(0, -10, -140, 60)  # Home
+raccoon.dispose()</pre></div><div><div class="txt"><p>지난 시간에는 관절 각도 네 개로 로봇의 자세를 만들었다.</p><p>이번에는 각도 설정 없이 <b>좌표</b><b> 세 </b><b>개</b>로 집게 끝이 갈 지점을 지정해보자.</p><p><b>[</b><b>관찰해보기</b><b>]</b></p><p>각도를 하나도 정하지 않았는데, 관절 네 개가 알아서 움직이는지?</p><p>좌우로 옮길 때 <b>어느 관절들이 따라 도는지</b>?</p><p><b>[</b><b>안전</b><b>]</b> 실행 전 팔 주변 30cm 를 비운다.</p></div></div></div><div class="txt"><p>좌표에 도달하기 위해 필요한 각도는 누가 정했을까?</p></div></section><section class="slide" id="s45"><h2>좌표를 바꿔 네 곳 보내기 <span class="tag">준비물 : 작업지도 A3 or B4</span></h2><div class="cols" style="grid-template-columns:18fr 22fr"><div><pre>from roboid import *
+ 
+raccoon = Raccoon()
+ 
+raccoon.move_to(-16, 16, 1.5)   # 앞 14cm, 높이 10cm
+raccoon.beep()               # “삑” — 동작 하나 끝
+wait(1000)
+raccoon.move_to(0, 20, 2)   # 책상 바로 위 2cm, 앞 20cm
+raccoon.beep()
+wait(1000)
+raccoon.move_to(0, 5, 10)  # 로봇 바로 앞 5cm
+raccoon.beep()
+wait(1000)
+raccoon.move_to(0, 30, 10)  # 아주 먼 곳
+raccoon.beep()
+wait(1000)
+raccoon.dispose()</pre></div><div><pre>raccoon.move_to(0, 14, 10)  # ← 이 세 좌표를 바꾼다</pre><div class="txt"><p><b>작업지도</b><b> A3 칸 위 10cm</b> — (-16, 16, 1.5)</p></div><div class="txt"><p>책상 바로 위 2cm, 앞 20cm — (0, 20, 2)</p></div><div class="txt"><p>로봇 <b>바로 앞</b> 5cm — (0, 5, 10)</p></div><div class="txt"><p>아주 <b>먼 곳</b> — (0, 30, 10)</p></div><div class="txt"><p>3번과 4번에서 이상한 일이 생긴다 <br>— 팔이 가지 않거나, 엉뚱한 곳에 멈춘다. <br>    왜 특정 좌표에서만 동작하지 않았을까?</p></div><div class="txt"><p>먼 좌표는 거리의 제약이 있지만 가까운 좌표로 안 가는 것은 왜일까?</p></div></div></div></section><section class="slide" id="s46"><h2>갈 수 있을지 O/X 예상하기 <span class="tag">실습 3 · 실행 전에 O/X</span></h2><div class="tbl"><table><tr><th><b>실행할</b><b> 줄 (</b><b>좌표만</b><b> </b><b>바꾼다</b><b>)</b></th><th><b>내 예상 (O/X)</b></th><th><b>확인 결과</b></th></tr><tr><td>can_move_to(0, 20, 10)</td><td></td><td></td></tr><tr><td>can_move_to(0, 5, 10)</td><td></td><td></td></tr><tr><td>can_move_to(-16, 16, 10)</td><td></td><td></td></tr><tr><td>can_move_to(0, 30, 10)</td><td></td><td></td></tr></table></div><pre>print(raccoon.can_move_to(0, 20, 10))  # True / False — 가 보지 않고 묻는다. 좌표 세 개만 바꿔 네 번 실행</pre><div class="txt"><p>먼저 네 칸 모두 O/X 예상을 적고, 그 다음에 확인한다.</p><p>몇 개 맞혔나? 틀린 게 있다면 — 우리는 아직 <b>로봇이</b><b> 갈 수 </b><b>있는</b><b> </b><b>영역의</b><b> </b><b>모양</b>을 모르는 것이다.</p></div></section><section class="slide" id="s47"><h2>가까운데 왜 안 될까? <span class="tag">생각해보기</span></h2><div class="txt"><p>(0, 30, 10) 이 안 되는 건 이해가 된다 — 팔보다 먼 곳이니까.</p><p>그런데 (0, 5, 10) 은 로봇 코앞인데도 안 된다.</p><p><b>가까워서</b><b> 안 </b><b>되는</b><b> </b><b>곳이</b><b> </b><b>있다</b></p><p>되는 곳과 안 되는 곳 사이 어딘가에 <b>경계</b>가 있다. 안쪽에 하나, 바깥쪽에 하나.</p><p>이번 주제에서 그 경계를 직접 재서 <b>단면도</b>로 그리고, 왜 그 모양인지까지 설명한다.</p><p>move_to 에 좌표만 줬는데 팔이 알아서 갔다 — 각도는 누가 정했을까?</p><p>“안 된다”는 판정은 어디서 나올까? 다음 장에서 그 정체를 본다.</p></div></section><section class="slide" id="s48"><h2>좌표에서 각도로, 반대로 가볼까?</h2><div class="txt"><p>지난 시간에는 각도 네 개를 넣어 손끝 좌표를 구했다.(순기구학)</p><p>오늘은 <b>좌표를</b><b> </b><b>목표로</b><b> </b><b>각도를</b><b> </b><b>역산하는</b><b> 것, </b><b>역</b><b>기구학</b>이라고 부른다.</p><p>방금 move_to 에 좌표만 주었는데 팔이 갔다. 로봇이 이 계산을 이미 하고 있다는 뜻이고, “안 된다”는 판정도 여기서 나온다.</p><p>이쪽은 사정이 다르다.</p><p>1. <b>답이 아예 없을 수 있다</b> — 팔이 닿지 않는 곳은 어떤 각도 조합으로도 못 간다.</p><p>2. <b>답이 여러 개일 수 있다</b> — 팔꿈치를 위로 꺾어도, 아래로 꺾어도 손끝이 같은 점에 온다.</p><p>수학의 <b>역함수</b>와 같은 관계 — 일대일이 아닌 함수는 깔끔하게 뒤집히지 않는다.</p></div><div class="card"><div class="txt"><p>계산 자체는 <span class="hl"><b>컴퓨터와 이미 구현된 코드</b></span><span class="hl"><b>가 해 </b></span><span class="hl"><b>준다</b></span><span class="hl"><b>.</b></span></p><p>우리는 <b>“</b><b>어디까지</b><b> 갈 수 </b><b>있고</b><b>, 왜 </b><b>거기서</b><b> </b><b>막히는가</b><b>”</b> 다. 생각과 현실의 동작의 차이에 초점을 둔다.</p></div></div></section><section class="slide" id="s49"><h2>관절은 어디까지 움직일까? <span class="tag">[미션] 숫자만 바꿔서 · ch3_8p.py</span></h2><div class="txt"><p>각도 숫자만 바꿔 실행하며, False 가 나오는 지점을 찾는다.</p><p>can_degree_to 는 로봇을 움직이지 않고 묻는다 — 되는 값과 안 되는 값 사이를 <b>반씩</b><b> </b><b>좁히면</b> 빠르다.</p><p>출발 힌트 — <b>0° 는 </b><b>어느</b><b> </b><b>관절이든</b><b> </b><b>항상</b><b> </b><b>된다</b><b>.</b> ±180° 는 어느 관절도 안 된다. 그 사이 어딘가에 경계가 있다.</p></div><div class="cols" style="grid-template-columns:19fr 20fr"><div><pre>from roboid import *
+ 
+raccoon = Raccoon()
+ 
+j = 2          # ← 조사할 관절 (1~4)
+각도 = 30      # ← 이 숫자만 바꾼다
+ 
+print(j, "번", 각도, "도 →",
+      raccoon.can_degree_to(j, 각도))
+raccoon.dispose()</pre></div><div><div class="tbl"><table><tr><th><b>관절</b></th><th><b>하는 일</b></th><th><b>탐색 범위</b></th><th><b>내가 찾은 범위</b></th></tr><tr><td>J1</td><td>좌우 회전</td><td>−150 ~ +150° 사이</td><td></td></tr><tr><td>J2</td><td>어깨</td><td>−90 ~ +90° 사이</td><td></td></tr><tr><td>J3</td><td>팔꿈치</td><td>−180 ~ +180° 사이</td><td></td></tr><tr><td>J4</td><td>손목</td><td>−150 ~ +150° 사이</td><td></td></tr></table></div><div class="txt"><p>[참고] 범위를 넘는 로봇 동작 명령은 조용히 무시된다</p></div></div></div><div class="txt"><p>[관찰해보기] J2 와 J3 는 왜 한쪽으로 치우쳤나? — 사람 팔처럼, 어깨는 위로 조금 · 팔꿈치는 접히기만.</p><p>관절별 가동 범위가 작업 공간의 모양을 결정한다.</p></div></section><section class="slide" id="s50"><h2>칸 이름으로 보내보기 <span class="tag">작성&amp;실행 ch3_3p.py</span></h2><div class="cols" style="grid-template-columns:21fr 19fr"><div><pre>from roboid import *
+ 
+X = [-16, -12, -8, -4, 0, 4, 8, 12, 16]  # A3 열 A~I
+Y = [8, 12, 16, 20]                    # 행 1~4
+ 
+cell = "E3"                      # ← 바꿔 볼 칸 이름
+x = X[ord(cell[0]) - ord("A")]  # 글자 "E" → 몇 번째 열인지
+y = Y[int(cell[1]) - 1]         # 숫자 "3" → 몇 번째 행인지
+ 
+raccoon = Raccoon()
+wait(1000)
+raccoon.move_to(x, y, 10)     # 10cm = 수평 구역 접근 높이
+wait(1500)
+print(cell, (x, y), "→ 실제", raccoon.xyz())  # 목표와 실측 대조
+raccoon.dispose()</pre></div><div><div class="txt"><p>E3 = 다섯째 열, 셋째 행 → (0, 16).</p><p>칸 이름을 좌표로 바꾸는 줄 <b>두 </b><b>개</b>면 매트의 36칸 어디로든 보낼 수 있다.</p><p>실과 클립의 총 길이는 9cm,</p><p>접근 높이 10cm로 고정하고 실습을 진행</p></div><figure><img src="../img/g03/s050-1.jpg" alt="칸 이름으로 보내보기 — 그림" style="width:551px" loading="lazy"></figure></div></div></section><section class="slide" id="s51"><h2>손으로 가르쳐보기 <span class="tag">실습 0 · 코드 없이 · 01_티칭_플레이백.py</span></h2><div class="txt"><p>오늘의 첫 실습에는 코드가 없다.</p><p>extras/01_티칭_플레이백.py 를 실행하면 팔의 힘이 빠진다 — 손으로 잡고 움직일 수 있다.</p><p>자세를 만들 때마다 Enter 로 저장, p 를 누르면 로봇이 그대로 따라 한다.</p><p>집기 → 들기 → 옮기기 → 놓기를 <b>손으로 가르친다</b> (o/c버튼으로 집게)</p><p>p버튼으로 학습시킨 동작 재생</p><p>이제 블록을 <b>옆 칸으로 옮기고</b> 다시 p — 어떻게 될까?</p><p>3번에서 로봇은 아까 외운 자세를 그대로 되풀이한다 — 블록은 옆 칸에 있는데 <b>빈 자리에서 집게를 닫는다(허공 집기)</b><b>.</b></p><p>매번 내가 학습을 시킬 수 없는데 이 문제를 어떻게 해결할 수 있을까?</p><p>오늘 배우는 코드는 <b>숫자 두 개만 바꾸면</b> 어느 칸이든 갈 수 있다.(자동화의 중요성)</p></div><p class="note">r 을 누르면 거꾸로 재생된다 — 왜 거꾸로는 공짜일까? (답: 동작의 정체가 리스트라서)</p></section><section class="slide" id="s52"><h2>가기 전에 물어볼까?</h2><pre>can_move_to(0, 20,  5)  →  True
+can_move_to(0, 20,  0)  →  True    ← 책상 높이인데도
+can_move_to(0, 20, −3)  →  False   ← 관절이 안 닿아서</pre><div class="txt"><p>가 보지 않고 물어볼 수 있다 — 편리하다. 그런데:</p><p>둘째 줄, z = 0 은 <b>책상</b><b> </b><b>표면</b>인데 True 다.</p><p>셋째 줄의 False 도 책상 때문이 아니라 관절이 안 꺾여서다.</p><p>이 함수가 보는 것은 <b>관절 범위 안인가</b> 하나뿐이다. 로봇에게는 책상이라는 개념이 없다.</p><p>“갈 수 있다” ≠ “가도 된다” — 충돌을 막는 일은 우리 몫으로 남는다.</p></div></section><section class="slide" id="s53"><h2>같은 좌표, 왜 다른 답일까? <span class="tag">3차시 · 왜 안 될까 8분</span></h2><div class="cols" style="grid-template-columns:23fr 19fr"><div><div class="card"><div class="cols" style="grid-template-columns:13fr 9fr"><div><div class="txt"><p><span class="hl">D1 칸 (0, 8) 을 </span><span class="hl"><b>수평</b></span><span class="hl"> </span><span class="hl">기준으로</span><span class="hl"> </span><span class="hl">풀면</span></p><p>(0, −94.7, −170.5, 175.3)</p><p><span class="hl"><b>세 관절이 한계 초과</b></span><span class="hl"> </span><span class="hl">— </span><span class="hl">갈 수 없다</span></p></div></div><div><figure><img src="../img/g03/s053-1.png" alt="같은 좌표, 왜 다른 답일까? — 그림" style="width:256px" loading="lazy"></figure></div></div></div><div class="card"><figure><img src="../img/g03/s053-2.png" alt="같은 좌표, 왜 다른 답일까? — 그림" style="width:648px" loading="lazy"></figure></div></div><div><div class="txt"><p>같은 점 (0, 8) 인데 한 번은 거부당하고, 한 번은 이동한다.</p><p>좌표 세 개만으로는 자세가 정해지지 않는다 <br>— <b>집게를</b><b> </b><b>어느</b><b> </b><b>방향으로</b><b> </b><b>향한</b><b> 채</b> 갈지가 더 필요하다.</p><p>역기구학은 그 방향을 <b>지금</b><b> </b><b>손목이</b><b> </b><b>향한</b><b> </b><b>쪽</b>으로 가정해 버린다.</p><p>그래서 순서가 있다 — <b>기울기 먼저</b><b>, </b><b>좌표는 그 다음</b><b>.</b></p><p><b>이 순서를 모르면</b></p><p>“어떤 칸은 되고 어떤 칸은 안 된다” 에서 끝없이 헤매게 된다.</p></div></div></div></section><section class="slide" id="s54"><h2>로봇에게 펜을 쥐여 준다면? <span class="tag">3차시 · 펜을 든 로봇</span></h2><div class="txt"><p>오늘은 집게에 <b>펜</b>을 물린다. 블록을 옮길 때와는 <b>준비물도</b><b>, 갈 수 </b><b>있는</b><b> </b><b>방향도</b><b> </b><b>다르다</b><b>.</b> <br>닿는 높이를 재고(①), 같은 명령으로 점을 찍어 자로 재서(②) 로봇의 오차를 본다(③).</p></div><div class="card"><div class="txt"><p><b>준비물</b></p></div><div class="txt"><p>펜(연필·사인펜) · <b>고무줄</b><b> 2개</b> · 종이와 테이프 · 자.<br>펜은 집게 힘만으로는 눌리는 순간 미끄러진다.</p><p>고무줄로 집게에 묶고, 집게 <b>바로</b><b> </b><b>아래</b> 펜 몸통에도 한 번 감아 턱을 만든다.</p></div></div><div class="cols" style="grid-template-columns:20fr 20fr"><div><div class="card"><div class="txt"><p><span class="hl"><b>먼저</b></span><span class="hl"><b> </b></span><span class="hl"><b>재는</b></span><span class="hl"><b> 것</b></span></p></div><div class="txt"><p>펜을 물리면 프로그램이 <b>집게</b><b> </b><b>끝에서</b><b> 펜 </b><b>끝까지</b><b> 몇 cm </b><b>인지</b> 묻는다. 자로 재서 넣으면 쓰는 높이를 <br>정해 준다 — z 는 집게 끝 높이. 펜 끝이 아니다.<br>더 맞추려면 <b>02_공구_높이재기.py</b> 로 <br>가까운 쪽·먼 쪽 두 자리를 잰다.</p></div></div></div><div><div class="card"><div class="txt"><p><span class="hl"><b>안 되는 것</b></span></p></div><div class="txt"><p>펜을 내린 채로 움직이지 않는다 — <b>점만</b><b> </b><b>찍는다</b><b>.</b> 선을 그으면 관절이 따로 도착해 끝이 긁힌다.<br>종이는 매트 <b>2~3행(y=12~16)</b> 에 둔다. 다 쓰면 home() 말고 <b>pen_park</b><b>()</b> 으로 빠져나온다.</p></div></div></div></div></section><section class="slide" id="s55"><h2>로봇이 만든 눈금자 — 자로 재서 검증한다 <span class="tag">눈금자 · 02_눈금자.py</span></h2><div class="txt"><p>로봇에게 <b>2.00cm </b><b>간격</b>으로 점을 찍으라고 시킨다. 그러고 그 점들을 <b>진짜</b><b> </b><b>자로</b> 잰다. 2.00 이 나오는가?</p><p>같은 명령으로 한 줄 더 찍는다. 먼저 <b>눈으로</b> 본다 — 두 줄의 점이 세로로 나란한가? 나란하지 않다면 같은 명령인데 자리가 다르게 나온 것이다.</p></div><pre>간격  = 2.0      # 명령값 — 이 숫자를 자로 잰다
+눈금수 = 7        # 점 7개 -&gt; 간격 6칸
+시작  = (4.0, 12.0)
+줄간격 = -1.2     # 2회차는 한 줄 아래에
+회차  = 2        # 같은 명령을 두 번
+
+for n in range(회차):
+    한줄_찍기(arm, y, z)    # x 로만 움직이며 점 7개
+    y += 줄간격</pre><div class="txt"><p><b>치우침</b><b> (bias)</b></p></div><div class="txt"><p><span class="hl"><b>산포</b></span><span class="hl"><b> (scatter)</b></span></p></div><div class="cols" style="grid-template-columns:16fr 16fr"><div><div class="txt"><p>명령값과 평균의 차이. 늘 2.05 가 나온다면 항상 같은 쪽으로 틀리는 것이라 <b>보정으로</b><b> </b><b>지울</b><b> 수 </b><b>있다</b>.</p></div></div><div><div class="txt"><p>1회차와 2회차의 차이. 매번 다르게 틀리는 것이라 <b>보정으로 못 없앤다</b>. 평균을 내거나, 보고 고치거나, 견디게 설계한다.</p></div></div></div><p class="note">왜 안 맞나 — 인쇄 배율 · 각도 분해능 · 백래시 · 팔 처짐 · 반경 증폭 · 종이와 펜 · 앞의 둘은 사람이, 나머지는 로봇이 안고 가는 몫</p></section><section class="slide" id="s56"><h2>로봇이 만든 눈금자 — 어느 칸에 놓나 <span class="tag">02_눈금자.py · A3 작업지도</span></h2><div class="cols" style="grid-template-columns:26fr 14fr"><div><div class="txt"><p><b>② A3 </b><b>작업</b><b> </b><b>지도</b><b> </b><b>기준</b></p></div><figure><img src="../img/g03/s056-1.png" alt="로봇이 만든 눈금자 — 어느 칸에 놓나 — 그림" style="width:732px" loading="lazy"></figure></div><div><div class="txt"><p>· 먼저 02_공구_높이재기.py 로 펜을 물리고 닿는 높이를 잰다.</p><p>· 같은 명령으로 두 줄을 찍는다 <br>  — 두 줄의 점이 세로로 나란한가?</p><p>· 찍힌 점 사이를 자로 재어 2.00cm 가 나오는지 본다.</p></div></div></div><p class="note">같은 명령으로 두 줄 — 두 줄의 점이 세로로 나란한가?</p></section><section class="slide" id="s57"><h2>오차를 인공지능은 어떻게 다루나 <span class="tag">피지컬 AI 연결 · docs/오차와_AI.md</span></h2><div class="txt"><p>치우침은 지울 수 있고, 산포는 줄이고 견뎌 내는 것이다.</p><p>인공지능이 로봇의 오차를 다루는 방법은 4가지(보정, 시각 폐루프, 센서 융합, 시뮬레이션 학습)이다.</p></div><div class="tbl"><table><tr><th><b>방법</b></th><th><b>하는</b><b> 일</b></th><th><b>우리</b><b> </b><b>수업</b></th></tr><tr><td>지도학습 보정</td><td>명령한 좌표와 자로 잰 실제 좌표를 짝지어 모은다. 그 사이를 메우는 함수를 학습하면 재지 않은 자리도 예측한다</td><td>눈금자 표 — 입력과 정답의 짝</td></tr><tr><td>시각 폐루프</td><td>지금 로봇은 눈이 없어 '갔겠지' 하고 믿는다(개루프). 카메라로 실제 위치를 보고 차이만큼 다시 보내면 그 자리에서 고쳐진다</td><td>자율 탐구 · 색·위치 검출</td></tr><tr><td>센서 융합</td><td>엔코더는 '명령대로 돌았다', 카메라는 '실제로 여기 있다'. 둘 다 조금씩 틀리지만 섞으면 각각보다 낫다</td><td>엔코더 + 카메라</td></tr><tr><td>시뮬레이션 학습</td><td>실물로 천 번 연습하면 기계가 닳는다. 가상에서 연습하고 실물로 옮긴다. 가상을 일부러 들쭉날쭉하게 만들어 학습시킨다</td><td>가상 모드 → 실기기</td></tr></table></div><div class="card"><div class="txt"><p>그래도 남는 것 — 보정 모델은 <b>잰 </b><b>범위</b><b> </b><b>안에서만</b> 믿을 만하고, 학습 데이터가 치우치면 모델도 치우친다.</p><p>공학은 오차를 줄이는 일과, 오차를 견디게 설계하는 일. 두 가지를 함께 수행해야 한다:</p></div></div><p class="note">좋은 로봇은 정확한 로봇이 아니라, 자기 오차를 알고 그만큼 여유를 둔 로봇이다</p></section><section class="slide" id="s58"><h2>경계 찾아보기 <span class="tag">4차시 · 활동 20분</span></h2><div class="cols" style="grid-template-columns:22fr 16fr"><div><pre>from roboid import *
+raccoon = Raccoon()
+ 
+y = 20      # ← 이 숫자만 바꾼다
+z = 10
+ 
+print(y, "→", raccoon.can_move_to(0, y, z))
+raccoon.dispose()</pre></div><div><div class="txt"><p>y 를 1cm 간격으로 바꿔 가며 훑으면 <br>— 13~27 은 ○, 12 와 28 은 ✕</p><p>그럼 진짜 경계는 어디인가? 안쪽 경계는 12와 13 <b>사이</b><b> </b><b>어딘가</b>, 바깥 경계는 27과 28 <b>사이</b><b> </b><b>어딘가</b> — 1cm 폭까지만 안다.</p><p>더 좁히려고 0.1cm 간격으로 전부 훑으면 150번을 재야 한다. 그럴 필요가 없다.</p></div></div></div><div class="txt"><p>되는 점과 안 되는 점을 양끝으로 잡고, 그 중간 지점이 되는지 물어 <b>절반씩</b><b> </b><b>좁혀</b><b> </b><b>보자</b><b>(</b><b>이진</b><b> </b><b>탐색</b><b>).</b></p><p>되면 되는 점을 옮기고, 안 되면 안 되는 점을 옮긴다.</p><p>최대 20번 만에 y 값의 경계를 찾을 수 있다.</p><p>주목할 것은 방법이 아니라 순서다.</p><p><b>얼마나 </b><b>정밀하게</b>가 먼저, <b>어떤 방법으로</b>는 그 다음이다. 0.5cm 면 충분한 일에 0.1mm 는 낭비다.</p></div></section><section class="slide" id="s59"><h2>단면도 그려보기</h2><div class="cols" style="grid-template-columns:21fr 20fr"><div><figure><img src="../img/g03/s059-1.jpg" alt="단면도 그려보기 — 그림" style="width:606px" loading="lazy"></figure></div><div><div class="txt"><p>초록 점은 갈 수 있던 점, 어두운 점은 갈 수 없던 점.</p><p>여러 방향으로 경계를 재서 찍으면 <b>도넛</b>이 나온다.</p><p>바깥 경계(파란 점선)는 예상대로다.</p><p>그런데 <b>안쪽에도</b><b> </b><b>구멍</b>(주황 점선)이 있다</p><p>— 로봇 바로 앞이 비어 있다.</p></div></div></div><div class="txt"><p><span class="hl"><b>왜 </b></span><span class="hl"><b>로봇</b></span><span class="hl"><b> </b></span><span class="hl"><b>바로</b></span><span class="hl"><b> </b></span><span class="hl"><b>앞은</b></span><span class="hl"><b> 못 </b></span><span class="hl"><b>갈까</b></span><span class="hl"><b>?</b></span></p></div></section><section class="slide" id="s60"><h2>높이를 바꾸면 어떻게 될까?</h2><div class="txt"><p>한 높이에서만 재면 단면 하나를 아는 것뿐이다.</p><p>높이를 바꿔 같은 측정을 세 번 — 예상과 다른 일이 나온다.</p></div><div class="tbl"><table><tr><th><b>높이 z</b></th><th><b>가장 가까이</b></th><th><b>가장 멀리</b></th><th><b>폭</b></th></tr><tr><td>3 cm</td><td>14.07</td><td>26.85</td><td>12.78</td></tr><tr><td>8 cm</td><td>13.17</td><td>27.99</td><td>14.82</td></tr><tr><td>15 cm</td><td>12.92</td><td>26.60</td><td>13.68</td></tr></table></div><div class="txt"><p>표의 <b>폭</b> = 멀리 − 가까이, 즉 그 높이에서 갈 수 있는 구간의 길이다.</p><p>z 가 높을수록 넓어질 것 같지만 — 폭은 z = 8cm 에서 최대이고, 더 올리면 오히려 접근영역이 좁아진다.</p><p>낮추면 땅에 걸리고, 올리면 뻗을 각도가 없다.</p></div><p class="note">수평 자세, 정면(x=0) 기준 · 단위 cm · 이진 탐색으로 0.1mm 까지</p></section><section class="slide" id="s61"><h2>왜 로봇 바로 앞은 못 갈까?</h2><figure><img src="../img/g03/s061-1.jpg" alt="왜 로봇 바로 앞은 못 갈까? — 그림" style="width:1152px" loading="lazy"></figure><div class="txt"><p>팔이 짧아서가 아니다. 팔은 충분히 접힌다.</p><p>문제는 집게가 손목 축에서 <b>앞으로</b><b> 8cm</b> 나와 있다는 것.</p><p>집게를 수평으로 두면 그 8cm 가 고스란히 앞으로 더해진다 — 아무리 접어도 손끝이 그만큼 가까이 못 온다.</p><p>가운데가 비는 것은 팔의 한계가 아니라 <b>집게의</b><b> </b><b>기하</b> 때문이다.</p></div><div class="txt"><p class="lbl">그렇다면 해결책도 보인다.</p><p>집게를 <b>수직으로 세우면</b> 같은 8cm 가 앞이 아니라 아래로 간다 — 손끝이 훨씬 가까이 들어온다.</p><p>다음 차시에 숫자로 확인한다.</p></div></section><section class="slide" id="s62"><h2>라쿤봇 작업 공간 단면도 <span class="tag">4차시</span></h2><div class="cols" style="grid-template-columns:23fr 18fr"><div><figure><img src="../img/g03/s062-1.jpg" alt="라쿤봇 작업 공간 단면도 — 그림" style="width:670px" loading="lazy"></figure></div><div><div class="txt"><p>빨간 십자가 : 로봇 원점<br><b>수평은</b><b> </b><b>가운데</b><b> </b><b>구멍이</b><b> </b><b>크고</b><b>, </b><b>수직은</b><b> </b><b>거의</b><b> </b><b>없다</b><b>.</b> 수직 z=15 는 아예 빈 칸이다.</p></div></div></div></section><section class="slide" id="s63"><h2>안쪽 경계와 바깥쪽 경계 <span class="tag">4차시 · 왜 안 될까 15분</span></h2><div class="txt"><p>안쪽도 바깥쪽도 “못 간다” 는 같지만, 사정이 다르다.</p><p>경계 바로 바깥의 점을 xyz_to_degree() 로 풀어 보면 드러난다.</p></div><div class="cols" style="grid-template-columns:23fr 18fr"><div><figure><img src="../img/g03/s063-1.jpg" alt="안쪽 경계와 바깥쪽 경계 — 그림" style="width:645px" loading="lazy"></figure></div><div><div class="card"><div class="cols" style="grid-template-columns:7fr 10fr"><div><div class="txt"><p><b>바깥</b><b> </b><b>경계</b><b> (y ≈ 28)</b></p></div><pre>y = 27.0  갈 수 있음
+y = 28.0  해 없음
+y = 29.0  해 없음</pre></div><div><figure><img src="../img/g03/s063-2.jpg" alt="안쪽 경계와 바깥쪽 경계 — 그림" style="width:285px" loading="lazy"></figure></div></div></div></div></div><div class="txt"><p>안쪽 — <b>답은</b><b> </b><b>나오는데</b><b> 그 </b><b>답이</b><b> </b><b>관절</b><b> </b><b>한계를</b><b> </b><b>넘는다</b><b>.</b> 필요한 각도 J3 −160.9°, 로봇은 −150°까지.</p><p>바깥쪽 — <b>답이</b><b> </b><b>아예</b><b> </b><b>없다</b><b>.</b> 어떤 조합으로도 닿지 않는다. 팔 길이가 모자란 것이다.</p><p>원인이 다르면 해결책도 다르다.</p><p><b>기울기를 바꾸면 안쪽은 풀린다</b><b>. </b><b>바깥은 안 풀린다</b> — 더 멀리 가려면 팔이 긴 로봇을 사야 한다.</p></div></section><section class="slide" id="s64"><h2>반경과 기울기</h2><div class="cols" style="grid-template-columns:31fr 8fr"><div><div class="tbl"><table><tr><th><b>반경 r</b></th><th><b>기울기</b></th><th><b>접근 높이</b></th></tr><tr><td>15.5 cm 이상</td><td>수평 0°</td><td>10 cm</td></tr><tr><td>11.0 ~ 15.5 cm</td><td>기울임 −45°</td><td>8 cm</td></tr><tr><td>11.0 cm 미만</td><td>수직 −90°</td><td>6 cm</td></tr></table></div></div><div><pre>TILT_RULES = [
+    (15.5,   0, 10.0),
+    (11.0, −45,  8.0),
+    ( 0.0, −90,  6.0),
+]</pre></div></div><div class="txt"><p>하나의 기울기로 전부 덮을 수 없다.</p><p>그래서 <b>반경에</b><b> </b><b>따라</b><b> </b><b>기울기를</b><b> </b><b>고르는</b><b> </b><b>규칙</b>을 만든다 — 멀면 수평, 중간은 기울임, 가까우면 수직.</p><p>경계값 15.5 와 11.0 은 단면도 9장의 구간이 겹치는 자리에서 나왔다. (정리 표는 부록 《오차와 한계의 과학》)</p><p>오른쪽 코드가 실제 설정 파일이다.</p><p>저 세 줄은 누가 정해 준 값이 아니라 <b>라쿤봇으로</b><b> 측정한 결과</b>다.</p><p>— 장치 마다 사람이 기준선을 정해줘야 한다.</p><p>블록 크기나 집게가 바뀌면? — 이 값도 다시 재야 한다.</p></div><p class="note">vision/config.py · 작업 지도의 칸마다 인쇄된 기울기도 이 규칙으로 계산했다</p></section><section class="slide" id="s65"><h2>인쇄된 작업지도</h2><div class="cols" style="grid-template-columns:23fr 16fr"><div><figure><img src="../img/g03/s065-1.jpg" alt="인쇄된 작업지도 — 그림" style="width:660px" loading="lazy"></figure></div><div><div class="txt"><p><b>작업</b><b> </b><b>지도</b>는 오늘 그린 도달 가능 영역 위에 칸을 얹은 것이다.</p><p>칸마다 인쇄된 <b>기울기</b><b> </b><b>구역</b>도 오늘의 표에서 나왔다.</p></div></div></div></section><section class="slide" id="s66"><h2>정리 <span class="tag">제출 — 작업 공간 단면도 9장 + 경계 원인 기록표</span></h2><div class="txt"><p>이번 주제는 좌표를 각도로 계산(역기구학)하는 과정과 성질을 관찰해보았다.</p><p>1. 가 보지 않고 물어볼 수 있다 — can_move_to</p><p>2. 같은 좌표라도 <b>기울기가</b><b> </b><b>다르면</b><b> </b><b>답이</b><b> </b><b>다르다</b> — 그래서 기울기 먼저 계산해야 한다.</p><p>경계를 재서 그리니 작업 공간은 <b>도넛</b>이었다.</p><p>가운데 구멍 = 집게가 앞으로 8cm 나와 있어서. 집게를 세우니 메워졌다.</p><p>두 경계는 원인이 달랐다 — 안쪽은 <b>관절 한계</b>, 바깥쪽은 <b>해 없음</b>. 원인이 다르니 해결책도 달랐다.</p></div><div class="card"><div class="txt"><p class="lbl">다음 주제 — <b>집기</b><b> </b><b>시퀀스</b><b>.</b></p><p>갈 수 있는 곳을 알았으니 이제 물체를 집어보자. 그런데 <b>로봇은</b><b> </b><b>블록이</b><b> </b><b>어디</b><b> </b><b>있는지</b><b> </b><b>알고</b><b> </b><b>있을까</b><b>?</b></p></div></div></section>
+<div class="nav"><span><a href="주제2_각도에서_좌표로.html">← 주제 2 각도에서 좌표로</a></span><a href="index.html">차례</a><span><a href="주제4_집기_시퀀스.html">주제 4 집기 시퀀스 →</a></span></div>
+</main>
+<script>
+var S=[].slice.call(document.querySelectorAll('.slide')),L=document.querySelectorAll('#toc a.it');
+function mark(){var y=window.scrollY+120,id='';for(var i=0;i<S.length;i++)if(S[i].offsetTop<=y)id=S[i].id;
+for(var j=0;j<L.length;j++)L[j].classList.toggle('now',L[j].getAttribute('href')==='#'+id);}
+var tk=false;window.addEventListener('scroll',function(){if(tk)return;tk=true;requestAnimationFrame(function(){tk=false;mark();});});
+document.getElementById('tocbtn').onclick=function(){document.body.classList.toggle('open');};
+[].forEach.call(L,function(a){a.addEventListener('click',function(){document.body.classList.remove('open');});});
+mark();
+</script>
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>자율 탐구 ② 객체 인식과 모델 평가 — 학생용</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Gothic+A1:wght@400;700&display=swap">
+<style>
+:root{--ink:#16212e;--sub:#4a5866;--mut:#7e8c9b;--line:#dfe3e8;--bg:#ffffff;--paper:#f7f6f1;
+--teal:#1f8a7c;--orange:#d9622f;--red:#c6402f;--code:#13202d;--codefg:#e7eef6;--card:#fbfaf6}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--ink:#e6edf3;--sub:#b9c5d0;--mut:#8796a5;
+--line:#26323f;--bg:#0f151c;--paper:#141c25;--card:#151e28;--code:#0a1017}}
+:root[data-theme="dark"]{--ink:#e6edf3;--sub:#b9c5d0;--mut:#8796a5;--line:#26323f;--bg:#0f151c;--paper:#141c25;--card:#151e28;--code:#0a1017}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth;scroll-padding-top:16px}
+body{background:var(--bg);color:var(--ink);font:400 16px/1.75 'Gothic A1','Malgun Gothic',sans-serif}
+a{color:var(--teal)}
+#toc{position:fixed;top:0;left:0;bottom:0;width:280px;overflow-y:auto;background:var(--paper);border-right:1px solid var(--line);padding:22px 0 60px}
+#toc .home{display:block;padding:0 20px 6px;font-size:13px;color:var(--mut);text-decoration:none}
+#toc .tt{font:400 22px/1.3 'Black Han Sans','Malgun Gothic',sans-serif;padding:0 20px}
+#toc .ts{font-size:12.5px;color:var(--mut);padding:2px 20px 14px;border-bottom:1px solid var(--line);margin-bottom:8px}
+#toc a.it{display:block;padding:5px 20px;font-size:13.5px;line-height:1.45;color:var(--sub);text-decoration:none}
+#toc a.it:hover{background:var(--card);color:var(--ink)}
+#toc a.it.now{color:var(--orange);font-weight:700}
+#tocbtn{position:fixed;left:12px;top:12px;z-index:40;display:none;font:700 13px/1 inherit;background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:9px 12px;cursor:pointer}
+#doc{margin-left:280px;padding:36px 48px 120px;max-width:1240px}
+header.top{border-bottom:2px solid var(--ink);padding-bottom:18px;margin-bottom:8px}
+header.top .lab{color:var(--orange);font-weight:700;letter-spacing:2px;font-size:14px}
+header.top h1{font:400 42px/1.2 'Black Han Sans','Malgun Gothic',sans-serif;margin:4px 0 6px}
+header.top p{color:var(--sub)}
+.nav{display:flex;justify-content:space-between;gap:12px;margin-top:40px;padding-top:16px;border-top:1px solid var(--line);font-size:14px}
+.slide{padding:30px 0 6px;border-bottom:1px dashed var(--line)}
+.slide h2{font:700 23px/1.4 'Gothic A1','Malgun Gothic',sans-serif;margin-bottom:12px;display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px}
+.tag{font-size:13px;font-weight:700;color:var(--teal);background:var(--card);border:1px solid var(--line);border-radius:20px;padding:2px 10px}
+.slide p{margin:0 0 8px;color:var(--ink)}
+.txt,.card,.chip,figure,pre,.tbl{margin:0 0 14px}
+.lbl{font-size:13px;font-weight:700;color:var(--teal)!important;margin-bottom:2px!important}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.card .txt:last-child,.card p:last-child{margin-bottom:0}
+.chip{display:inline-block;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 14px;margin-right:8px}
+.chip p{margin:0}
+.hl{color:var(--orange)}
+.cols{display:grid;gap:20px;align-items:start}
+figure img{max-width:100%;height:auto;border-radius:8px;border:1px solid var(--line);background:#fff;display:block}
+pre{font:400 14px/1.6 'D2Coding','JetBrains Mono',Consolas,monospace;background:var(--code);color:var(--codefg);border-radius:10px;padding:14px 16px;overflow-x:auto;white-space:pre}
+.tbl{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14.5px}
+th,td{border:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--paper);font-weight:700}
+.note{font-size:13.5px;color:var(--mut)!important}
+.sn{display:inline-block;width:28px;height:28px;border-radius:50%;background:var(--teal);color:#fff;text-align:center;font:700 15px/28px inherit;margin-right:4px}
+.box{border-left:4px solid var(--teal);background:var(--card);border-radius:0 10px 10px 0;padding:10px 14px;margin:10px 0}
+.box.no{border-color:var(--orange)}
+.box .bt,.tri .bt{font-size:13px;font-weight:700;color:var(--teal);margin-bottom:2px}
+.box.no .bt{color:var(--orange)}
+.tri{border-left:3px solid var(--line);padding:2px 0 2px 14px;margin:8px 0}
+.pills{display:flex;flex-wrap:wrap;gap:6px}
+.pill{font-size:13px;border:1px solid var(--line);border-radius:20px;padding:3px 10px;background:var(--card)}
+.pill.on{background:var(--teal);color:#fff;border-color:var(--teal)}
+ul{padding-left:22px;margin:0 0 10px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin:14px 0 26px}
+.grid a{display:block;text-decoration:none;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.grid a:hover{border-color:var(--teal)}
+.grid .k{font-size:12.5px;font-weight:700;color:var(--orange)}
+.grid .n{font-weight:700;font-size:18px;line-height:1.35}
+.grid .d{font-size:13.5px;color:var(--sub)}
+h3.part{font-size:18px;margin-top:26px}
+.tnote{margin:12px 0 4px;background:#fff8e6;border:1px solid #ecd9a6;border-left:4px solid #d9a21f;border-radius:0 10px 10px 0;padding:10px 14px;color:#3d3420}
+.tnote p{color:#3d3420!important;font-size:14.5px}
+.tnote .bt{font-size:13px;font-weight:700;color:#a8780c!important;margin-bottom:2px}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .tnote{background:#2a2414;border-color:#5a4a1e}
+:root:not([data-theme="light"]) .tnote p{color:#efe3c2!important}}
+#doc.wide{margin:0 auto;max-width:1100px}
+.grid a .n{display:block}
+.grid.big{grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
+.grid.big a{padding:26px 24px}
+.grid.big .n{font:400 30px/1.3 'Black Han Sans','Malgun Gothic',sans-serif;margin:4px 0}
+@media (max-width:900px){#toc{transform:translateX(-100%);transition:transform .18s;z-index:30}
+body.open #toc{transform:none}#doc{margin-left:0;padding:56px 16px 100px}#tocbtn{display:block}
+.cols{grid-template-columns:1fr!important}figure img{width:auto!important}}
+@media print{#toc,#tocbtn,.nav{display:none}#doc{margin:0;padding:0;max-width:none}.slide{page-break-inside:avoid}}
+</style>
+</head>
+<body>
+<nav id="toc"><a class="home" href="index.html">← 학생용 차례</a><p class="tt">객체 인식과 모델 평가</p><p class="ts">자율 탐구 ② · 프로젝트에 붙이기</p><a class="it" href="#s137">자율 탐구 — 객체 인식과 모델 평가</a><a class="it" href="#t7-why">왜 하나</a><a class="it" href="#t7-1">1. 배운 적 없는 검출기를 돌려 본다</a><a class="it" href="#t7-2">2. 설정 한 줄로 갈아 끼운다</a><a class="it" href="#t7-3">3. 스무 번 세어 혼동행렬을 만든다</a><a class="it" href="#t7-4">4. 임계값을 올려 무엇을 잃는지 본다</a><a class="it" href="#t7-measure">숫자로 재기</a><a class="it" href="#t7-project">프로젝트에 붙이기</a><a class="it" href="#t7-more">더 가고 싶으면</a></nav>
+<button id="tocbtn" type="button">목차</button>
+<main id="doc">
+<header class="top"><p class="lab">자율 탐구 ② · 프로젝트에 붙이기</p><h1>객체 인식과 모델 평가</h1><p>규칙을 사람이 안 적으면</p></header>
+<section class="slide" id="s137"><h2>자율 탐구 — 객체 인식과 모델 평가 <span class="tag">자율 탐구 ② · detectors.py</span></h2><div class="cols" style="grid-template-columns:17fr 17fr"><div><div class="card"><div class="txt"><p><b>무엇을 하나</b></p></div><div class="txt"><p>배운 적 없는 검출기(YOLO)를 그대로 돌려 본다. 스무 가지를 보여 주고 맞은 것과 틀린 것을 표로 세어 <b>혼동행렬</b>을 만든다.</p></div></div></div><div><div class="card"><div class="txt"><p><b>프로젝트에 어떻게</b></p></div><div class="txt"><p>재활용 분류·품질 검사 주제에 쓴다. 검출기만 바꿔 끼우면 나머지 코드는 그대로다 — <b>make_detector(cfg)</b> 하나로 갈아 끼운다.</p></div></div></div></div><div class="cols" style="grid-template-columns:17fr 17fr"><div><div class="card"><div class="txt"><p><span class="hl"><b>무엇이 필요한가</b></span></p></div><div class="txt"><p>웹캠과 ultralytics. vision/detectors.py 의 YoloDetector, 임계값은 config.py 의 <b>YOLO_CONF = 0.4</b> 다.</p></div></div></div><div><div class="card"><div class="txt"><p><span class="hl"><b>어디서 막히나</b></span></p></div><div class="txt"><p>신뢰도 0.9 로도 틀린다. 임계값을 올리면 틀린 것은 줄지만 못 찾는 것이 는다 — 무엇을 잃을지 고르는 일이 남는다.</p></div></div></div></div><p class="note">공장 시뮬레이션은 extras/04_공장_시뮬레이션.py</p></section><section class="slide" id="t7-why"><h2>왜 하나</h2><p class="pills"><span class="pill on">100분 × 2</span><span class="pill">노트북 웹캠</span><span class="pill">pip install ultralytics</span><span class="pill">물건 5종</span><span class="pill">자율 탐구 ① 을 먼저</span></p><p>자율 탐구 ① 의 색 검출기는 우리가 숫자 여섯 개를 가르쳐 줘야 움직였다. 규칙이 보이는 대신, 조명이 바뀌면 무너졌다.</p><p>오늘 쓸 것은 규칙을 사람이 적지 않은 검출기다. 대신 <b>왜 그렇게 봤는지 보이지 않는다.</b> 그래서 믿을 만한지 따로 재야 한다 — 그 재는 법이 오늘의 중심이다.</p></section><section class="slide step" id="t7-1"><h2><span class="sn">1</span>배운 적 없는 검출기를 돌려 본다</h2><p>모델 파일은 처음 실행할 때 자동으로 내려받는다.</p><pre>from ultralytics import YOLO
+import cv2
+model = YOLO("yolo11n.pt")    # 처음엔 자동 다운로드
+cap = cv2.VideoCapture(0)
+while True:
+    ok, frame = cap.read()
+    if not ok: break
+    results = model(frame, conf=0.4, verbose=False)
+    cv2.imshow("yolo", results[0].plot())
+    if cv2.waitKey(1) == 27:   # ESC
+        break
+cap.release()
+cv2.destroyAllWindows()</pre><div class="box ok"><p class="bt">이렇게 되면 맞다</p><p>사람·휴대폰·컵 같은 것에 상자와 이름표가 붙는다. 숫자는 신뢰도다.</p><p>색블록에는 아무 이름도 안 붙는다 — 배운 적이 없는 물건이다.</p></div><div class="box no"><p class="bt">막히면</p><p>첫 실행이 느리다 — 모델을 내려받는 중이다. 한 번 받으면 다음부터 빠르다.</p><p>설치가 안 된다 — python -m pip install ultralytics. 용량이 크니 인터넷을 확인한다.</p></div></section><section class="slide step" id="t7-2"><h2><span class="sn">2</span>설정 한 줄로 갈아 끼운다</h2><p>검출기를 바꾸는 데 필요한 것은 설정 한 줄이다. 카메라 코드도, 그리는 코드도 손대지 않는다.</p><p>주제 4 에서 RaccoonArm 과 DummyArm 을 같은 이름의 메서드로 맞춘 것과 같은 수법이다.</p><pre># vision/config.py
+DETECTOR = "color"
+        ↓
+DETECTOR = "yolo"
+
+# 그리고 그대로 다시 실행
+python vision/camera_test.py</pre><div class="box ok"><p class="bt">이렇게 되면 맞다</p><p>같은 창, 같은 조작인데 찾는 방식만 바뀐다.</p></div><div class="box no"><p class="bt">막히면</p><p>바꾸기 전에 <b>같은 조건</b>을 만들어 둔다 — 같은 카메라, 같은 조명, 같은 물건. 그래야 비교한 숫자가 뜻을 갖는다.</p></div></section><section class="slide step" id="t7-3"><h2><span class="sn">3</span>스무 번 세어 혼동행렬을 만든다</h2><p>물건 다섯 가지를 네 번씩, 모두 스무 번 보여 주고 결과를 적는다. 맞은 것, 다른 이름을 붙인 것, 아예 못 찾은 것 세 가지로 나눈다.</p><div class="box ok"><p class="bt">이렇게 되면 맞다</p><p>표가 채워지면 "잘 된다"가 아니라 "20번 중 16번" 처럼 말할 수 있게 된다.</p></div><div class="box no"><p class="bt">막히면</p><p>같은 물건인데 들 때마다 결과가 다르다 — 그것도 기록이다. 각도와 거리까지 같이 적어 두면 까닭이 보인다.</p></div></section><section class="slide step" id="t7-4"><h2><span class="sn">4</span>임계값을 올려 무엇을 잃는지 본다</h2><p>conf 는 "이만큼 확신하지 못하면 아예 말하지 않는다" 는 선이다. vision/config.py 의 <b>YOLO_CONF = 0.4</b> 가 그 값이다.</p><pre>YOLO_CONF = 0.4   →   0.7 로 올려 본다</pre><div class="box ok"><p class="bt">이렇게 되면 맞다</p><p>틀린 이름표는 줄어든다. 그런데 <b>못 찾는 것이 늘어난다.</b></p><p>어느 쪽이 더 나쁜지는 용도가 정한다 — 불량을 놓치는 것과 양품을 버리는 것 중 무엇이 더 비싼가.</p></div><div class="box no"><p class="bt">막히면</p><p>신뢰도 0.9 인데 틀린 경우를 찾아본다. 숫자가 높다는 것은 후보 안에서 우세하다는 뜻이지 맞다는 뜻이 아니다.</p></div></section><section class="slide" id="t7-measure"><h2>숫자로 재기</h2><p>스무 번을 세어 아래 표를 채운다. 숫자가 작아도 구조는 똑같이 보인다.</p><div class="tbl"><table><tr><th>보여 준 것</th><th>맞게 본 횟수</th><th>다른 이름을 붙임</th><th>못 찾음</th></tr><tr><td>물건 1</td><td></td><td></td><td></td></tr><tr><td>물건 2</td><td></td><td></td><td></td></tr><tr><td>물건 3</td><td></td><td></td><td></td></tr><tr><td>물건 4</td><td></td><td></td><td></td></tr><tr><td>물건 5</td><td></td><td></td><td></td></tr></table></div><p class="note">합이 20이 되어야 한다. 임계값을 바꾼 뒤 같은 표를 한 번 더 채워 견준다.</p></section><section class="slide" id="t7-project"><h2>프로젝트에 붙이기</h2><p>재활용 분류·품질 검사 주제에 쓴다. 검출기는 vision/detectors.py 의 <b>make_detector(cfg)</b> 하나로 갈아 끼운다.</p><p>성공 기준에 임계값을 같이 적는다 — "conf 0.4 에서 불량 3개 전부 검출, 양품 오검출 2개 이하".</p><p>분류 공장 시뮬레이션(extras/04_공장_시뮬레이션_가상.py)에서 검사원만 바꿔 끼워 견줄 수 있다.</p></section><section class="slide" id="t7-more"><h2>더 가고 싶으면</h2><ul><li>직접 라벨을 붙여 학습시키기 — 사진 수십 장이면 시작할 수 있다.</li><li>정밀도와 재현율 — 혼동행렬에서 두 숫자가 어떻게 나오는지.</li></ul></section>
+<div class="nav"><span><a href="자율탐구1_영상_처리_기초.html">← 자율 탐구 ① 영상 처리 기초</a></span><a href="index.html">차례</a><span><a href="자율탐구3_손동작_인식.html">자율 탐구 ③ 손동작 인식 →</a></span></div>
+</main>
+<script>
+var S=[].slice.call(document.querySelectorAll('.slide')),L=document.querySelectorAll('#toc a.it');
+function mark(){var y=window.scrollY+120,id='';for(var i=0;i<S.length;i++)if(S[i].offsetTop<=y)id=S[i].id;
+for(var j=0;j<L.length;j++)L[j].classList.toggle('now',L[j].getAttribute('href')==='#'+id);}
+var tk=false;window.addEventListener('scroll',function(){if(tk)return;tk=true;requestAnimationFrame(function(){tk=false;mark();});});
+document.getElementById('tocbtn').onclick=function(){document.body.classList.toggle('open');};
+[].forEach.call(L,function(a){a.addEventListener('click',function(){document.body.classList.remove('open');});});
+mark();
+</script>
+</body>
+</html>

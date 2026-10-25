@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>자율 탐구 ③ 손동작 인식 — 교사용</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Gothic+A1:wght@400;700&display=swap">
+<style>
+:root{--ink:#16212e;--sub:#4a5866;--mut:#7e8c9b;--line:#dfe3e8;--bg:#ffffff;--paper:#f7f6f1;
+--teal:#1f8a7c;--orange:#d9622f;--red:#c6402f;--code:#13202d;--codefg:#e7eef6;--card:#fbfaf6}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--ink:#e6edf3;--sub:#b9c5d0;--mut:#8796a5;
+--line:#26323f;--bg:#0f151c;--paper:#141c25;--card:#151e28;--code:#0a1017}}
+:root[data-theme="dark"]{--ink:#e6edf3;--sub:#b9c5d0;--mut:#8796a5;--line:#26323f;--bg:#0f151c;--paper:#141c25;--card:#151e28;--code:#0a1017}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth;scroll-padding-top:16px}
+body{background:var(--bg);color:var(--ink);font:400 16px/1.75 'Gothic A1','Malgun Gothic',sans-serif}
+a{color:var(--teal)}
+#toc{position:fixed;top:0;left:0;bottom:0;width:280px;overflow-y:auto;background:var(--paper);border-right:1px solid var(--line);padding:22px 0 60px}
+#toc .home{display:block;padding:0 20px 6px;font-size:13px;color:var(--mut);text-decoration:none}
+#toc .tt{font:400 22px/1.3 'Black Han Sans','Malgun Gothic',sans-serif;padding:0 20px}
+#toc .ts{font-size:12.5px;color:var(--mut);padding:2px 20px 14px;border-bottom:1px solid var(--line);margin-bottom:8px}
+#toc a.it{display:block;padding:5px 20px;font-size:13.5px;line-height:1.45;color:var(--sub);text-decoration:none}
+#toc a.it:hover{background:var(--card);color:var(--ink)}
+#toc a.it.now{color:var(--orange);font-weight:700}
+#tocbtn{position:fixed;left:12px;top:12px;z-index:40;display:none;font:700 13px/1 inherit;background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:9px 12px;cursor:pointer}
+#doc{margin-left:280px;padding:36px 48px 120px;max-width:1240px}
+header.top{border-bottom:2px solid var(--ink);padding-bottom:18px;margin-bottom:8px}
+header.top .lab{color:var(--orange);font-weight:700;letter-spacing:2px;font-size:14px}
+header.top h1{font:400 42px/1.2 'Black Han Sans','Malgun Gothic',sans-serif;margin:4px 0 6px}
+header.top p{color:var(--sub)}
+.nav{display:flex;justify-content:space-between;gap:12px;margin-top:40px;padding-top:16px;border-top:1px solid var(--line);font-size:14px}
+.slide{padding:30px 0 6px;border-bottom:1px dashed var(--line)}
+.slide h2{font:700 23px/1.4 'Gothic A1','Malgun Gothic',sans-serif;margin-bottom:12px;display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px}
+.tag{font-size:13px;font-weight:700;color:var(--teal);background:var(--card);border:1px solid var(--line);border-radius:20px;padding:2px 10px}
+.slide p{margin:0 0 8px;color:var(--ink)}
+.txt,.card,.chip,figure,pre,.tbl{margin:0 0 14px}
+.lbl{font-size:13px;font-weight:700;color:var(--teal)!important;margin-bottom:2px!important}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.card .txt:last-child,.card p:last-child{margin-bottom:0}
+.chip{display:inline-block;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 14px;margin-right:8px}
+.chip p{margin:0}
+.hl{color:var(--orange)}
+.cols{display:grid;gap:20px;align-items:start}
+figure img{max-width:100%;height:auto;border-radius:8px;border:1px solid var(--line);background:#fff;display:block}
+pre{font:400 14px/1.6 'D2Coding','JetBrains Mono',Consolas,monospace;background:var(--code);color:var(--codefg);border-radius:10px;padding:14px 16px;overflow-x:auto;white-space:pre}
+.tbl{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14.5px}
+th,td{border:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--paper);font-weight:700}
+.note{font-size:13.5px;color:var(--mut)!important}
+.sn{display:inline-block;width:28px;height:28px;border-radius:50%;background:var(--teal);color:#fff;text-align:center;font:700 15px/28px inherit;margin-right:4px}
+.box{border-left:4px solid var(--teal);background:var(--card);border-radius:0 10px 10px 0;padding:10px 14px;margin:10px 0}
+.box.no{border-color:var(--orange)}
+.box .bt,.tri .bt{font-size:13px;font-weight:700;color:var(--teal);margin-bottom:2px}
+.box.no .bt{color:var(--orange)}
+.tri{border-left:3px solid var(--line);padding:2px 0 2px 14px;margin:8px 0}
+.pills{display:flex;flex-wrap:wrap;gap:6px}
+.pill{font-size:13px;border:1px solid var(--line);border-radius:20px;padding:3px 10px;background:var(--card)}
+.pill.on{background:var(--teal);color:#fff;border-color:var(--teal)}
+ul{padding-left:22px;margin:0 0 10px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin:14px 0 26px}
+.grid a{display:block;text-decoration:none;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.grid a:hover{border-color:var(--teal)}
+.grid .k{font-size:12.5px;font-weight:700;color:var(--orange)}
+.grid .n{font-weight:700;font-size:18px;line-height:1.35}
+.grid .d{font-size:13.5px;color:var(--sub)}
+h3.part{font-size:18px;margin-top:26px}
+.tnote{margin:12px 0 4px;background:#fff8e6;border:1px solid #ecd9a6;border-left:4px solid #d9a21f;border-radius:0 10px 10px 0;padding:10px 14px;color:#3d3420}
+.tnote p{color:#3d3420!important;font-size:14.5px}
+.tnote .bt{font-size:13px;font-weight:700;color:#a8780c!important;margin-bottom:2px}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .tnote{background:#2a2414;border-color:#5a4a1e}
+:root:not([data-theme="light"]) .tnote p{color:#efe3c2!important}}
+#doc.wide{margin:0 auto;max-width:1100px}
+.grid a .n{display:block}
+.grid.big{grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
+.grid.big a{padding:26px 24px}
+.grid.big .n{font:400 30px/1.3 'Black Han Sans','Malgun Gothic',sans-serif;margin:4px 0}
+@media (max-width:900px){#toc{transform:translateX(-100%);transition:transform .18s;z-index:30}
+body.open #toc{transform:none}#doc{margin-left:0;padding:56px 16px 100px}#tocbtn{display:block}
+.cols{grid-template-columns:1fr!important}figure img{width:auto!important}}
+@media print{#toc,#tocbtn,.nav{display:none}#doc{margin:0;padding:0;max-width:none}.slide{page-break-inside:avoid}}
+</style>
+</head>
+<body>
+<nav id="toc"><a class="home" href="index.html">← 교사용 차례</a><p class="tt">손동작 인식</p><p class="ts">자율 탐구 ③ · 프로젝트에 붙이기</p><a class="it" href="#s138">자율 탐구 — 손동작 인식</a><a class="it" href="#t8-why">왜 하나</a><a class="it" href="#t8-1">1. 손에 점이 붙는 것을 본다</a><a class="it" href="#t8-2">2. 손 모양과 확신도를 적어 본다</a><a class="it" href="#t8-3">3. 코드보다 먼저 상태 전이도를 그린다</a><a class="it" href="#t8-4">4. 로봇 없이 먼저, 그다음 로봇으로</a><a class="it" href="#t8-measure">숫자로 재기</a><a class="it" href="#t8-project">프로젝트에 붙이기</a><a class="it" href="#t8-more">더 가고 싶으면</a></nav>
+<button id="tocbtn" type="button">목차</button>
+<main id="doc">
+<header class="top"><p class="lab">자율 탐구 ③ · 프로젝트에 붙이기</p><h1>손동작 인식</h1><p>사물이 아니라 사람을 본다</p></header>
+<section class="slide" id="s138"><h2>자율 탐구 — 손동작 인식 <span class="tag">자율 탐구 ③ · hand_tracker.py</span></h2><div class="cols" style="grid-template-columns:17fr 17fr"><div><div class="card"><div class="txt"><p><b>무엇을 하나</b></p></div><div class="txt"><p>손에 점 스물한 개가 붙는다. 점 사이의 거리로 핀치·주먹을 판단하고, <b>상태 전이도를 먼저 그린 뒤</b> 코드로 옮긴다.</p></div></div></div><div><div class="card"><div class="txt"><p><b>프로젝트에 어떻게</b></p></div><div class="txt"><p>접근성 보조 주제에 쓴다. 활동지 ④칸 명령표의 입력이 손 모양이 된다 — 어떤 모양이 어떤 동작을 부르는지 적는 그 표다.</p></div></div></div></div><div class="cols" style="grid-template-columns:17fr 17fr"><div><div class="card"><div class="txt"><p><span class="hl"><b>무엇이 필요한가</b></span></p></div><div class="txt"><p>웹캠과 MediaPipe. vision/hand_tracker.py 로 점을 보고, gesture_control.py 맨 위를 로봇없이 = True 로 두고 먼저 돌린다.</p></div></div></div><div><div class="card"><div class="txt"><p><span class="hl"><b>어디서 막히나</b></span></p></div><div class="txt"><p>주먹을 1초 쥐면 명령이 수십 번 나간다. 연타를 막는 규칙을 손수 넣어야 한다 — 인식보다 그 뒤가 어렵다.</p></div></div></div></div><p class="note">docs/손동작_안내.md</p><div class="tnote"><p class="bt">교사 노트</p><p>이 탐구만 PPT 원본이 없습니다. HTML 가이드와 vision/ 코드가 근거입니다.</p><p>상태 전이도를 코드보다 먼저 그리게 하세요. 그려 본 팀과 아닌 팀의 차이가 큽니다.</p></div></section><section class="slide" id="t8-why"><h2>왜 하나</h2><p class="pills"><span class="pill on">100분 × 2</span><span class="pill">노트북 웹캠</span><span class="pill">학생용/손동작_설치_도우미.bat</span><span class="pill">모델 8.4MB (자동)</span><span class="pill">자율 탐구 ② 을 먼저</span></p><p>자율 탐구 ② 의 검출기는 상자 하나와 이름표를 돌려줬다. 손 인식기는 <b>점 21개의 좌표</b>를 돌려준다.</p><p>좌표가 나오면 규칙을 우리가 만들 수 있다 — 손가락 두 개가 가까운가, 손이 화면 어디에 있는가.</p><p>여기서부터 오작동은 사람에게 간다. 그래서 인식보다 <b>인식 뒤의 설계</b>가 더 중요해진다.</p></section><section class="slide step" id="t8-1"><h2><span class="sn">1</span>손에 점이 붙는 것을 본다</h2><p>설치는 학생용/손동작_설치_도우미.bat 더블클릭 한 번이면 된다.</p><pre>python vision/hand_test.py
+
+# 키
+#   n  점 번호 켜기 / 끄기
+#   g  명령 칸 켜기 / 끄기
+#   s  지금 화면을 사진으로 저장
+#   q  종료</pre><div class="box ok"><p class="bt">이렇게 되면 맞다</p><p>손을 보여 주면 점 21개와 뼈대가 그려진다. n 을 누르면 번호가 보인다.</p><p>0 은 손목, 4 · 8 · 12 · 16 · 20 이 각 손가락 끝이다.</p><p>손을 앞뒤로 움직이면 화면 속 손 크기(span)가 커지고 작아진다.</p></div><div class="box no"><p class="bt">막히면</p><p>창이 안 뜬다 — 카메라 번호를 바꾼다 (vision/config.py).</p><p>모델을 못 찾는다 — 처음 한 번은 자동으로 내려받는다. 인터넷을 확인한다.</p></div></section><section class="slide step" id="t8-2"><h2><span class="sn">2</span>손 모양과 확신도를 적어 본다</h2><p>tracker.read(frame) 이 돌려주는 값이 무엇인지 눈으로 확인한다.</p><pre>from hand_tracker import HandTracker, read_hand_frame
+
+tracker = HandTracker()        # 모델을 불러온다 (처음 한 번만)
+sig = tracker.read(frame)      # 화면 한 장 -&gt; 손 정보
+
+sig.found       # 손이 보이는가
+sig.gesture     # 손 모양 이름 (Closed_Fist, Victory ...)
+sig.score       # 얼마나 확신하는가 (0~1)
+sig.palm_x/y    # 손바닥 위치 (0~1 로 정규화)
+sig.landmarks   # 점 21개의 좌표</pre><div class="box ok"><p class="bt">이렇게 되면 맞다</p><p>또렷한 모양에서는 score 가 0.9 가까이 나온다.</p><p>애매하게 쥐면 이름이 왔다 갔다 하고 score 가 흔들린다 — 그 구간이 문제다.</p></div></section><section class="slide step" id="t8-3"><h2><span class="sn">3</span>코드보다 먼저 상태 전이도를 그린다</h2><p>주먹을 1초 쥐고 있으면 명령이 몇 번 나갈까? 초당 30장이면 <b>서른 번</b>이다.</p><p>그래서 "모양이 바뀌는 순간"만 명령으로 치는 규칙이 필요하다. 종이에 상태(대기 · 쥠 · 실행 · 잠금)와 화살표를 먼저 그린다.</p><div class="box ok"><p class="bt">이렇게 되면 맞다</p><p>그림에 "같은 모양이 N 프레임 이어질 때만 바뀐다", "실행 뒤 0.8초는 잠근다" 같은 숫자가 적혀 있으면 됐다.</p></div><div class="box no"><p class="bt">막히면</p><p>그리기 전에 코드부터 쓰면 거의 반드시 연타 문제에 걸린다. 그림이 먼저다.</p></div></section><section class="slide step" id="t8-4"><h2><span class="sn">4</span>로봇 없이 먼저, 그다음 로봇으로</h2><p>가상 모드로 순서를 맞춘 뒤 로봇을 연결한다. 주제 4 의 가짜 팔이 여기서도 쓰인다.</p><pre>python vision/gesture_control.py --dry-run
+# 콘솔에 찍힌 명령 순서가 설계한 전이도와 같은지 대조한다
+
+python vision/gesture_control.py        # 통과한 뒤에만</pre><div class="box ok"><p class="bt">이렇게 되면 맞다</p><p>주먹을 쥐었다 펴면 명령이 <b>한 번만</b> 찍힌다.</p><p>손이 사라지면 아무 명령도 안 나간다 — 기본값은 정지다.</p></div><div class="box no"><p class="bt">막히면</p><p>명령이 연달아 찍힌다 — 3단계의 잠금 시간을 늘린다.</p><p>로봇을 붙이기 전에 비상정지를 먼저 확인한다. 스페이스가 정지, q 가 종료다.</p></div></section><section class="slide" id="t8-measure"><h2>숫자로 재기</h2><p>제스처마다 열 번씩 해 보고 몇 번 알아듣는지 적는다. 사람마다 다르게 나오는 것이 이 주제의 핵심 관찰이다.</p><div class="tbl"><table><tr><th>손 모양</th><th>내가 한 횟수</th><th>알아들은 횟수</th><th>잘못 알아들은 것</th></tr><tr><td>주먹 (Closed_Fist)</td><td>10</td><td></td><td></td></tr><tr><td>손바닥 (Open_Palm)</td><td>10</td><td></td><td></td></tr><tr><td>브이 (Victory)</td><td>10</td><td></td><td></td></tr><tr><td>핀치 (엄지+검지)</td><td>10</td><td></td><td></td></tr></table></div><p class="note">옆 사람과 숫자를 견준다. 손 크기와 피부색, 조명에 따라 달라진다.</p></section><section class="slide" id="t8-project"><h2>프로젝트에 붙이기</h2><p>접근성 보조 주제에 쓴다. 활동지 ④칸의 <b>명령표</b>가 "어떤 손 모양이 어떤 동작을 부르는가" 가 된다.</p><p>인식률이 낮은 모양을 위험한 동작(집기·놓기)에 배정하지 않는다 — 그 이유를 명령표에 한 줄로 적는다.</p><p>성공 기준 예 — "다섯 개를 전부 손으로만 옮긴다 · 손을 한 번도 쓰지 않고".</p></section><section class="slide" id="t8-more"><h2>더 가고 싶으면</h2><ul><li>vision/hand_ar.py — 손 위에 그림을 겹쳐 보는 예제</li><li>포즈 인식 — 손이 아니라 몸 전체의 관절을 받는다</li><li>docs/손동작_안내.md — 설치와 문제 해결</li></ul></section>
+<div class="nav"><span><a href="자율탐구2_객체_인식과_모델_평가.html">← 자율 탐구 ② 객체 인식과 모델 평가</a></span><a href="index.html">차례</a><span><a href="자율탐구4_음성_인식과_오작동.html">자율 탐구 ④ 음성 인식과 오작동 →</a></span></div>
+</main>
+<script>
+var S=[].slice.call(document.querySelectorAll('.slide')),L=document.querySelectorAll('#toc a.it');
+function mark(){var y=window.scrollY+120,id='';for(var i=0;i<S.length;i++)if(S[i].offsetTop<=y)id=S[i].id;
+for(var j=0;j<L.length;j++)L[j].classList.toggle('now',L[j].getAttribute('href')==='#'+id);}
+var tk=false;window.addEventListener('scroll',function(){if(tk)return;tk=true;requestAnimationFrame(function(){tk=false;mark();});});
+document.getElementById('tocbtn').onclick=function(){document.body.classList.toggle('open');};
+[].forEach.call(L,function(a){a.addEventListener('click',function(){document.body.classList.remove('open');});});
+mark();
+</script>
+</body>
+</html>
