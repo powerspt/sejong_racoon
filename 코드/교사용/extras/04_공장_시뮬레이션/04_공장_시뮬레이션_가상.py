@@ -35,7 +35,7 @@ import time
 # [레벨0] 점수 규칙 바꾸기 — 아래 main() 의  +10 / -15  숫자 (틀림을 -50 으로 하면?)
 # [레벨1] BINS 의 목적지 칸 바꾸기 / 불량 확률 0.15 바꾸기 (make_products)
 # [레벨2] 새 색(초록 G) 추가 — NAMES 와 BINS 에 한 줄씩
-N_PRODUCTS = 8     # 판별할 블록 수의 기본값 — 실행하면 물어본다 (그냥 Enter = 이 값)
+N_PRODUCTS = 4     # 판별할 블록 수의 기본값 — 실행하면 물어본다 (그냥 Enter = 이 값)
 SEED = 42          # 같은 숫자 = 같은 제품 순서 — 반 전체가 공정하게 비교할 수 있다
 AUTO_JUDGE = False  # (교사 시연용) True 면 판정을 자동으로 — 수업에서는 False
 IN_CELL = "E3"
