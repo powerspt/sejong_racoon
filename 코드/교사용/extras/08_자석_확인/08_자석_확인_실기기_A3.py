@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""자석 낚시 · 적용 가능성 확인 · 실기기 · A3 지도
+"""자석 낚시 · 적용 가능성 확인 · 실제 로봇 · A3 지도
 
     python 08_자석_확인_실기기_A3.py
 
@@ -17,6 +17,6 @@ from importlib import import_module
 활동 = import_module("08_자석_확인")
 활동.지도맞추기("A3")
 
-print("[실기기 · A3] 팔 주변 30cm 를 비우세요.")
+print("[실제 로봇 · A3] 팔 주변 30cm 를 비우세요.")
 print("  붙는 높이·손목·겹침을 재고, 마지막에 권장 자석높이를 알려 줍니다.")
 활동.main(활동.RealArm())

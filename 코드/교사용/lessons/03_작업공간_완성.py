@@ -108,7 +108,14 @@ def png_저장(계산기들):
         matplotlib.use("Agg")
         import matplotlib.pyplot as plt
         from matplotlib import font_manager            # noqa: F401
-        matplotlib.rcParams["font.family"] = "Malgun Gothic"
+        # 한글 글꼴 — PC 에 있는 것을 고른다 (윈도우 맑은 고딕 · 맥 AppleGothic · 리눅스 나눔/Noto)
+        from matplotlib import font_manager as _fm
+        _있는글꼴 = {f.name for f in _fm.fontManager.ttflist}
+        _한글글꼴 = [f for f in ("Malgun Gothic", "AppleGothic", "Apple SD Gothic Neo", "NanumGothic",
+                                "Noto Sans CJK KR", "Noto Sans KR") if f in _있는글꼴]
+        if not _한글글꼴:
+            print("한글 글꼴을 찾지 못했다 — 그림의 한글이 네모로 나올 수 있다 (나눔고딕을 설치하면 된다)")
+        matplotlib.rcParams["font.family"] = _한글글꼴 or ["sans-serif"]
         matplotlib.rcParams["axes.unicode_minus"] = False
     except ImportError:
         print("\nmatplotlib 가 없어 그림은 건너뜁니다 (글자 단면도는 위에 있습니다).")

@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>주제 9 자석 탐색 — 학생용</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Gothic+A1:wght@400;700&display=swap">
+<style>
+:root{--ink:#16212e;--sub:#4a5866;--mut:#7e8c9b;--line:#dfe3e8;--bg:#ffffff;--paper:#f7f6f1;
+--teal:#1f8a7c;--orange:#d9622f;--red:#c6402f;--code:#13202d;--codefg:#e7eef6;--card:#fbfaf6}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--ink:#e6edf3;--sub:#b9c5d0;--mut:#8796a5;
+--line:#26323f;--bg:#0f151c;--paper:#141c25;--card:#151e28;--code:#0a1017}}
+:root[data-theme="dark"]{--ink:#e6edf3;--sub:#b9c5d0;--mut:#8796a5;--line:#26323f;--bg:#0f151c;--paper:#141c25;--card:#151e28;--code:#0a1017}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth;scroll-padding-top:16px}
+body{background:var(--bg);color:var(--ink);font:400 16px/1.75 'Gothic A1','Malgun Gothic',sans-serif}
+a{color:var(--teal)}
+#toc{position:fixed;top:0;left:0;bottom:0;width:280px;overflow-y:auto;background:var(--paper);border-right:1px solid var(--line);padding:22px 0 60px}
+#toc .home{display:block;padding:0 20px 6px;font-size:13px;color:var(--mut);text-decoration:none}
+#toc .tt{font:400 22px/1.3 'Black Han Sans','Malgun Gothic',sans-serif;padding:0 20px}
+#toc .ts{font-size:12.5px;color:var(--mut);padding:2px 20px 14px;border-bottom:1px solid var(--line);margin-bottom:8px}
+#toc a.it{display:block;padding:5px 20px;font-size:13.5px;line-height:1.45;color:var(--sub);text-decoration:none}
+#toc a.it:hover{background:var(--card);color:var(--ink)}
+#toc a.it.now{color:var(--orange);font-weight:700}
+#tocbtn{position:fixed;left:12px;top:12px;z-index:40;display:none;font:700 13px/1 inherit;background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:9px 12px;cursor:pointer}
+#doc{margin-left:280px;padding:36px 48px 120px;max-width:1240px}
+header.top{border-bottom:2px solid var(--ink);padding-bottom:18px;margin-bottom:8px}
+header.top .lab{color:var(--orange);font-weight:700;letter-spacing:2px;font-size:14px}
+header.top h1{font:400 42px/1.2 'Black Han Sans','Malgun Gothic',sans-serif;margin:4px 0 6px}
+header.top p{color:var(--sub)}
+.nav{display:flex;justify-content:space-between;gap:12px;margin-top:40px;padding-top:16px;border-top:1px solid var(--line);font-size:14px}
+.slide{padding:30px 0 6px;border-bottom:1px dashed var(--line)}
+.slide h2{font:700 23px/1.4 'Gothic A1','Malgun Gothic',sans-serif;margin-bottom:12px;display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px}
+.tag{font-size:13px;font-weight:700;color:var(--teal);background:var(--card);border:1px solid var(--line);border-radius:20px;padding:2px 10px}
+.slide p{margin:0 0 8px;color:var(--ink)}
+.txt,.card,.chip,figure,pre,.tbl{margin:0 0 14px}
+.lbl{font-size:13px;font-weight:700;color:var(--teal)!important;margin-bottom:2px!important}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.card .txt:last-child,.card p:last-child{margin-bottom:0}
+.chip{display:inline-block;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 14px;margin-right:8px}
+.chip p{margin:0}
+.hl{color:var(--orange)}
+.cols{display:grid;gap:20px;align-items:start}
+figure img{max-width:100%;height:auto;border-radius:8px;border:1px solid var(--line);background:#fff;display:block}
+pre{font:400 14px/1.6 'D2Coding','JetBrains Mono',Consolas,monospace;background:var(--code);color:var(--codefg);border-radius:10px;padding:14px 16px;overflow-x:auto;white-space:pre}
+.tbl{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14.5px}
+th,td{border:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--paper);font-weight:700}
+.note{font-size:13.5px;color:var(--mut)!important}
+.sn{display:inline-block;width:28px;height:28px;border-radius:50%;background:var(--teal);color:#fff;text-align:center;font:700 15px/28px inherit;margin-right:4px}
+.box{border-left:4px solid var(--teal);background:var(--card);border-radius:0 10px 10px 0;padding:10px 14px;margin:10px 0}
+.box.no{border-color:var(--orange)}
+.box .bt,.tri .bt{font-size:13px;font-weight:700;color:var(--teal);margin-bottom:2px}
+.box.no .bt{color:var(--orange)}
+.tri{border-left:3px solid var(--line);padding:2px 0 2px 14px;margin:8px 0}
+.pills{display:flex;flex-wrap:wrap;gap:6px}
+.pill{font-size:13px;border:1px solid var(--line);border-radius:20px;padding:3px 10px;background:var(--card)}
+.pill.on{background:var(--teal);color:#fff;border-color:var(--teal)}
+ul{padding-left:22px;margin:0 0 10px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin:14px 0 26px}
+.grid a{display:block;text-decoration:none;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.grid a:hover{border-color:var(--teal)}
+.grid .k{font-size:12.5px;font-weight:700;color:var(--orange)}
+.grid .n{font-weight:700;font-size:18px;line-height:1.35}
+.grid .d{font-size:13.5px;color:var(--sub)}
+h3.part{font-size:18px;margin-top:26px}
+.tnote{margin:12px 0 4px;background:#fff8e6;border:1px solid #ecd9a6;border-left:4px solid #d9a21f;border-radius:0 10px 10px 0;padding:10px 14px;color:#3d3420}
+.tnote p{color:#3d3420!important;font-size:14.5px}
+.tnote .bt{font-size:13px;font-weight:700;color:#a8780c!important;margin-bottom:2px}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .tnote{background:#2a2414;border-color:#5a4a1e}
+:root:not([data-theme="light"]) .tnote p{color:#efe3c2!important}}
+#doc.wide{margin:0 auto;max-width:1100px}
+.grid a .n{display:block}
+.grid.big{grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
+.grid.big a{padding:26px 24px}
+.grid.big .n{font:400 30px/1.3 'Black Han Sans','Malgun Gothic',sans-serif;margin:4px 0}
+@media (max-width:900px){#toc{transform:translateX(-100%);transition:transform .18s;z-index:30}
+body.open #toc{transform:none}#doc{margin-left:0;padding:56px 16px 100px}#tocbtn{display:block}
+.cols{grid-template-columns:1fr!important}figure img{width:auto!important}}
+@media print{#toc,#tocbtn,.nav{display:none}#doc{margin:0;padding:0;max-width:none}.slide{page-break-inside:avoid}}
+</style>
+</head>
+<body>
+<nav id="toc"><a class="home" href="index.html">← 학생용 차례</a><p class="tt">자석 탐색</p><p class="ts">주제 9 · 22차시</p><a class="it" href="#s121">집게에 자석을 달면</a><a class="it" href="#s122">자석 탐색 — 몇 번 만에 찾나</a><a class="it" href="#s123">자석 탐색 — 어느 칸에 놓나</a></nav>
+<button id="tocbtn" type="button">목차</button>
+<main id="doc">
+<header class="top"><p class="lab">주제 9 · 22차시</p><h1>자석 탐색</h1><p>한 줄에 숨은 클립을 몇 번 만에 찾나</p><p class="note">실제 구분 차시보다 많은 시간이 소요될 수 있음.</p></header>
+<section class="slide" id="s121"><h2>집게에 자석을 달면 <span class="tag">자석 탐색 · 08_자석_확인.py</span></h2><div class="card"><div class="txt"><p><b>준비물</b></p></div><div class="txt"><p>네오디뮴 원형 자석 1개(지름 10~12mm) · 철 클립 · 통 하나. 자석은 집게 날 아래 면에 테이프로 붙이고 집게를 닫아 둔다.</p></div></div><div class="cols" style="grid-template-columns:29fr 8fr"><div><div class="card"><div class="txt"><p><span class="hl"><b>먼저</b></span><span class="hl"><b> </b></span><span class="hl"><b>재는</b></span><span class="hl"><b> 것</b></span></p></div><div class="txt"><p><b>08_자석_확인</b> 으로 붙는 높이·손목을 돌려도 안 떨어지는지·겹쳐 붙는지를 잰다.<br>측정한 권장 높이를 09 · 10 의 _가상.py 맨 위 <b>‘</b><b>자석높이</b><b>’</b> 에 적는다.</p></div></div><div class="card"><div class="txt"><p><span class="hl"><b>정해 둔 것</b></span></p></div><div class="txt"><p>로봇은 클립을 <b>놓지</b><b> </b><b>못한다</b><b>.</b> 붙은 클립은 달고 다니거나 사람이 뗀다.</p></div></div></div><div><figure><img src="../img/g09/s121-1.jpg" alt="집게에 자석을 달면 — 그림" style="width:228px" loading="lazy"></figure></div></div></section><section class="slide" id="s122"><h2>자석 탐색 — 몇 번 만에 찾나 <span class="tag">자석 탐색 · 09_자석_탐색.py</span></h2><div class="cols" style="grid-template-columns:21fr 18fr"><div><pre>줄 = ["A2", "B2", "C2", "D2", "E2", "F2", "G2", "H2", "I2"]
+판수 = 3          # 판마다 짝이 클립을 다시 놓는다
+
+# 실행하면 고른다
+#   1 순차   왼쪽 끝부터 차례로
+#   2 랜덤   남은 칸 아무 데나
+#   3 직접   내가 정한 순서
+#   4 이진   가운데를 찍고, 짝이 "더 왼쪽 / 더 오른쪽"
+
+for cell in 순서:
+    arm.pick_magnet(cell)       # 자석을 내렸다 든다
+    if 붙었나(cell):            # 사람이 y/n
+        break</pre></div><div><div class="txt"><p>작업 지도 2행 <b>한 </b><b>줄</b>에 짝이 클립 <b>하나</b>를 놓는다. 술래는 지도를 보지 않는다.</p><p>로봇이 칸을 하나씩 찍고, 붙었는지를 사람이 답한다. <b>몇 번 </b><b>만에</b><b> </b><b>찾았나</b>가 점수다.</p></div><div class="txt"><p>찍는 방식을 골라 세 판씩 돌리고 세 판의 평균과 가장 많이 걸린 횟수를 적는다 (이론값과 다를 수 있다).</p></div><div class="txt"><p><b>순차와</b><b> </b><b>랜덤</b></p></div><div class="txt"><p>고르게 숨긴다면 순차·랜덤 모두 평균 5번 · 최악 9번으로 횟수는 같고, 이동 거리는 랜덤이 세 배쯤 길다. 이진은 평균 3번쯤 · 최악 4번이다.</p></div><div class="txt"><p><span class="hl"><b>이진은</b></span><span class="hl"><b> 왜 </b></span><span class="hl"><b>따로인가</b></span></p></div></div></div><div class="txt"><p>자석은 '붙었나' 만 안다. 정답이 어느 쪽인지 짝이 말해 줘야 반을 버린다 — <b>정렬된</b><b> </b><b>자료라야</b><b> </b><b>이진</b><b> </b><b>탐색이</b><b> </b><b>된다</b><b>.</b> 아홉 칸을 네 번 안에 끝낸다.</p></div><p class="note">가상으로 돌리면 방식별 300판 평균을 표로 보여 준다 · 이 파일 하나로 돌아간다</p></section><section class="slide" id="s123"><h2>자석 탐색 — 어느 칸에 놓나 <span class="tag">09_자석_탐색.py · A3 작업 지도</span></h2><div class="cols" style="grid-template-columns:25fr 13fr"><div><figure><img src="../img/g09/s123-1.png" alt="자석 탐색 — 어느 칸에 놓나 — 그림" style="width:705px" loading="lazy"></figure></div><div><div class="txt"><p>· 짝이 A2~I2 가운데 한 칸에<br>클립 하나를 놓는다.<br>— 술래는 지도를 보지 않는다.</p><p>· 로봇이 찍어 볼 순서를 고르고<br>(순차·랜덤·직접·이진)<br>몇 번 만에 찾는지 센다.</p><p>준비물 — 자석 1개 · 철 클립 1개<br>(자석은 집게 날 아래 면에)</p><p>역할 2명 — 짝 / 술래</p></div></div></div><p class="note">2행 한 줄 · 클립 하나 — 술래는 지도를 보지 않는다</p></section>
+<div class="nav"><span><a href="t8.html">← 주제 8 하노이 탑</a></span><a href="index.html">차례</a><span><a href="t10.html">주제 10 자석 경주 →</a></span></div>
+</main>
+<script>
+var S=[].slice.call(document.querySelectorAll('.slide')),L=document.querySelectorAll('#toc a.it');
+function mark(){var y=window.scrollY+120,id='';for(var i=0;i<S.length;i++)if(S[i].offsetTop<=y)id=S[i].id;
+for(var j=0;j<L.length;j++)L[j].classList.toggle('now',L[j].getAttribute('href')==='#'+id);}
+var tk=false;window.addEventListener('scroll',function(){if(tk)return;tk=true;requestAnimationFrame(function(){tk=false;mark();});});
+document.getElementById('tocbtn').onclick=function(){document.body.classList.toggle('open');};
+[].forEach.call(L,function(a){a.addEventListener('click',function(){document.body.classList.remove('open');});});
+mark();
+</script>
+</body>
+</html>

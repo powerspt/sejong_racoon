@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<title>주제 6 프로젝트 활동지</title>
+<title>주제 11 프로젝트 활동지</title>
 <style>
 @page { size: A4 portrait; margin: 0; }
 * { margin:0; padding:0; box-sizing:border-box; }
@@ -80,10 +80,10 @@ td.fill { height:9mm; }
 <!-- ══════════════════════ 1쪽 ══════════════════════ -->
 <div class="page">
   <div class="head">
-    <div class="t"><span>주제 6</span>프로젝트 활동지 — 명세와 설계</div>
+    <div class="t"><span>주제 11</span>프로젝트 활동지 — 명세와 설계</div>
     <div class="n">팀 ____________ &nbsp; 이름 ____________ &nbsp; 날짜 ____ / ____</div>
   </div>
-  <p class="lead">이 활동지는 두 시간 동안 <b>열 칸</b>을 차례로 채운다. 설계 시간에 ①~⑥, 검증과 발표 시간에 ⑦~⑩ 을 채운다.
+  <p class="lead">이 활동지는 다섯 차시(24~28차시) 동안 <b>열 칸</b>을 차례로 채운다. 24~25차시에 ①~⑥, 26~28차시에 ⑦~⑩ 을 채운다.
     칸을 건너뛰지 않는다 — ③ 명세서와 ④ 검증표는 교사 검토를 받아야 다음으로 간다.</p>
 
   <div class="sec">
@@ -146,7 +146,7 @@ td.fill { height:9mm; }
   </div>
   <p class="note">검토를 통과한 팀만 구현에 들어간다. 주제를 바꾸려면 설계 때 바꾼다 — 검증 때는 측정과 발표만 한다.</p>
 
-  <div class="foot"><span>라쿤봇 4축 로봇팔 · 주제 6 프로젝트 (22~26차시)</span><span>1 / 4</span></div>
+  <div class="foot"><span>라쿤봇 4축 로봇팔 · 주제 11 프로젝트 (24~28차시)</span><span>1 / 4</span></div>
 </div>
 
 <!-- ══════════════════════ 2쪽 ══════════════════════ -->
@@ -159,7 +159,7 @@ td.fill { height:9mm; }
     통과하기 전에는 로봇을 연결하지 않는다.</p>
 
   <div class="sec">
-    <h2><span class="no">4</span>검증표 <span class="hint">— 안전 점검하기: 비상정지 · 인식 실패 · 좌표 범위 · 명령표</span><span class="when">설계</span></h2>
+    <h2><span class="no">4</span>검증표 <span class="hint">— 안전 점검하기: 멈추기 · 틀린 명령 · 좌표 범위 · 인식 실패</span><span class="when">설계</span></h2>
     <table class="four">
       <tr>
         <th style="width:30mm">항목</th>
@@ -167,34 +167,34 @@ td.fill { height:9mm; }
         <th class="c" style="width:44mm">확인</th>
       </tr>
       <tr>
-        <td><b>① 비상정지</b><br><span style="font-size:7.5pt;color:#5a6675">무엇을 누르면 멈추나</span></td>
+        <td><b>① 멈추기</b><br><span style="font-size:7.5pt;color:#5a6675">무엇을 누르면 멈추나 (틀은 Ctrl+C)</span></td>
         <td class="fill"></td>
-        <td class="c">세 번 눌러 세 번 다 멈췄다<br>
-          <span class="chk"></span>1회 <span class="chk"></span>2회 <span class="chk"></span>3회</td>
+        <td class="c">멈추는 키를 적고<br>팀원 모두 알고 있다 <span class="chk"></span></td>
       </tr>
       <tr>
-        <td><b>② 인식이 틀리면</b><br><span style="font-size:7.5pt;color:#5a6675">기본값은 정지</span></td>
+        <td><b>② 틀린 명령</b><br><span style="font-size:7.5pt;color:#5a6675">없는 칸 · 너무 낮은 높이</span></td>
         <td class="fill"></td>
-        <td class="c">신뢰도를 0.2 로 바꿔 돌렸더니<br>팔이 움직이지 않았다 <span class="chk"></span></td>
+        <td class="c">없는 칸과 높이 1 을 넣었더니<br>■ 멈춤이 찍히고 그 뒤를 하지 않았다 <span class="chk"></span></td>
       </tr>
       <tr>
         <td><b>③ 좌표 범위</b><br><span style="font-size:7.5pt;color:#5a6675">보내기 전에 확인</span></td>
         <td class="fill"></td>
-        <td class="c">범위 밖 좌표를 넣었더니<br>보내지 않았다 <span class="chk"></span></td>
+        <td class="c">못 가는 자리를 넣었더니<br>■ 멈춤이 찍히고 보내지 않았다 <span class="chk"></span></td>
       </tr>
       <tr>
-        <td><b>④ 명령표</b><br><span style="font-size:7.5pt;color:#5a6675">아래 표에 적는다</span></td>
+        <td><b>④ 인식이 틀리면</b><br><span style="font-size:7.5pt;color:#5a6675">카메라 · 음성 · 손동작을 쓰는 팀만</span></td>
         <td class="fill"></td>
-        <td class="c">인식률이 낮은 입력을 위험한<br>동작에 쓰지 않았다 <span class="chk"></span></td>
+        <td class="c">신뢰도를 0.2 로 바꿔 돌렸더니<br>팔이 움직이지 않았다 <span class="chk"></span></td>
       </tr>
     </table>
-    <div class="tip" style="margin-top:2mm">코드로 옮기면 <b>세 번의 return</b> 이 전부다 —
-      ① <code>if STOP: return</code> &nbsp; ② <code>if score &lt; 0.55: return</code> &nbsp;
-      ③ <code>if not can_move_to(x, y, z): return</code>. 움직이는 줄은 그 뒤에 딱 하나다.</div>
+    <div class="tip" style="margin-top:2mm">프로젝트 틀의 <code>가기()</code> 에는 ②③이 이미 들어 있다 — 높이와 갈 수 있는 자리를 먼저 확인하고,
+      안 되면 <b>■ 멈춤</b>을 찍고 그 뒤를 하지 않는다. 멈춘 뒤에는 Home 으로도 가지 않는다.
+      인식 입력을 붙이는 팀은 <code>if score &lt; 0.55: return</code> 처럼 '못 알아들으면 정지' 를 직접 넣는다.
+      높이 z 는 <b>집게 끝</b> 기준이다 — 펜 · 자석을 달았으면 02_공구_높이재기 로 재서 적는다.</div>
   </div>
 
   <div class="sec">
-    <h2><span class="no">4</span>-② 명령표 <span class="hint">— 어떤 입력이 어떤 동작을 부르는가</span></h2>
+    <h2><span class="no">4</span>-② 명령표 <span class="hint">— 어떤 입력이 어떤 동작을 부르는가 (버튼 · 인식 입력을 쓰는 팀)</span></h2>
     <table class="cmd">
       <tr><th style="width:42mm">입력 (제스처·음성·색·버튼)</th><th style="width:48mm">동작</th><th>왜 이렇게 배정했나</th></tr>
       <tr><td class="fill"></td><td></td><td></td></tr>
@@ -225,16 +225,16 @@ td.fill { height:9mm; }
 
   <div class="sec">
     <h2><span class="no">5</span>가상 모드 <span class="hint">— 로봇 없이 먼저 테스트하기: 검증표와 비교하기</span><span class="when">설계</span></h2>
-    <div class="lbl">파일 맨 위를 <code>실기기 = False</code> 로 두고 F5 — 로봇 없이 화면에 찍힌 순서를 적는다</div>
+    <div class="lbl"><code>11_프로젝트_틀_가상.py</code> 를 실행한다(F5) — 로봇 없이 화면에 찍힌 순서를 적는다</div>
     <div class="box" style="height:24mm; font-size:8pt; color:#5a6675">
       [가상] &nbsp; → &nbsp; [가상] &nbsp; → &nbsp; [가상] &nbsp; → &nbsp; [가상]
     </div>
     <div style="font-size:8pt; margin-top:1.5mm">
       <span class="chk"></span>처음부터 끝까지 한 번 돌았다 &nbsp;&nbsp;
-      <span class="chk"></span><b>정지</b>가 한 번 이상 찍혔다 &nbsp;&nbsp;
-      <span class="chk"></span><b>거절</b>(범위 밖)이 한 번 이상 찍혔다
+      <span class="chk"></span>일부러 넣은 틀린 명령에서 <b>■ 멈춤</b>이 찍혔다 &nbsp;&nbsp;
+      <span class="chk"></span>그 줄을 고친 뒤 <b>끝까지 간 횟수 1/1</b> 이 찍혔다
     </div>
-    <p class="note">정지와 거절이 한 번도 안 찍혔다면 안전 코드가 실제로는 연결되지 않은 것이다. 일부러 틀린 입력을 넣어 확인한다.
+    <p class="note">■ 멈춤을 한 번도 못 봤다면 멈추는지 확인하지 않은 것이다. 일부러 틀린 명령(없는 칸 · 높이 1 · 못 가는 자리)을 넣어 확인한다.
       세 칸이 다 채워진 팀부터 로봇을 연결한다.</p>
   </div>
 
@@ -252,7 +252,7 @@ td.fill { height:9mm; }
     <h2><span class="no">7</span>검증 <span class="hint">— 산출물 테스트하기</span><span class="when">검증</span></h2>
     <table>
       <tr><th class="c" style="width:13mm">회차</th><th class="c" style="width:23mm">결과</th>
-          <th style="width:62mm">실패한 까닭 (어떤 조건에서)</th><th>무엇을 했나</th></tr>
+          <th style="width:62mm">실패한 까닭 (어떤 조건에서)</th><th>열 번 뒤에 고칠 것</th></tr>
       <tr><td class="c">1</td><td class="c" style="font-size:8pt; white-space:nowrap">성공 / 실패</td><td class="fill"></td><td></td></tr>
       <tr><td class="c">2</td><td class="c" style="font-size:8pt; white-space:nowrap">성공 / 실패</td><td class="fill"></td><td></td></tr>
       <tr><td class="c">3</td><td class="c" style="font-size:8pt; white-space:nowrap">성공 / 실패</td><td class="fill"></td><td></td></tr>
@@ -268,8 +268,8 @@ td.fill { height:9mm; }
         <td><b>실패를 종류별로</b> — 인식 ___ &middot; 집기 ___ &middot; 그 밖 ___</td>
         <td><b>명세 기준</b> ____ 이상 → <span class="chk"></span>달성 <span class="chk"></span>미달</td></tr>
     </table>
-    <p class="note">못 미친 항목도 그대로 적는다. 적지 않은 실패는 보고가 아니다. 한 번도 실패하지 않았다면 기준이 느슨한 것이니
-      블록 위치나 조명을 바꿔 다시 잰다.</p>
+    <p class="note">못 미친 항목도 그대로 적는다. 적지 않은 실패는 보고가 아니다. 열 번을 도는 동안 코드와 조건은 바꾸지 않는다 —
+      고쳤으면 1회차부터 다시 잰다. 열 번 다 성공했으면 10/10 으로 적고, 더 어려운 조건(블록 위치 · 조명)은 따로 정해 한 번 더 잰다.</p>
   </div>
 
   <div class="foot"><span>측정 중에도 정지 키에 손을 올려 둔다</span><span>3 / 4</span></div>
@@ -299,9 +299,9 @@ td.fill { height:9mm; }
     <h2><span class="no">9</span>상호 평가 <span class="hint">— 다른 팀 산출물 상호 평가</span><span class="when">평가</span></h2>
     <table>
       <tr><th class="c" style="width:14mm">수준</th><th>무엇이 보이는가</th></tr>
-      <tr><td class="c"><b>A</b></td><td>실패를 재현 조건과 함께 적고, 까닭을 세워 확인한 뒤 고쳤다</td></tr>
-      <tr><td class="c"><b>B</b></td><td>실패를 적고 고쳤으나, 까닭이 추측에 머물렀다</td></tr>
-      <tr><td class="c"><b>C</b></td><td>실패를 적었으나 고쳐 보지 않았다</td></tr>
+      <tr><td class="c"><b>A</b></td><td>기준을 미리 정해 쟀고, 실패는 재현 조건과 까닭을 확인해 고쳤다 (실패가 없었으면 그 까닭을 설명했다)</td></tr>
+      <tr><td class="c"><b>B</b></td><td>실패를 고쳤으나 까닭이 추측에 머물렀다 · 또는 까닭은 확인했으나 고치지 못했다</td></tr>
+      <tr><td class="c"><b>C</b></td><td>실패를 적었으나 고쳐 보지 않았고, 못 고친 까닭도 없다</td></tr>
       <tr><td class="c"><b>D</b></td><td>결과만 말했다</td></tr>
     </table>
     <table style="margin-top:2mm">
@@ -324,7 +324,7 @@ td.fill { height:9mm; }
       <tr><td><b>지금</b> — 프로젝트<br><span style="font-size:7.5pt;color:#5a6675">목표한 숫자와 잰 숫자가 어떻게 달랐나</span></td><td class="fill" style="height:10mm"></td></tr>
       <tr><td><b>다음</b><br><span style="font-size:7.5pt;color:#5a6675">더 해 보고 싶은 것 (자율 탐구 등)</span></td><td class="fill" style="height:10mm"></td></tr>
     </table>
-    <div class="lbl" style="margin-top:2mm">아홉 차시에서 나에게 남는 한 줄</div>
+    <div class="lbl" style="margin-top:2mm">28차시에서 나에게 남는 한 줄</div>
     <div class="w"></div>
     <div class="lbl" style="margin-top:1.5mm">더 가고 싶은 것 (카메라 보정 · 피드백 제어 · YOLO 직접 학습 · 포즈 인식 · 그 밖)</div>
     <div class="w sm"></div>

@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>주제 10 자석 경주 — 교사용</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Gothic+A1:wght@400;700&display=swap">
+<style>
+:root{--ink:#16212e;--sub:#4a5866;--mut:#7e8c9b;--line:#dfe3e8;--bg:#ffffff;--paper:#f7f6f1;
+--teal:#1f8a7c;--orange:#d9622f;--red:#c6402f;--code:#13202d;--codefg:#e7eef6;--card:#fbfaf6}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--ink:#e6edf3;--sub:#b9c5d0;--mut:#8796a5;
+--line:#26323f;--bg:#0f151c;--paper:#141c25;--card:#151e28;--code:#0a1017}}
+:root[data-theme="dark"]{--ink:#e6edf3;--sub:#b9c5d0;--mut:#8796a5;--line:#26323f;--bg:#0f151c;--paper:#141c25;--card:#151e28;--code:#0a1017}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth;scroll-padding-top:16px}
+body{background:var(--bg);color:var(--ink);font:400 16px/1.75 'Gothic A1','Malgun Gothic',sans-serif}
+a{color:var(--teal)}
+#toc{position:fixed;top:0;left:0;bottom:0;width:280px;overflow-y:auto;background:var(--paper);border-right:1px solid var(--line);padding:22px 0 60px}
+#toc .home{display:block;padding:0 20px 6px;font-size:13px;color:var(--mut);text-decoration:none}
+#toc .tt{font:400 22px/1.3 'Black Han Sans','Malgun Gothic',sans-serif;padding:0 20px}
+#toc .ts{font-size:12.5px;color:var(--mut);padding:2px 20px 14px;border-bottom:1px solid var(--line);margin-bottom:8px}
+#toc a.it{display:block;padding:5px 20px;font-size:13.5px;line-height:1.45;color:var(--sub);text-decoration:none}
+#toc a.it:hover{background:var(--card);color:var(--ink)}
+#toc a.it.now{color:var(--orange);font-weight:700}
+#tocbtn{position:fixed;left:12px;top:12px;z-index:40;display:none;font:700 13px/1 inherit;background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:9px 12px;cursor:pointer}
+#doc{margin-left:280px;padding:36px 48px 120px;max-width:1240px}
+header.top{border-bottom:2px solid var(--ink);padding-bottom:18px;margin-bottom:8px}
+header.top .lab{color:var(--orange);font-weight:700;letter-spacing:2px;font-size:14px}
+header.top h1{font:400 42px/1.2 'Black Han Sans','Malgun Gothic',sans-serif;margin:4px 0 6px}
+header.top p{color:var(--sub)}
+.nav{display:flex;justify-content:space-between;gap:12px;margin-top:40px;padding-top:16px;border-top:1px solid var(--line);font-size:14px}
+.slide{padding:30px 0 6px;border-bottom:1px dashed var(--line)}
+.slide h2{font:700 23px/1.4 'Gothic A1','Malgun Gothic',sans-serif;margin-bottom:12px;display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px}
+.tag{font-size:13px;font-weight:700;color:var(--teal);background:var(--card);border:1px solid var(--line);border-radius:20px;padding:2px 10px}
+.slide p{margin:0 0 8px;color:var(--ink)}
+.txt,.card,.chip,figure,pre,.tbl{margin:0 0 14px}
+.lbl{font-size:13px;font-weight:700;color:var(--teal)!important;margin-bottom:2px!important}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.card .txt:last-child,.card p:last-child{margin-bottom:0}
+.chip{display:inline-block;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 14px;margin-right:8px}
+.chip p{margin:0}
+.hl{color:var(--orange)}
+.cols{display:grid;gap:20px;align-items:start}
+figure img{max-width:100%;height:auto;border-radius:8px;border:1px solid var(--line);background:#fff;display:block}
+pre{font:400 14px/1.6 'D2Coding','JetBrains Mono',Consolas,monospace;background:var(--code);color:var(--codefg);border-radius:10px;padding:14px 16px;overflow-x:auto;white-space:pre}
+.tbl{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14.5px}
+th,td{border:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--paper);font-weight:700}
+.note{font-size:13.5px;color:var(--mut)!important}
+.sn{display:inline-block;width:28px;height:28px;border-radius:50%;background:var(--teal);color:#fff;text-align:center;font:700 15px/28px inherit;margin-right:4px}
+.box{border-left:4px solid var(--teal);background:var(--card);border-radius:0 10px 10px 0;padding:10px 14px;margin:10px 0}
+.box.no{border-color:var(--orange)}
+.box .bt,.tri .bt{font-size:13px;font-weight:700;color:var(--teal);margin-bottom:2px}
+.box.no .bt{color:var(--orange)}
+.tri{border-left:3px solid var(--line);padding:2px 0 2px 14px;margin:8px 0}
+.pills{display:flex;flex-wrap:wrap;gap:6px}
+.pill{font-size:13px;border:1px solid var(--line);border-radius:20px;padding:3px 10px;background:var(--card)}
+.pill.on{background:var(--teal);color:#fff;border-color:var(--teal)}
+ul{padding-left:22px;margin:0 0 10px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin:14px 0 26px}
+.grid a{display:block;text-decoration:none;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.grid a:hover{border-color:var(--teal)}
+.grid .k{font-size:12.5px;font-weight:700;color:var(--orange)}
+.grid .n{font-weight:700;font-size:18px;line-height:1.35}
+.grid .d{font-size:13.5px;color:var(--sub)}
+h3.part{font-size:18px;margin-top:26px}
+.tnote{margin:12px 0 4px;background:#fff8e6;border:1px solid #ecd9a6;border-left:4px solid #d9a21f;border-radius:0 10px 10px 0;padding:10px 14px;color:#3d3420}
+.tnote p{color:#3d3420!important;font-size:14.5px}
+.tnote .bt{font-size:13px;font-weight:700;color:#a8780c!important;margin-bottom:2px}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .tnote{background:#2a2414;border-color:#5a4a1e}
+:root:not([data-theme="light"]) .tnote p{color:#efe3c2!important}}
+#doc.wide{margin:0 auto;max-width:1100px}
+.grid a .n{display:block}
+.grid.big{grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
+.grid.big a{padding:26px 24px}
+.grid.big .n{font:400 30px/1.3 'Black Han Sans','Malgun Gothic',sans-serif;margin:4px 0}
+@media (max-width:900px){#toc{transform:translateX(-100%);transition:transform .18s;z-index:30}
+body.open #toc{transform:none}#doc{margin-left:0;padding:56px 16px 100px}#tocbtn{display:block}
+.cols{grid-template-columns:1fr!important}figure img{width:auto!important}}
+@media print{#toc,#tocbtn,.nav{display:none}#doc{margin:0;padding:0;max-width:none}.slide{page-break-inside:avoid}}
+</style>
+</head>
+<body>
+<nav id="toc"><a class="home" href="index.html">← 교사용 차례</a><p class="tt">자석 경주</p><p class="ts">주제 10 · 23차시</p><a class="it" href="#s125">순서를 바꾸면 얼마나 빨라질까?</a><a class="it" href="#s126">자석 경주 — 어디를 들를까</a><a class="it" href="#s127">자석 경주 — 어느 칸에 놓나</a></nav>
+<button id="tocbtn" type="button">목차</button>
+<main id="doc">
+<header class="top"><p class="lab">주제 10 · 23차시</p><h1>자석 경주</h1><p>도는 순서를 바꾸면 얼마나 빨라질까</p><p class="note">실제 구분 차시보다 많은 시간이 소요될 수 있음.</p></header>
+<section class="slide" id="s125"><h2>순서를 바꾸면 얼마나 빨라질까? <span class="tag">미션</span></h2><div class="cols" style="grid-template-columns:25fr 16fr"><div><div class="txt"><p>정렬은 이동 횟수를 줄여 시간을 벌었다.</p><p>이동 비용이 비싸다면 같은 칸들을 방문해도 <b>도는</b><b> </b><b>순서</b>에 따라 이동 거리를 짧게 할 수 있다.</p><p>1. lessons/ch10_order.py 의 칸들 에 여섯 칸을 적는다.</p><p>2. 로봇이 <b>리스트</b><b> </b><b>순서대로</b> 각 칸 위 10cm 를 돈다 — 시간이 찍힌다.</p><p>3. 여섯 칸의 위치 순서를 특정한 기준<br>  (로봇과 가까운 순서, 왼쪽에서 오른쪽 등)을 적용하여 배치하고 시간을 잰다.</p><p>4. 2단계에서 걸린 시간과 3단계에서 걸린 시간을 비교해보자.</p></div></div><div><pre>칸들 = ["A4","G2","I3","B2","H4","C3"]
+# ↑ 이 리스트의 순서 = 도는 순서
+for 칸 in 칸들:
+    x, y = cell_to_xy(칸)  # 주제 5의 변환
+    # 팔을 세우고 그 칸 쪽으로 돈 뒤
+    raccoon.degree_to(th1, -10, -70, -10)
+    raccoon.move_to(x, y, 10)  # 칸 위 10cm</pre></div></div><div class="card"><div class="txt"><p><span class="hl"><b>한 걸음 더</b></span></p></div><div class="txt"><p><b>항상</b> <b>최적 순서대로 움직일 수 있을까</b><b>?(</b><b>외판원 문제</b><b>)</b></p><p>6개 = 720가지 경우의 수, 전수 탐색 가능.</p><p>10개 = 362만.</p><p>20개 = 243경 가지 — 초당 10억 가지로 77년</p></div></div><div class="card"><div class="txt"><p><span class="hl"><b>지금은 못 하는 것</b></span></p></div><div class="txt"><p>색깔을 <b>사람이</b> 알려줘야 한다. 로봇은 빨강과 파랑을 <b>구분하지</b><b> </b><b>못한다</b></p></div></div></section><section class="slide" id="s126"><h2>자석 경주 — 어디를 들를까 <span class="tag">자석 경주 · 10_자석_경주.py</span></h2><div class="cols" style="grid-template-columns:19fr 19fr"><div><pre>칸 = ["C2", "E2", "G2", "C3", "E3", "G3", "C4", "E4", "G4"]
+클립개수 = 6     # 짝이 아무렇게나 흩어 놓는다
+제한시간 = 180.0  # 3분 — 실제 로봇 벽시계
+
+방문순서 = []     # 비면 실행할 때 묻는다
+
+for cell in 방문순서:
+    if 지난시간 &gt;= 제한시간:
+        break
+    arm.pick_magnet(cell)       # 붙인 채로 다음 칸
+
+# 끝나면 자석에 붙은 클립을 센다</pre></div><div><div class="txt"><p>짝이 클립 여섯 개를 칸들에 <b>아무렇게나</b> 놓는다. 술래는 <b>들를</b><b> </b><b>칸의</b><b> </b><b>순서</b>만 정한다. 3분이 끝나면 자석에 붙은 클립을 센다 — 그게 점수다.</p><p>클립 자리를 모르니 정할 수 있는 것은 <b>어디를</b><b>, </b><b>몇 칸</b><b>, </b><b>어떤 순서로</b> 뿐이다.</p></div><div class="txt"><p><b>뱀 모양으로 돌면</b></p></div><div class="txt"><p>C2 E2 G2 G3 E3 C3 — 여섯 칸, 평균 4.0개 (가상 300판 · 칸당 30초 추정). 3분 안에 출발한 칸까지 센다.</p></div><div class="txt"><p><span class="hl"><b>다섯 칸만 적으면</b></span></p></div><div class="txt"><p>E3 E2 E4 C3 G3 — 평균 3.3개. 칸마다 30초가 드는 가상에서는 들른 칸 수가 점수를 가른다. 순서의 효과는 칸 수를 같게 두고 견준다.</p></div></div></div><p class="note">한 판은 경향을 보기 어렵다 — 가상 버전을 실행하면 같은 순서를 클립 자리가 다른 300판에 돌려 평균을 보여 준다</p></section><section class="slide" id="s127"><h2>자석 경주 — 어느 칸에 놓나 <span class="tag">10_자석_경주.py · A3 작업 지도</span></h2><div class="cols" style="grid-template-columns:25fr 13fr"><div><figure><img src="../img/g10/s127-1.png" alt="자석 경주 — 어느 칸에 놓나 — 그림" style="width:705px" loading="lazy"></figure></div><div><div class="txt"><p>· 짝이 클립 6개를 아홉 칸에<br>아무렇게나 놓는다.<br>— 술래는 안 본다.</p><p>· 술래는 들를 칸 순서만 정한다.<br>3분이 지나면 자석에<br> 붙은 클립을 센다.</p><p>준비물 — 자석 1개 · 철 클립 6개<br>(자석은 집게 날 아래 면에)</p><p>역할 2명 — 짝 / 술래</p></div></div></div><p class="note">아홉 칸(B4 는 다섯 칸)에 클립 여섯 개를 아무렇게나</p></section>
+<div class="nav"><span><a href="t9.html">← 주제 9 자석 탐색</a></span><a href="index.html">차례</a><span><a href="t11.html">주제 11 실생활 문제 해결 프로젝트 →</a></span></div>
+</main>
+<script>
+var S=[].slice.call(document.querySelectorAll('.slide')),L=document.querySelectorAll('#toc a.it');
+function mark(){var y=window.scrollY+120,id='';for(var i=0;i<S.length;i++)if(S[i].offsetTop<=y)id=S[i].id;
+for(var j=0;j<L.length;j++)L[j].classList.toggle('now',L[j].getAttribute('href')==='#'+id);}
+var tk=false;window.addEventListener('scroll',function(){if(tk)return;tk=true;requestAnimationFrame(function(){tk=false;mark();});});
+document.getElementById('tocbtn').onclick=function(){document.body.classList.toggle('open');};
+[].forEach.call(L,function(a){a.addEventListener('click',function(){document.body.classList.remove('open');});});
+mark();
+</script>
+</body>
+</html>

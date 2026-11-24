@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""분류 공장 · 실기기 · A3 지도
+"""분류 공장 · 실제 로봇 · A3 지도
 
     python 04_공장_시뮬레이션_실기기_A3.py
 
@@ -17,6 +17,6 @@ from importlib import import_module
 활동 = import_module("04_공장_시뮬레이션_가상")
 활동.지도맞추기("A3")
 
-print("[실기기 · A3] 팔 주변 30cm 를 비우세요.")
+print("[실제 로봇 · A3] 팔 주변 30cm 를 비우세요.")
 print("  판정은 사람이 합니다 — 로봇은 색을 보지 못합니다.")
 활동.main(활동.RealArm())

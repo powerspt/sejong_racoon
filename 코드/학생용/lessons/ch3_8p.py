@@ -13,7 +13,7 @@ from roboid import *
 raccoon = Raccoon()
 
 j = 2          # ← 조사할 관절 번호 (1~4)
-각도 = 30      # ← 이 숫자만 바꾼다
+각도 = 30      # ← j 와 이 숫자, 둘만 바꾼다
 
 print(j, "번 관절", 각도, "도 →", raccoon.can_degree_to(j, 각도))
 raccoon.dispose()

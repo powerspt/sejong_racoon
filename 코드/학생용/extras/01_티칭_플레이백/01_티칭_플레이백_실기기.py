@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-"""[콘텐츠 ①] Teach & Playback · 실기기 — 코드 없이 가르치고, 리스트로 되돌아본다
+"""[콘텐츠 ①] Teach & Playback · 실제 로봇 — 코드 없이 가르치고, 리스트로 되돌아본다
 
     python 01_티칭_플레이백_실기기.py
 
-**이 활동은 실기기 전용이다.** 손으로 팔을 직접 움직여 가르치는 것이 전부라
+**이 활동은 실제 로봇 전용이다.** 손으로 팔을 직접 움직여 가르치는 것이 전부라
 가상으로는 성립하지 않는다 — 로봇이 없으면 01_티칭_플레이백_가상.py 로
 '기록 → 역재생' 로직만 먼저 본다.
 
@@ -43,11 +43,17 @@ POSES_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "poses.jso
 
 
 def main():
-    print("[실기기] 팔 주변 30cm 를 비우세요. 힘을 빼면 팔이 떨어집니다 — 받치세요.")
+    print("[실제 로봇] 팔 주변 30cm 를 비우세요. 힘을 빼면 팔이 떨어집니다 — 받치세요.")
     from roboid import Raccoon, wait
+    import time
     bot = Raccoon()
+    t0 = time.time()
     while not bot.is_connected():
         wait(100)
+        if time.time() - t0 > 10:
+            bot.dispose()                  # 연결을 못 했어도 포트는 놓아 준다
+            print("로봇 연결 실패 — 전원과 동글을 확인한 뒤 다시 실행한다.")
+            return
     poses = []
     grip = "open"
     bot.open_gripper()

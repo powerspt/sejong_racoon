@@ -141,15 +141,16 @@ rem ============================================================
 if defined FULL goto EXTRAS
 if defined AUTO goto ASK_PATH
 echo ------------------------------------------------------------
-echo  주제 6 이후에 쓰는 패키지도 지금 설치할까요?
+echo  자율 탐구(영상, 손동작, 음성)에 쓰는 패키지도 지금 설치할까요?
 echo  카메라, 손동작, 음성 인식용입니다. 용량이 큽니다.
-echo  주제 1 에는 필요하지 않습니다.
+echo  본과정(주제 1~11)에는 필요하지 않습니다.
 echo ------------------------------------------------------------
 set "ANS=N"
 set /p ANS="  설치할까요? (Y/N) : "
 if /i not "%ANS%"=="Y" goto ASK_PATH
 
 :EXTRAS
+set EXTRA_FAIL=
 echo.
 echo      추가 패키지를 설치합니다. 시간이 걸립니다...
 if exist "%HERE%requirements.txt" (
@@ -157,10 +158,19 @@ if exist "%HERE%requirements.txt" (
 ) else (
     %PY% -m pip install %PIPOPT% opencv-python numpy matplotlib pillow mediapipe vosk sounddevice
 )
+if errorlevel 1 set EXTRA_FAIL=1
 echo.
 echo      확인합니다...
 %PY% -c "import cv2, numpy, matplotlib, PIL; print('     opencv', cv2.__version__, '/ numpy', numpy.__version__)"
+if errorlevel 1 (
+    set EXTRA_FAIL=1
+    echo      [!] opencv / numpy / matplotlib / pillow 가운데 설치되지 않은 것이 있습니다.
+)
 %PY% -c "import mediapipe, vosk, sounddevice; print('     mediapipe', mediapipe.__version__, '/ vosk, sounddevice 준비됨')"
+if errorlevel 1 (
+    set EXTRA_FAIL=1
+    echo      [!] mediapipe / vosk / sounddevice 가운데 설치되지 않은 것이 있습니다.
+)
 echo.
 echo      참고 - 음성 인식 모델과 손동작 모델 파일은 따로 받아야 합니다.
 echo.
@@ -187,7 +197,8 @@ rem  마무리
 rem ============================================================
 :DONE
 echo ============================================================
-echo    준비 완료
+if not defined EXTRA_FAIL echo    준비 완료
+if defined EXTRA_FAIL echo    기본 준비 완료 - 추가 패키지 일부는 설치 실패. 자율 탐구는 위의 [!] 를 해결한 뒤에 합니다.
 echo.
 echo    다음 할 일
 echo      1. 위에서 본 COM 번호를 등록카드에 적는다
@@ -215,6 +226,7 @@ goto END_FAIL
 :END
 if not defined AUTO pause
 chcp %OLDCP% >nul
+if defined EXTRA_FAIL exit /b 2
 exit /b 0
 
 :END_FAIL

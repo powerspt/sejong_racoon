@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""공구 높이 재기 · 실기기 · B4 지도
+"""공구 높이 재기 · 실제 로봇 · B4 지도
 
     python 02_공구_높이재기_실기기_B4.py
 
@@ -17,7 +17,7 @@ from importlib import import_module
 활동 = import_module("02_공구_높이재기_가상")
 활동.지도맞추기("B4")
 
-print("[실기기 · B4] 팔 주변 30cm 를 비우세요.")
+print("[실제 로봇 · B4] 팔 주변 30cm 를 비우세요.")
 print("  장치를 고르면 높은 데서 내려오며 묻습니다 — y/n 으로 답하세요.")
 print("  마지막에 나온 z 를 활동 파일의 높이 설정에 적습니다.")
 활동.main(활동.RealArm())

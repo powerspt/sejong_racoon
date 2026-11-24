@@ -92,9 +92,15 @@ def main():
     ans = input("로봇을 연결했나요? [y = 로봇도 움직임 / 그냥 Enter = 인식만]: ").strip().lower()
     if ans in ("y", "yes", "ㅛ"):
         from roboid import Raccoon, wait
+        import time
         bot = Raccoon()
+        t0 = time.time()
         while not bot.is_connected():
             wait(100)
+            if time.time() - t0 > 10:
+                bot.dispose()              # 연결을 못 했어도 포트는 놓아 준다
+                print("로봇 연결 실패 — 전원과 동글을 확인한 뒤 다시 실행한다.")
+                sys.exit()
 
     model = Model("vosk-model-small-ko-0.22")
     grammar = json.dumps(COMMANDS + [WAKE_WORD, "[unk]"], ensure_ascii=False)

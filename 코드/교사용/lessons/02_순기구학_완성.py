@@ -88,6 +88,7 @@ def 로봇_공식값(사용_로봇):
         while time.time() - t0 < 10 and not bot.is_connected():
             wait(300)
         if not bot.is_connected():
+            bot.dispose()                         # 연결을 못 했어도 포트는 놓아 준다
             print("로봇이 연결되지 않았습니다. 연결 없이 계산만 비교합니다.")
             print("  진단: examples/01_connect_test.py")
         else:
@@ -107,7 +108,7 @@ def 로봇_공식값(사용_로봇):
             return Raccoon._CM
 
         def read(s, device_id, arg=None):
-            return 3 if device_id == Raccoon.SLOT_R2 else 0    # 서보 그리퍼가 달린 것으로
+            return 3 if device_id == Raccoon.SLOT_R2 else 0    # 서보 집게가 달린 것으로
 
     return 오프라인(), lambda: None
 

@@ -65,6 +65,8 @@ class State:
     joints = (0.0, 0.0, 0.0, 0.0)
     cam_index = -1
     cam_switch = False
+    cancel = False          # 정지를 눌렀다 — 하던 묶음 동작의 다음 명령을 보내지 않는다
+    bot = None              # 정지를 큐 밖에서 바로 보내려고 잡아 둔다
 
     @classmethod
     def step(cls):
@@ -88,12 +90,16 @@ def robot_worker(bot):
         State.busy = True
         try:
             run_action(bot, act)
+        except Cancelled:                            # 정지 — 남은 단계를 보내지 않고 그 자리에 선다
+            bot.stop()
+            State.msg = "정지했다 — 남은 동작을 보내지 않았다. 팔 주변을 확인하고 다시 조종한다 (Home 은 H)"
         except Exception as e:                       # 로봇 예외로 프로그램이 죽지 않도록
             State.msg = f"오류: {e}"
         State.busy = False
 
 
 def safe_move(bot, x, y, z, speed=MOVE_SPEED):
+    check()
     if not bot.can_move_to(x, y, z):
         State.msg = f"도달 불가: ({x:.1f}, {y:.1f}, {z:.1f})"
         return False
@@ -188,16 +194,17 @@ def run_action(bot, act):
         px, py, pz = State.pick
         qx, qy, qz = State.place
         State.msg = "Pick & Place 실행 중..."
-        apply_tilt(bot, State.tilt()[0])
-        bot.open_gripper(); State.gripper_closed = False
+        check(); apply_tilt(bot, State.tilt()[0])
+        check(); bot.open_gripper(); State.gripper_closed = False
         if not safe_move(bot, px, py, pz + HOVER_UP): return
         if not safe_move(bot, px, py, pz, 30): return
-        bot.close_gripper(); State.gripper_closed = True
+        check(); bot.close_gripper(); State.gripper_closed = True
         if not safe_move(bot, px, py, pz + LIFT_UP): return
         if not safe_move(bot, qx, qy, qz + LIFT_UP): return
         if not safe_move(bot, qx, qy, qz, 30): return
-        bot.open_gripper(); State.gripper_closed = False
-        safe_move(bot, qx, qy, qz + HOVER_UP)
+        check(); bot.open_gripper(); State.gripper_closed = False
+        if not safe_move(bot, qx, qy, qz + HOVER_UP): return
+        check()                                      # 정지 뒤에는 Home 으로도 가지 않는다
         bot.unlock(); bot.degree_to(*HOME, MOVE_SPEED); State.tilt_idx = 0; bot.lock_horz()
         bot.sound("GOOD JOB"); State.msg = "Pick & Place 완료"
     elif act == "step":
@@ -316,11 +323,31 @@ def submit(act):
     elif act == "cam":
         State.cam_switch = True
     elif act == "stop":
-        actions.put(act)
+        # 정지는 큐에 넣지 않는다. 큐에 넣으면 하던 묶음 동작(집기→놓기→Home)이 다 끝나야 읽힌다.
+        State.cancel = True
+        while True:                                  # 기다리던 동작도 버린다
+            try:
+                actions.get_nowait()
+            except queue.Empty:
+                break
+        if State.bot is not None:
+            State.bot.stop()
+        State.msg = "정지"
     elif State.busy:
         State.msg = "이동 중입니다. 잠시 기다리세요."
     else:
+        State.cancel = False                         # 사람이 다시 조종을 시작했다
         actions.put(act)
+
+
+class Cancelled(Exception):
+    """정지를 눌렀다 — 묶음 동작의 다음 단계를 보내지 않는다."""
+
+
+def check():
+    """로봇에 명령을 보내기 직전마다 부른다."""
+    if State.cancel or State.quit:
+        raise Cancelled()
 
 
 # ───────────── 카메라 ─────────────
@@ -404,6 +431,7 @@ def main():
 
     bot = Raccoon()
     bot.lock_horz()
+    State.bot = bot
     worker = threading.Thread(target=robot_worker, args=(bot,), daemon=True)
     worker.start()
 
@@ -449,13 +477,17 @@ def main():
             if cv2.getWindowProperty(win, cv2.WND_PROP_VISIBLE) < 1:
                 State.quit = True
     finally:
+        멈춘채 = State.cancel or State.busy           # 정지했거나 동작 도중에 끈 경우
         State.quit = True
-        print("종료: 정지 후 Home 으로 이동합니다.")
         try:
             bot.stop()
             worker.join(timeout=5)
-            bot.unlock()
-            bot.degree_to(*HOME, MOVE_SPEED)
+            if 멈춘채 or worker.is_alive():
+                print("종료: 동작 도중에 멈췄다 — Home 으로 돌아가지 않고 그 자리에 세운다.")
+            else:
+                print("종료: Home 으로 이동합니다.")
+                bot.unlock()
+                bot.degree_to(*HOME, MOVE_SPEED)
         except Exception:
             pass
         if cap is not None:

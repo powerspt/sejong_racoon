@@ -14,7 +14,8 @@
       3 내가 정한 순서
       4 이진 탐색     가운데를 찍고, 짝이 "더 왼쪽 / 더 오른쪽" 을 알려 주면 반을 버린다
 
-    여러 판을 돌려 **평균**을 낸다. 순차든 랜덤이든 평균은 (칸 수 + 1) / 2 로 같다 —
+    여러 판을 돌려 **평균**을 낸다. 클립을 모든 칸에 같은 확률로 숨긴다면
+    순차든 랜덤이든 평균은 (칸 수 + 1) / 2 로 같다 (세 판의 평균은 이 값과 다를 수 있다) —
     그런데 왜 다르게 느껴질까? 최악은? 이동 시간은?
     이진 탐색은 "붙었나" 만으로는 안 된다 — 자석은 정답이 어느 쪽인지 모른다. 짝이
     왼쪽/오른쪽을 말해 줘야(= 자료가 정렬돼 있어야) 아홉 칸을 네 번 안에 끝낸다.
@@ -30,21 +31,318 @@ for _s in (sys.stdin, sys.stdout, sys.stderr):
     except (AttributeError, ValueError):
         pass
 
+# ── 로봇 부품 값 (아래 코드가 바로 쓴다) — 고치지 않는다 ──
+class Stopped(Exception):
+    pass
+
+def 안전하게(main):
+    import functools
+
+    @functools.wraps(main)
+    def 감싼(*a, **k):
+        try:
+            return main(*a, **k)
+        except Stopped as e:
+            print(f'\n  ■ 멈춤 — {e}')
+        except KeyboardInterrupt:
+            print('\n  ■ 사람이 멈췄다 (Ctrl+C)')
+        finally:
+            팔 = RealArm.live
+            if 팔 is not None and (not 팔.closed):
+                팔.close(home=False)
+    return 감싼
+
+def 지도_바꾸기(paper, 설정, 보일=''):
+    set_paper(paper)
+    if paper in 설정.get('지도별', {}):
+        설정.update(설정['지도별'][paper])
+        값 = ' '.join((f'{이름}={설정[이름]}' for 이름 in 보일.split()))
+        print(f'[{paper} 지도] 칸 설정을 {paper} 용으로 바꿨다 — {값}')
+MAP_LAYOUT = {'A3': ([-16, -12, -8, -4, 0, 4, 8, 12, 16], [8, 12, 16, 20]), 'B4': ([-12, -8, -4, 0, 4, 8, 12], [8, 12, 16])}
+PAPER = 'A3'
+HOVER = 10.0
+SPEED_DOWN = 40
+SPEED_MOVE = 60
+HOME_POSE = (0, -10, -140, 60)
+TILT_RULES = [(15.5, 0, 10.0), (11.0, -45, 8.0), (0.0, -90, 6.0)]
+TILT = None
+J2_SAFE, J3_SAFE = (-30.0, -60.0)
+DOWN_STEPS = 3
+MAGNET_TILT = None
+MAGNET_Z = 2.7
+MAGNET_HOVER = None
+PRECISION_MODE = False
+L1, L2, L3 = (8.25, 10.0, 10.0)
+JOINT_LIMITS = ((-120, 120), (-90, 30), (-150, 0), (-105, 105))
+
+def ik_joints(x, y, z, tilt, ref):
+    x, y = (y, -x)
+    rx, ry = (ref[0], ref[1])
+    alpha = math.radians(tilt)
+    beta = math.atan2(ry, rx)
+    L = math.sqrt(rx * rx + ry * ry)
+    Lx = L * math.cos(alpha + beta)
+    Ly = L * math.sin(alpha + beta)
+    th1 = math.atan2(y, x)
+    x -= Lx * math.cos(th1)
+    y -= Lx * math.sin(th1)
+    z -= Ly
+    c1, s1 = (math.cos(th1), math.sin(th1))
+    zL1 = z - L1
+    c3 = (x * x + y * y + zL1 * zL1 - L2 * L2 - L3 * L3) / (2 * L2 * L3)
+    if c3 * c3 > 1 + 1e-09:
+        return None
+    s3 = -math.sqrt(max(0.0, 1 - min(c3 * c3, 1.0)))
+    th3 = math.atan2(s3, c3)
+    M1 = c3 * L3 + L2
+    M2 = z - L1
+    M3 = s3 * L3
+    M4 = c1 * x + s1 * y
+    th2 = math.atan2(-M2 * M3 - M1 * M4, M1 * M2 - M3 * M4)
+    th1, th2, th3 = (math.degrees(th1), math.degrees(th2), math.degrees(th3))
+    return (th1, th2, th3, math.degrees(alpha) - 90 - th2 - th3)
+
+def over_limit(sol):
+    if sol is None:
+        return [(0, None, None, None)]
+    return [(i + 1, v, lo, hi) for i, (v, (lo, hi)) in enumerate(zip(sol, JOINT_LIMITS)) if not lo <= v <= hi]
+PATH_Z_MIN = 3.0
+
+def tip_z(sol, ref):
+    t2 = math.radians(sol[1])
+    t3 = t2 + math.radians(sol[2])
+    al = math.radians(sol[1] + sol[2] + sol[3] + 90)
+    return L1 + L2 * math.cos(t2) + L3 * math.cos(t3) + ref[0] * math.sin(al) + ref[1] * math.cos(al)
+
+def path_low(a, b, ref):
+    d = [b[i] - a[i] for i in range(4)]
+    m = max((abs(x) for x in d))
+    if m < 1e-06:
+        return tip_z(b, ref)
+    low = 1000000000.0
+    for k in range(41):
+        간 = m * k / 40
+        j = [a[i] + math.copysign(min(abs(d[i]), 간), d[i]) for i in range(4)]
+        low = min(low, tip_z(j, ref))
+    return low
+
+def set_paper(paper: str):
+    global PAPER
+    paper = paper.strip().upper()
+    if paper not in MAP_LAYOUT:
+        raise ValueError(f"모르는 용지: {paper!r} ({' / '.join(MAP_LAYOUT)})")
+    PAPER = paper
+    xs, ys = MAP_LAYOUT[paper]
+    print(f"[작업 지도 {paper}] 가로 A~{chr(ord('A') + len(xs) - 1)} · 세로 1~{len(ys)}")
+
+def last_cell(paper=None):
+    xs, ys = MAP_LAYOUT[paper or PAPER]
+    return f"{chr(ord('A') + len(xs) - 1)}{len(ys)}"
+
+def cell_to_xy(cell: str, paper=None):
+    xs, ys = MAP_LAYOUT[paper or PAPER]
+    cell = cell.strip().upper()
+    col = ord(cell[0]) - ord('A') if len(cell) == 2 else -1
+    row = int(cell[1]) - 1 if len(cell) == 2 and cell[1].isdigit() else -1
+    if not (0 <= col < len(xs) and 0 <= row < len(ys)):
+        raise ValueError(f'{paper or PAPER} 작업 지도에 없는 칸: {cell!r} (A1~{last_cell(paper)})')
+    return (xs[col], ys[row])
+
+def tilt_for(r_cm: float):
+    for r_min, alpha, hover in TILT_RULES:
+        if r_cm >= r_min:
+            return (alpha, hover)
+    return (TILT_RULES[-1][1], TILT_RULES[-1][2])
+
+class DummyArm:
+    T_MOVE, T_PICK, T_PLACE = (1.2, 2.6, 2.4)
+
+    def __init__(self, verbose=True):
+        self.t = 0.0
+        self.n_move = self.n_pick = self.n_place = 0
+        self.verbose = verbose
+
+    def _log(self, msg, dt):
+        self.t += dt
+        if self.verbose:
+            print(f'  [가상 {self.t:6.1f}s] {msg}')
+    T_MAGNET = 1.5
+
+    def pick_magnet(self, cell, z=None):
+        self.n_pick += 1
+        self._log(f'MAG   {cell} 내렸다 들기 (z={(MAGNET_Z if z is None else z)})', self.T_MAGNET)
+        return True
+
+    def home(self):
+        self._log('HOME', self.T_MOVE)
+
+    def close(self, home=None):
+        pass
+
+    def summary(self):
+        센것 = [f'{이름} {n}회' for 이름, n in (('집기', self.n_pick), ('놓기', self.n_place), ('이동', self.n_move)) if n]
+        return (' · '.join(센것) or '한 동작도 안 함') + f' · 가상 소요 {self.t:.0f}초 (약 {self.t / 60:.1f}분)'
+
+class RealArm:
+    live = None
+
+    def __init__(self, tilt=TILT):
+        from roboid import Raccoon, wait, wait_until
+        self._wait = wait
+        self._wait_until = wait_until
+        self.tilt_fixed = tilt
+        self.tilt_now = 0.0
+        self.failed = False
+        self.closed = False
+        self.last = None
+        self.bot = Raccoon()
+        t0 = time.time()
+        while not self.bot.is_connected():
+            wait(100)
+            if time.time() - t0 > 10:
+                self.bot.dispose()
+                raise RuntimeError('로봇 연결 실패 — 전원·BLE 확인')
+        RealArm.live = self
+        self.ref = self._tool_offset()
+        if PRECISION_MODE and hasattr(self.bot, 'precision_mode'):
+            self.bot.precision_mode(True)
+        self.bot.open_gripper()
+        self.home()
+
+    def _tool_offset(self):
+        _, y, z = self.bot.degree_to_xyz(0, 0, 0, 0)
+        ref = (z - (L1 + L2 + L3), -y)
+        print(f'[공구 오프셋] 앞으로 {ref[0]:.1f}cm · 아래로 {-ref[1]:.1f}cm')
+        return ref
+
+    def _solve(self, x, y, z, tilt=None):
+        sol = ik_joints(x, y, z, self.tilt_now if tilt is None else tilt, self.ref)
+        if over_limit(sol):
+            return None
+        return sol if self.bot.can_degree_to(*sol) else None
+
+    def _set_tilt(self, alpha):
+        if abs(self.tilt_now - alpha) < 1.0:
+            return
+        j1 = float(self.bot.encoder(1))
+        self.bot.unlock()
+        if not self.bot.can_degree_to(j1, J2_SAFE, J3_SAFE, alpha):
+            print(f'  !! 기울기 {alpha}° 를 잡지 못했다 — 수평 그대로 간다')
+            return
+        self.bot.degree_to(j1, J2_SAFE, J3_SAFE, alpha, SPEED_MOVE)
+        self.tilt_now = alpha
+        self.last = (j1, J2_SAFE, J3_SAFE, alpha)
+
+    def _raise_if_low(self, sol):
+        if self.last is None:
+            return
+        low = path_low(self.last, sol, self.ref)
+        if low >= PATH_Z_MIN or low >= min(tip_z(self.last, self.ref), tip_z(sol, self.ref)) - 0.5:
+            return
+        for j1 in (self.last[0], sol[0]):
+            if self.bot.can_degree_to(j1, J2_SAFE, J3_SAFE, self.tilt_now):
+                self.bot.degree_to(j1, J2_SAFE, J3_SAFE, self.tilt_now, SPEED_MOVE)
+                self.last = (j1, J2_SAFE, J3_SAFE, self.tilt_now)
+
+    def _descend(self, x, y, z_from, z_to, steps=None, ask=True):
+        n = DOWN_STEPS if steps is None else max(1, int(steps))
+        for i in range(1, n + 1):
+            z = z_from + (z_to - z_from) * i / n
+            if not self._goto(x, y, z, SPEED_DOWN, ask):
+                return False
+        return True
+
+    def _why(self, x, y, z, tilt):
+        bad = over_limit(ik_joints(x, y, z, tilt, self.ref))
+        return ', '.join((f'J{i}={v:.0f}° (한계 {lo}~{hi})' for i, v, lo, hi in bad if v is not None)) or '팔 길이로 닿지 않는 거리'
+
+    def _reach(self, 칸, x, y, 위, 아래):
+        if not (self._goto(x, y, 위, ask=False) and self._descend(x, y, 위, 아래, ask=False)):
+            raise Stopped(f'{칸} 칸에 높이 {아래:g} 로는 갈 수 없다 — 칸이나 높이를 바꾼다')
+
+    def _lift(self, 칸, x, y, 아래, 위):
+        if not self._descend(x, y, 아래, 위, ask=False):
+            raise Stopped(f'{칸} 칸에서 높이 {위:g} 로 올라오지 못했다')
+
+    def _goto(self, x, y, z, speed=SPEED_MOVE, ask=True) -> bool:
+        sol = self._solve(x, y, z)
+        if sol is None:
+            print(f'  !! ({x:.1f}, {y:.1f}, {z:.1f}) 에 기울기 {self.tilt_now:g}° 로는 설 수 없다 — {self._why(x, y, z, self.tilt_now)}')
+            self.failed = True
+            if ask:
+                print('     사람이 처리해 주세요 (Enter)')
+                input()
+            return False
+        self._raise_if_low(sol)
+        self.bot.degree_to(sol[0], sol[1], sol[2], sol[3], speed)
+        self.last = tuple(sol)
+        return True
+
+    def pick_magnet(self, cell, z=None):
+        z = MAGNET_Z if z is None else float(z)
+        x, y = cell_to_xy(cell)
+        alpha, hover = self._magnet_pose(x, y)
+        self._set_tilt(alpha)
+        self.bot.close_gripper()
+        self._reach(cell, x, y, hover, z)
+        self._wait(300)
+        self._lift(cell, x, y, z, hover)
+        return True
+
+    def _magnet_pose(self, x, y):
+        if MAGNET_TILT is not None:
+            return (MAGNET_TILT, MAGNET_HOVER if MAGNET_HOVER is not None else HOVER)
+        alpha, hover = tilt_for((x * x + y * y) ** 0.5)
+        return (alpha, MAGNET_HOVER if MAGNET_HOVER is not None else hover)
+
+    def home(self):
+        if self.last is not None and abs(self.tilt_now) >= 1.0:
+            self._set_tilt(0)
+        self.bot.unlock()
+        self.bot.degree_to(*HOME_POSE)
+        self.tilt_now = 0.0
+        self.last = HOME_POSE
+
+    def close(self, home=None):
+        if self.closed:
+            return
+        self.closed = True
+        if home is None:
+            home = not self.failed and sys.exc_info()[0] is None
+        try:
+            if home:
+                self.home()
+            else:
+                self.bot.stop()
+                print('  (중단 — 팔을 그 자리에 세웠다. Home 으로 돌아가지 않는다)')
+        finally:
+            self.bot.dispose()
+
+    def summary(self):
+        return '실제 로봇 실행 완료'
+팔 = None
 
 # ════════ 설정 — 여기만 바꿔 보세요 ════════════════════
 줄 = ["A2", "B2", "C2", "D2", "E2", "F2", "G2", "H2", "I2"]
 #   클립을 놓는 한 줄 (A3 지도 2행). 집게를 세우지 않고(0°/45°) 닿는 줄이다 — 1행은 안 닿는다
 자석높이 = 2.7        # ★ 자석을 내리는 집게 끝 높이 — 08_자석_확인 이 알려 준 권장값을 적는다
-판수 = 3              # 몇 판 돌리나 (판마다 짝이 클립을 다시 놓는다). 실기기는 판 사이에 q 로 끝낼 수 있다
+판수 = 3              # 몇 판 돌리나 (판마다 짝이 클립을 다시 놓는다). 실제 로봇은 판 사이에 q 로 끝낼 수 있다
 SEED = 7              # 가상 모드가 클립을 놓는 자리. 같은 숫자 = 같은 문제
-방식 = None           # None 이면 실행할 때 고른다. "순차" / "랜덤" / "직접" 을 적으면 안 묻는다
+방식 = None           # None 이면 실행할 때 고른다. "순차" / "랜덤" / "직접" / "이진" 을 적으면 안 묻는다
 내순서 = []           # 방식 "직접" 일 때 찍을 순서. 비면 실행할 때 입력받는다
 시험판수 = 300        # 가상에서 방식별 평균을 낼 때 돌리는 판 수
 이동속도 = 8.0        # cm/s — 가상 시계용. 멀리 뛰면 그만큼 오래 걸린다
 # ─────────────────────────────────────────────────────
-# [레벨0] 세 방식을 5판씩 돌려 평균 횟수를 견준다 — 누가 이기나? 정말 이긴 건가?
-# [레벨1] 판수 를 1000 으로 두고(가상) 평균이 어디로 모이나 본다 — (칸 수+1)/2
-# [레벨2] 이진_한판() 에서 가운데 대신 1/3 지점을 찍게 바꾸면 평균이 어떻게 되나
+# [레벨0] 세 방식을 세 판씩 돌려 평균 횟수를 견준다 — 누가 이기나? 정말 이긴 건가?
+# [레벨1] 시험판수 를 1000 으로 두고(가상) 평균이 어디로 모이나 본다 — (칸 수+1)/2
+# [레벨2] 아래 가운데() 의 return 한 줄을 고쳐 가운데 대신 1/3 지점을 찍게 하면 평균이 어떻게 되나
+
+
+# ── 여기부터는 활동 본문 — [레벨2] 를 할 때만 연다 ──
+def 가운데(lo, hi):
+    """이진 탐색이 다음에 찍을 자리 — 남은 범위 lo 번째 ~ hi 번째 칸의 가운데."""
+    return (lo + hi) // 2
+
 
 방식이름 = {"1": "순차", "2": "랜덤", "3": "직접", "4": "이진"}
 
@@ -84,7 +382,7 @@ def 이진_한판(arm, 정답, 실기기):
     """가운데를 찍고 '더 왼쪽/더 오른쪽' 을 들어 반씩 버린다. (횟수, 찾은 칸)."""
     lo, hi, 지금, 횟수 = 0, len(줄) - 1, None, 0
     while lo <= hi:
-        mid = (lo + hi) // 2
+        mid = 가운데(lo, hi)
         cell = 줄[mid]
         횟수 += 1
         여행(arm, 지금, cell)
@@ -140,7 +438,7 @@ def 평균표(rng):
             if 이름 == "이진":
                 순서, lo, hi = [], 0, len(줄) - 1
                 while True:
-                    mid = (lo + hi) // 2
+                    mid = 가운데(lo, hi)
                     순서.append(줄[mid])
                     if 줄[mid] == 정답:
                         break
@@ -163,13 +461,14 @@ def 평균표(rng):
           "  순차와 랜덤은 평균이 같고 **이동 거리**가 다르다. 이진은 **힌트**가 있어야 된다)")
 
 
+@안전하게
 def main(arm=None):
     global 내순서
-    if arm is None:            # 그냥 돌리면 가상 — 실기기는 _실기기.py 가 진짜 팔을 넘긴다
+    if arm is None:            # 그냥 돌리면 가상 — 실제 로봇은 _실기기.py 가 진짜 팔을 넘긴다
         arm = DummyArm()
-    실기기 = not hasattr(arm, "t")
+    실기기 = not hasattr(arm, "t")      # 가상 팔에만 t(가상 시계)가 있다
     rng = random.Random(SEED)
-    print(__doc__.split("\n\n")[1])
+    print(__doc__.split("\n\n")[2])     # 독스트링의 활동 설명 문단
     print(f"\n  줄: {' '.join(줄)}  (클립 1개 · {판수}판)")
 
     고른 = 방식
@@ -212,7 +511,7 @@ def main(arm=None):
             break
 
     print("\n" + "=" * 46)
-    print(f"{고른} 탐색 {len(기록)}판 — 횟수 {기록} · 평균 {sum(기록) / len(기록):.2f}번 · 최악 {max(기록)}번")
+    print(f"{고른} 탐색 {len(기록)}판 — 횟수 {기록} · 평균 {sum(기록) / len(기록):.2f}번 · 가장 많이 걸린 판 {max(기록)}번")
     print("=" * 46)
     if not 실기기:
         평균표(random.Random(SEED + 1))
@@ -226,17 +525,16 @@ def main(arm=None):
 
 
 # ── 작업 지도별 칸 ─────────────────────────────────────
-# 위 설정은 A3 지도(2행 A~I) 기준이다. B4 지도는 _실기기_B4.py 가 지도맞추기("B4") 로 바꾼다.
+# 위 설정은 A3 지도(2행 A~I) 기준이다 — A3 에서는 설정을 그대로 쓴다.
+# B4 지도는 09_자석_탐색_실기기_B4.py 가 지도맞추기("B4") 로 아래 칸으로 갈아 끼운다.
 지도별 = {
-    "A3": dict(줄=["A2", "B2", "C2", "D2", "E2", "F2", "G2", "H2", "I2"]),
     "B4": dict(줄=["A2", "B2", "C2", "D2", "E2", "F2", "G2"]),
 }
 
 
 def 지도맞추기(paper):
-    """지도("A3"/"B4")에 맞는 칸 이름으로 설정을 갈아 끼운다. 실기기 파일이 부른다."""
-    set_paper(paper)
-    globals().update(지도별[paper])
+    """실제 로봇 파일이 부른다. A3 는 설정 그대로, 다른 지도는 칸 이름만 그 지도 것으로 바꾼다."""
+    지도_바꾸기(paper, globals(), "줄")
 
 # ══════════════════════════════════════════════════════════════════════
 # 여기부터 끝까지는 로봇을 움직이는 부품이다 — 고치지 않는다.
@@ -247,206 +545,6 @@ import math
 import os
 import sys
 import time
-MAP_LAYOUT = {'A3': ([-16, -12, -8, -4, 0, 4, 8, 12, 16], [8, 12, 16, 20]), 'B4': ([-12, -8, -4, 0, 4, 8, 12], [8, 12, 16])}
-PAPER = 'A3'
-HOVER = 10.0
-SPEED_DOWN = 40
-SPEED_MOVE = 60
-HOME_POSE = (0, -10, -140, 60)
-TILT_RULES = [(15.5, 0, 10.0), (11.0, -45, 8.0), (0.0, -90, 6.0)]
-TILT = None
-J2_SAFE, J3_SAFE = (-30.0, -60.0)
-DOWN_STEPS = 3
-MAGNET_TILT = None
-MAGNET_Z = 2.7
-MAGNET_HOVER = None
-PRECISION_MODE = False
-L1, L2, L3 = (8.25, 10.0, 10.0)
-JOINT_LIMITS = ((-120, 120), (-90, 30), (-150, 0), (-105, 105))
-
-def ik_joints(x, y, z, tilt, ref):
-    x, y = (y, -x)
-    rx, ry = (ref[0], ref[1])
-    alpha = math.radians(tilt)
-    beta = math.atan2(ry, rx)
-    L = math.sqrt(rx * rx + ry * ry)
-    Lx = L * math.cos(alpha + beta)
-    Ly = L * math.sin(alpha + beta)
-    th1 = math.atan2(y, x)
-    x -= Lx * math.cos(th1)
-    y -= Lx * math.sin(th1)
-    z -= Ly
-    c1, s1 = (math.cos(th1), math.sin(th1))
-    zL1 = z - L1
-    c3 = (x * x + y * y + zL1 * zL1 - L2 * L2 - L3 * L3) / (2 * L2 * L3)
-    if c3 * c3 > 1 + 1e-09:
-        return None
-    s3 = -math.sqrt(max(0.0, 1 - min(c3 * c3, 1.0)))
-    th3 = math.atan2(s3, c3)
-    M1 = c3 * L3 + L2
-    M2 = z - L1
-    M3 = s3 * L3
-    M4 = c1 * x + s1 * y
-    th2 = math.atan2(-M2 * M3 - M1 * M4, M1 * M2 - M3 * M4)
-    th1, th2, th3 = (math.degrees(th1), math.degrees(th2), math.degrees(th3))
-    return (th1, th2, th3, math.degrees(alpha) - 90 - th2 - th3)
-
-def over_limit(sol):
-    if sol is None:
-        return [(0, None, None, None)]
-    return [(i + 1, v, lo, hi) for i, (v, (lo, hi)) in enumerate(zip(sol, JOINT_LIMITS)) if not lo <= v <= hi]
-
-def set_paper(paper: str):
-    global PAPER
-    paper = paper.strip().upper()
-    if paper not in MAP_LAYOUT:
-        raise ValueError(f"모르는 용지: {paper!r} ({' / '.join(MAP_LAYOUT)})")
-    PAPER = paper
-    xs, ys = MAP_LAYOUT[paper]
-    print(f"[작업 지도 {paper}] 가로 A~{chr(ord('A') + len(xs) - 1)} · 세로 1~{len(ys)}")
-
-def last_cell(paper=None):
-    xs, ys = MAP_LAYOUT[paper or PAPER]
-    return f"{chr(ord('A') + len(xs) - 1)}{len(ys)}"
-
-def cell_to_xy(cell: str, paper=None):
-    xs, ys = MAP_LAYOUT[paper or PAPER]
-    cell = cell.strip().upper()
-    col = ord(cell[0]) - ord('A') if len(cell) == 2 else -1
-    row = int(cell[1]) - 1 if len(cell) == 2 and cell[1].isdigit() else -1
-    if not (0 <= col < len(xs) and 0 <= row < len(ys)):
-        raise ValueError(f'{paper or PAPER} 매트에 없는 칸: {cell!r} (A1~{last_cell(paper)})')
-    return (xs[col], ys[row])
-
-def tilt_for(r_cm: float):
-    for r_min, alpha, hover in TILT_RULES:
-        if r_cm >= r_min:
-            return (alpha, hover)
-    return (TILT_RULES[-1][1], TILT_RULES[-1][2])
-
-class DummyArm:
-    T_MOVE, T_PICK, T_PLACE = (1.2, 2.6, 2.4)
-
-    def __init__(self, verbose=True):
-        self.t = 0.0
-        self.n_move = self.n_pick = self.n_place = 0
-        self.verbose = verbose
-
-    def _log(self, msg, dt):
-        self.t += dt
-        if self.verbose:
-            print(f'  [가상 {self.t:6.1f}s] {msg}')
-    T_MAGNET = 1.5
-
-    def pick_magnet(self, cell, z=None):
-        self.n_pick += 1
-        self._log(f'MAG   {cell} 내렸다 들기 (z={(MAGNET_Z if z is None else z)})', self.T_MAGNET)
-        return True
-
-    def home(self):
-        self._log('HOME', self.T_MOVE)
-
-    def close(self):
-        pass
-
-    def summary(self):
-        센것 = [f'{이름} {n}회' for 이름, n in (('집기', self.n_pick), ('놓기', self.n_place), ('이동', self.n_move)) if n]
-        return (' · '.join(센것) or '한 동작도 안 함') + f' · 가상 소요 {self.t:.0f}초 (약 {self.t / 60:.1f}분)'
-
-class RealArm:
-
-    def __init__(self, tilt=TILT):
-        from roboid import Raccoon, wait, wait_until
-        self._wait = wait
-        self._wait_until = wait_until
-        self.tilt_fixed = tilt
-        self.tilt_now = 0.0
-        self.bot = Raccoon()
-        t0 = time.time()
-        while not self.bot.is_connected():
-            wait(100)
-            if time.time() - t0 > 10:
-                raise RuntimeError('로봇 연결 실패 — 전원·BLE 확인')
-        self.ref = self._tool_offset()
-        if PRECISION_MODE and hasattr(self.bot, 'precision_mode'):
-            self.bot.precision_mode(True)
-        self.bot.open_gripper()
-        self.home()
-
-    def _tool_offset(self):
-        _, y, z = self.bot.degree_to_xyz(0, 0, 0, 0)
-        ref = (z - (L1 + L2 + L3), -y)
-        print(f'[공구 오프셋] 앞으로 {ref[0]:.1f}cm · 아래로 {-ref[1]:.1f}cm')
-        return ref
-
-    def _solve(self, x, y, z, tilt=None):
-        sol = ik_joints(x, y, z, self.tilt_now if tilt is None else tilt, self.ref)
-        if over_limit(sol):
-            return None
-        return sol if self.bot.can_degree_to(*sol) else None
-
-    def _set_tilt(self, alpha):
-        if abs(self.tilt_now - alpha) < 1.0:
-            return
-        j1 = float(self.bot.encoder(1))
-        self.bot.unlock()
-        if not self.bot.can_degree_to(j1, J2_SAFE, J3_SAFE, alpha):
-            print(f'  !! 기울기 {alpha}° 를 잡지 못했다 — 수평 그대로 간다')
-            return
-        self.bot.degree_to(j1, J2_SAFE, J3_SAFE, alpha, SPEED_MOVE)
-        self.tilt_now = alpha
-
-    def _descend(self, x, y, z_from, z_to, steps=None):
-        n = DOWN_STEPS if steps is None else max(1, int(steps))
-        for i in range(1, n + 1):
-            z = z_from + (z_to - z_from) * i / n
-            if not self._goto(x, y, z, SPEED_DOWN):
-                return False
-        return True
-
-    def _goto(self, x, y, z, speed=SPEED_MOVE) -> bool:
-        sol = self._solve(x, y, z)
-        if sol is None:
-            bad = over_limit(ik_joints(x, y, z, self.tilt_now, self.ref))
-            why = ', '.join((f'J{i}={v:.0f}° (한계 {lo}~{hi})' for i, v, lo, hi in bad if v is not None)) or '팔 길이로 닿지 않는 거리'
-            print(f'  !! ({x:.1f}, {y:.1f}, {z:.1f}) 에 기울기 {self.tilt_now:g}° 로는 설 수 없다 — {why}')
-            print('     사람이 처리해 주세요 (Enter)')
-            input()
-            return False
-        self.bot.degree_to(sol[0], sol[1], sol[2], sol[3], speed)
-        return True
-
-    def pick_magnet(self, cell, z=None):
-        z = MAGNET_Z if z is None else float(z)
-        x, y = cell_to_xy(cell)
-        alpha, hover = self._magnet_pose(x, y)
-        self._set_tilt(alpha)
-        self.bot.close_gripper()
-        if not self._goto(x, y, hover):
-            return False
-        if not self._descend(x, y, hover, z):
-            return False
-        self._wait(300)
-        self._descend(x, y, z, hover)
-        return True
-
-    def _magnet_pose(self, x, y):
-        if MAGNET_TILT is not None:
-            return (MAGNET_TILT, MAGNET_HOVER if MAGNET_HOVER is not None else HOVER)
-        alpha, hover = tilt_for((x * x + y * y) ** 0.5)
-        return (alpha, MAGNET_HOVER if MAGNET_HOVER is not None else hover)
-
-    def home(self):
-        self.bot.unlock()
-        self.bot.degree_to(*HOME_POSE)
-        self.tilt_now = 0.0
-
-    def close(self):
-        self.home()
-        self.bot.dispose()
-
-    def summary(self):
-        return '실기기 실행 완료'
 
 
 if __name__ == "__main__":
